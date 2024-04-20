@@ -63,7 +63,7 @@ public interface ProjectRepositoryJPA extends JpaRepository<Project, String> {
             "WHERE " +
             "   (:#{#request.status} IS NULL OR p.status = :#{#request.status} OR p.status = 2) " +
             "   AND (:#{#request.nameProject} IS NULL OR :#{#request.nameProject} = '' OR p.name LIKE %:#{#request.nameProject}%) " +
-            "   AND (:#{#request.investor} IS NULL OR p.investor = :#{#request.investor}) " +
+            "   AND (:#{#request.investor} IS NULL OR :#{#request.investor} = '' OR p.investor LIKE %:#{#request.investor}%) " +
             "   AND (:#{#request.provinceId} IS NULL OR p.district.province.id = :#{#request.provinceId}) " +
             "   AND (:#{#request.districtId} IS NULL OR p.district.id = :#{#request.districtId}) " +
 

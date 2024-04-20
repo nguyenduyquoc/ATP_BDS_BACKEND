@@ -36,7 +36,7 @@ public class AreaControllerAPI {
                 request.setProjectId(projectId);
                 request.setAreaName(areaName);
 
-        return areaService.allAreaOfProject(request);
+        return areaService.allAreas(request);
     }
 
     // Tao mot phan khu trong mot lan tao
@@ -48,14 +48,14 @@ public class AreaControllerAPI {
     // Chinh sua phan khu trong du an
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData updateArea(@Valid @RequestBody AreaCreate request) {
-        return  areaService.updateAreaForProject(request);
+        return areaService.updateAreaForProject(request);
     }
 
     // Tao nhieu phan khu trong mot lan tao
-    @PostMapping(value = "/add_multi_area", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/{id}/addMultiArea", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData createMultiArea(@PathVariable String id, @Valid @RequestBody RequestCreateMultiObject<AreaCreate> request) {
         request.setId(id);
-        return  areaService.createAreaMultiProject(request);
+        return areaService.createAreaMultiProject(request);
     }
     // tìm dự án theo id
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

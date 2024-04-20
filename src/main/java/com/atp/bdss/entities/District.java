@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Entity
 @Table(name = "district")
 @Data
@@ -24,4 +26,13 @@ public class District {
     @ManyToOne
     @JoinColumn(name = "province_id")
     Province province;
+
+    @OneToMany(mappedBy = "district" , fetch = FetchType.LAZY)
+    List<Project> projects;
+
+    public District(int id, String name, Province province) {
+        this.id = id;
+        this.name = name;
+        this.province = province;
+    }
 }

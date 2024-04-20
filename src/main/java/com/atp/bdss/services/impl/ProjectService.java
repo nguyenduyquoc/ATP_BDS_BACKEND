@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProjectService implements IProjectService {
 

@@ -811,8 +811,7 @@ VALUES
 
     ('Area 1', '6ab4cf4e-fe29-11ee-9868-90e868d8964c'),
     ('Area 2', '6ab4cf4e-fe29-11ee-9868-90e868d8964c'),
-    ('Area 3', '6ab4cf4e-fe29-11ee-9868-90e868d8964c')
-    ;
+    ('Area 3', '6ab4cf4e-fe29-11ee-9868-90e868d8964c');
 
 INSERT INTO land (id, name, description, thumbnail, status, address, price, deposit, acreage, area_id)
 VALUES  (UUID(), 'Land 1', 'Description of Land 1', 'thumbnail.jpg', 0, 'Address of Land', 30.00, 30.00, 100, 'c038d81f-fe29-11ee-9868-90e868d8964c'),

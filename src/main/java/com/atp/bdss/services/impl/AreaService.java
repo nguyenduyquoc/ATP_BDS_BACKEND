@@ -14,6 +14,7 @@ import com.atp.bdss.exceptions.CustomException;
 import com.atp.bdss.repositories.*;
 import com.atp.bdss.services.IAreaService;
 import com.atp.bdss.utils.ErrorsApp;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AreaService implements IAreaService {
 
@@ -38,7 +40,7 @@ public class AreaService implements IAreaService {
     final ModelMapper modelMapper;
 
     @Override
-    public ResponseDataWithPagination allAreaOfProject(RequestPaginationArea request) {
+    public ResponseDataWithPagination allAreas(RequestPaginationArea request) {
         Pageable pageable;
         long pageIndex = request.getPageIndex() != null ? request.getPageIndex() : 0;
         long pageSize = request.getPageSize() != null ? request.getPageSize() : 10;

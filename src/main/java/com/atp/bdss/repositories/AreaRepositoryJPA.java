@@ -23,12 +23,11 @@ public interface AreaRepositoryJPA extends JpaRepository<Area, String> {
             "   a.lands" +
             ")" +
             "from Area a " +
-            "inner join a.project p " +
-            "where ( a.project.id = :#{#id}) " +
+            "where ( a.project.id = :#{#projectId}) " +
             "order by a.id desc"
     )
-    List<Area> getAllAreaForProject(String id);
-
+    List<Area> getAllAreaForProject(@Param("projectId")String projectId);
+    // lay cac phan khu cho mot du an
 
 
     @Query(value = "select new com.atp.bdss.dtos.AreaDTO( " +
@@ -43,6 +42,7 @@ public interface AreaRepositoryJPA extends JpaRepository<Area, String> {
 
             "ORDER BY a.id DESC")
     Page<AreaDTO> getAreaPagination(@Param("request") RequestPaginationArea request, Pageable pageable);
+    // phan trang tat ca cac phan khu
 
     boolean existsAreaByNameIgnoreCaseAndProjectId(String name, String projectId);
 

@@ -1,8 +1,11 @@
 package com.atp.bdss.dtos;
 
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -11,14 +14,14 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DistrictDTO {
+public class ProvinceDTO {
 
-    Integer id;
+    int id;
 
     String name;
 
-    Integer provinceId;
+    List<DistrictDTO> districts;
 
-    String provinceName;
+
 
 }

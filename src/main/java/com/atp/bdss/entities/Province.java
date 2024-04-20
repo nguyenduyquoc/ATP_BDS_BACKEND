@@ -25,4 +25,9 @@ public class Province {
 
     @OneToMany(mappedBy = "province" , fetch = FetchType.LAZY)
     List<District> districts;
+
+    public Province(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

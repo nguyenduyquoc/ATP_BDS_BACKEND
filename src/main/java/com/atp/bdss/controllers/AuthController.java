@@ -1,7 +1,7 @@
+/**
 package com.atp.bdss.controllers;
 
-/*
-import com.atp.bds.entities.Root;
+import com.atp.bdss.entities.Root;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-*/
 
 
-/*
 @RestController
 @RequestMapping("/ATP_BDS")
 public class AuthController {
@@ -29,11 +27,10 @@ public class AuthController {
 
     @GetMapping("/sign_in")
     public Map<String, Object> currentUser(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
-        */
-/*System.out.println(toPerson(oAuth2AuthenticationToken.getPrincipal().getAttributes()).getEmail());
+System.out.println(toPerson(oAuth2AuthenticationToken.getPrincipal().getAttributes()).getEmail());
         System.out.println(toPerson(oAuth2AuthenticationToken.getPrincipal().getAttributes()).getName());
         System.out.println(toPerson(oAuth2AuthenticationToken.getPrincipal().getAttributes()).getPicture());
-        System.out.println(oAuth2AuthenticationToken);*//*
+        System.out.println(oAuth2AuthenticationToken);
 
 
         return oAuth2AuthenticationToken.getPrincipal().getAttributes();
