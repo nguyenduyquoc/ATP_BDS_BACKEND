@@ -19,9 +19,15 @@ public interface ProvinceRepositoryJPA extends JpaRepository<Province, Integer> 
             "WHERE SIZE(d.projects) > 0 "+
             "order by SIZE(d.projects) asc"
     )
-    List<Province> getAllProvinces();
+    List<Province> getAllProvincesWithProject();
     // just get provinces had project
 
-
+    @Query(value = "select distinct new com.atp.bdss.entities.Province( " +
+            "   p.id, " +
+            "   p.name" +
+            ")" +
+            "from Province p "
+    )
+    List<Province> getAllProvinces();
 
 }

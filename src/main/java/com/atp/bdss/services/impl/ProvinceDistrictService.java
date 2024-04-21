@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class ProvinceDistrictService implements IProvinceDistrictService {
     final ModelMapper modelMapper;
     @Override
     public ResponseData getAllProvincesWithProjects() {
-        List<Province> provinces = provinceRepository.getAllProvinces();
+        List<Province> provinces = provinceRepository.getAllProvincesWithProject();
         if(provinces.isEmpty())
             throw new CustomException(ErrorsApp.RECORD_NOT_FOUND);
 
@@ -50,14 +51,12 @@ public class ProvinceDistrictService implements IProvinceDistrictService {
     @Override
     public ResponseData getAllDistrictWithProject() {
         List<District> districts = districtRepository.getAllDistrict();
-
         if(districts.isEmpty())
             throw new CustomException(ErrorsApp.RECORD_NOT_FOUND);
 
         List<DistrictDTO> data = districts.stream()
                 .map(district -> modelMapper.map(district, DistrictDTO.class)
                 ).toList();
-
 
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
@@ -88,7 +87,7 @@ public class ProvinceDistrictService implements IProvinceDistrictService {
     @Override
     public ResponseData getAllDistrictWithProjectByProvinceId(int provinceId) {
 
-        List<District> districts = districtRepository.getAllDistrictByProvince(provinceId);
+        List<District> districts = districtRepository.getAllDistrictWithProjectByProvince(provinceId);
 
         if(districts.isEmpty())
             throw new CustomException(ErrorsApp.RECORD_NOT_FOUND);
@@ -101,6 +100,32 @@ public class ProvinceDistrictService implements IProvinceDistrictService {
                 .code(HttpStatus.OK.value())
                 .message("Query successfully")
                 .data(data)
+                .build();
+    }
+
+    @Override
+    public ResponseData getAllProvinces() {
+        List<ProvinceDTO> provinces = provinceRepository.getAllProvinces().stream().map(
+                province -> modelMapper.map(province, ProvinceDTO.class)
+        ).toList();
+
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .data(provinces)
+                .build();
+    }
+
+    @Override
+    public ResponseData getAllDistrictByProvinceId(int provinceId) {
+        List<DistrictDTO> districts = districtRepository.getAllDistrictByProvince(provinceId).stream()
+                .map(district -> modelMapper.map(district, DistrictDTO.class)
+                ).toList();
+
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .data(districts)
                 .build();
     }
 }

@@ -18,5 +18,5 @@ public interface IProjectService {
     ResponseData findProjectById(String id);
 
 
-    ResponseData updateProject(RequestCreateProject request);
+    ResponseData updateProject(RequestCreateProject request) throws IOException;
 }

@@ -32,6 +32,18 @@ public interface DistrictRepositoryJPA extends JpaRepository<District, Integer> 
             "WHERE p.id = :provinceId and SIZE(d.projects) > 0 "+
             "order by SIZE(d.projects) asc"
     )
-    List<District> getAllDistrictByProvince(@Param("provinceId") int provinceId);
+    List<District> getAllDistrictWithProjectByProvince(@Param("provinceId") int provinceId);
     // lay cac quan/ huyen thuoc tinh/thanh pho theo provinceId ma co du an
+
+
+    @Query(value = "select distinct new com.atp.bdss.entities.District( " +
+            "   d.id, " +
+            "   d.name, " +
+            "   d.province " +
+            ")" +
+            "from District d " +
+            "inner join d.province p " +
+            "WHERE p.id = :provinceId "
+    )
+    List<District> getAllDistrictByProvince(@Param("provinceId") int provinceId);
 }

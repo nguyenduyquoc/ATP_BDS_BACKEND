@@ -44,6 +44,6 @@ public interface AreaRepositoryJPA extends JpaRepository<Area, String> {
     Page<AreaDTO> getAreaPagination(@Param("request") RequestPaginationArea request, Pageable pageable);
     // phan trang tat ca cac phan khu
 
-    boolean existsAreaByNameIgnoreCaseAndProjectId(String name, String projectId);
+    boolean existsByNameIgnoreCaseAndProjectId(String name, String projectId);
 
 }

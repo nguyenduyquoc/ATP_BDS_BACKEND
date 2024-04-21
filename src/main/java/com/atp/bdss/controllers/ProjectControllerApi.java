@@ -58,6 +58,7 @@ public class ProjectControllerApi {
     // tìm dự án theo id
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData getProjectById(@PathVariable String id){
+
         return projectService.findProjectById(id);
     }
 
@@ -69,7 +70,7 @@ public class ProjectControllerApi {
                                       @RequestParam("address") String address,
                                       @RequestParam("startDate") String startDate,
                                       @RequestParam("endDate") String endDate,
-                                      @RequestParam("qrImg") String qrImg,
+                                      @RequestParam("qrImg") MultipartFile qrImg,
                                       @RequestParam("bankNumber") String bankNumber,
                                       @RequestParam("bankName") String bankName,
                                       @RequestParam("hostBank") String hostBank,
@@ -77,11 +78,10 @@ public class ProjectControllerApi {
                                       @RequestParam("investorPhone") String investorPhone,
                                       @RequestParam("projectTypeId") String projectTypeId,
                                       @RequestParam("districtId") String districtId) throws IOException {
-        String thumbnail = uploadImage(image, cloudinaryService);
         RequestCreateProject request = RequestCreateProject.builder()
                 .name(name)
                 .description(description)
-                .thumbnail(thumbnail)
+                .thumbnail(image)
                 .status(Short.parseShort(status))
                 .address(address)
                 .startDate(LocalDate.parse(startDate))
@@ -109,7 +109,7 @@ public class ProjectControllerApi {
                                       @RequestParam("address") String address,
                                       @RequestParam("startDate") String startDate,
                                       @RequestParam("endDate") String endDate,
-                                      @RequestParam("qrImg") String qrImg,
+                                      @RequestParam("qrImg") MultipartFile qrImg,
                                       @RequestParam("bankNumber") String bankNumber,
                                       @RequestParam("bankName") String bankName,
                                       @RequestParam("hostBank") String hostBank,
@@ -117,12 +117,12 @@ public class ProjectControllerApi {
                                       @RequestParam("investorPhone") String investorPhone,
                                       @RequestParam("projectTypeId") String projectTypeId,
                                       @RequestParam("districtId") String districtId) throws IOException {
-        String thumbnail = uploadImage(image, cloudinaryService);
+
         RequestCreateProject request = RequestCreateProject.builder()
                 .id(id)
                 .name(name)
                 .description(description)
-                .thumbnail(thumbnail)
+                .thumbnail(image)
                 .status(Short.parseShort(status))
                 .address(address)
                 .startDate(LocalDate.parse(startDate))

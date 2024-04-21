@@ -71,23 +71,27 @@ public class AreaService implements IAreaService {
     public ResponseData createAreaForProject(AreaCreate request) {
 
         // check xem id nay có ton tai khong
-        Optional<Project> project = projectRepository.findById(request.getProjectId());
-        if (project.isEmpty())
-            throw new CustomException(ErrorsApp.RECORD_NOT_FOUND);
+        Project project = projectRepository.findById(request.getProjectId())
+                .orElseThrow(() -> new CustomException(ErrorsApp.RECORD_NOT_FOUND));
 
         // check xem name truyen vao da trung voi name thuoc du an nay hay chua
-        List<Area> areasInProject = project.get().getAreas();
+        List<Area> areasInProject = project.getAreas();
 
-        boolean nameExistsInProject = areasInProject.stream()
+        /*boolean nameExistsInProject = areasInProject.stream()
                 .anyMatch(area -> area.getName().equalsIgnoreCase(request.getName()));
 
         if (nameExistsInProject) {
+            throw new CustomException(ErrorsApp.DUPLICATE_AREA_NAME);
+        }*/
+        // Kiểm tra xem tên khu vực đã tồn tại trong dự án hay chưa
+        boolean areaExists = areaRepository.existsByNameIgnoreCaseAndProjectId(request.getName(), request.getProjectId());
+        if (areaExists) {
             throw new CustomException(ErrorsApp.DUPLICATE_AREA_NAME);
         }
 
         Area area = Area.builder()
                 .name(request.getName())
-                .project(project.get())
+                .project(project)
                 .build();
         areaRepository.save(area);
 
@@ -101,9 +105,8 @@ public class AreaService implements IAreaService {
     @Override
     public ResponseData createAreaMultiProject(RequestCreateMultiObject<AreaCreate> request) {
         // check xem id nay có ton tai khong
-        Optional<Project> optionalProject =  projectRepository.findById(request.getId());
-        if(optionalProject.isEmpty())
-            throw new CustomException(ErrorsApp.RECORD_NOT_FOUND);
+        Project project =  projectRepository.findById(request.getId())
+                .orElseThrow(() -> new CustomException(ErrorsApp.RECORD_NOT_FOUND));
 
         Set<String> areaNames = new HashSet<>();
 
@@ -122,19 +125,19 @@ public class AreaService implements IAreaService {
             }
         }
 
-        List<Area> areaList = optionalProject.get().getAreas();
+        List<Area> areaList = project.getAreas();
 
         for(AreaCreate areaCreate : request.getMultiObject()) {
             Area area = Area.builder()
                     .name(areaCreate.getName())
-                    .project(optionalProject.get())
+                    .project(project)
                     .build();
 
             areaList.add(area);
         }
-        optionalProject.get().setAreas(areaList);
+        project.setAreas(areaList);
 
-        projectRepository.save(optionalProject.get());
+        projectRepository.save(project);
 
         return ResponseData
                 .builder()
@@ -145,33 +148,20 @@ public class AreaService implements IAreaService {
 
     @Override
     public ResponseData updateAreaForProject(AreaCreate request) {
-        Optional<Area> optionArea = areaRepository.findById(request.getId());
-        if (optionArea.isEmpty())
-            throw new CustomException(ErrorsApp.RECORD_NOT_FOUND);
+        Area area = areaRepository.findById(request.getId())
+                .orElseThrow(() -> new CustomException(ErrorsApp.RECORD_NOT_FOUND));
 
-        if(!optionArea.get().getLands().isEmpty())
-            throw new CustomException(ErrorsApp.LAND_EXISTED);
-
-        // check xem id nay có ton tai khong
-        Optional<Project> project = projectRepository.findById(request.getProjectId());
-        if (project.isEmpty())
-            throw new CustomException(ErrorsApp.RECORD_NOT_FOUND);
+        // check xem project id nay có ton tai khong
+        Project project = projectRepository.findById(request.getProjectId())
+                .orElseThrow(() -> new CustomException(ErrorsApp.RECORD_NOT_FOUND));
+        area.setProject(project);
 
         // check xem name truyen vao da trung voi name thuoc du an nay hay chua
-        List<Area> areasInProject = project.get().getAreas();
-
-        boolean nameExistsInProject = areasInProject.stream()
-                .anyMatch(area -> area.getName().equalsIgnoreCase(request.getName()));
-
-        if (nameExistsInProject) {
+        boolean areaExists = areaRepository.existsByNameIgnoreCaseAndProjectId(request.getName(), request.getProjectId());
+        if (areaExists) {
             throw new CustomException(ErrorsApp.DUPLICATE_AREA_NAME);
         }
-
-        Area area = Area.builder()
-                .id(request.getId())
-                .name(request.getName())
-                .project(project.get())
-                .build();
+        area.setName(request.getName());
         areaRepository.save(area);
 
         return ResponseData
@@ -188,7 +178,7 @@ public class AreaService implements IAreaService {
             throw new CustomException(ErrorsApp.RECORD_NOT_FOUND);
 
         AreaDTO areaDTO = modelMapper.map(area.get(), AreaDTO.class);
-        List<LandDTO> landDTOS = new ArrayList<>();
+        List<LandDTO> landDTOS;
         if (!area.get().getLands().isEmpty()) {
             landDTOS = area.get().getLands().stream()
                     .map(land -> modelMapper.map(land, LandDTO.class))

@@ -26,7 +26,8 @@ public enum ErrorsApp {
     INVESTOR_NOT_FOUND(4000, "investor.investor-not-found",  HttpStatus.BAD_REQUEST),
     DISTRICT_NOT_FOUND(5000,"district.district-not-found" , HttpStatus.BAD_REQUEST),
     UPLOAD_FAIL(6000,"upload-file.upload-file-fail" , HttpStatus.BAD_REQUEST),
-    DUPLICATE_AREA_NAME(7000, "area.area-duplicate", HttpStatus.BAD_REQUEST);
+    DUPLICATE_AREA_NAME(7000, "area.area-duplicate", HttpStatus.BAD_REQUEST),
+    DUPLICATE_LAND_NAME(7001, "land.land-duplicate", HttpStatus.BAD_REQUEST),;
 
 
     private final int code;

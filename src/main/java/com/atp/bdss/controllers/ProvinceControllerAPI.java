@@ -17,9 +17,22 @@ public class ProvinceControllerAPI {
 
     final IProvinceDistrictService provinceDistrictService;
 
+    // GET 63 PROVINCES
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData getAllProvinces(){
+
+        return provinceDistrictService.getAllProvinces();
+    }
+
+    //  GET ALL DISTRICTS WITH PROVINCE_ID
+    @GetMapping(value = "/{provinceId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData getAllDistrictByProvinceId(@PathVariable int provinceId){
+        return provinceDistrictService.getAllDistrictByProvinceId(provinceId);
+    }
+
 
     //  GET ALL PROVINCES WITH PROJECTS
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/withProject", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData getAllProvincesWithProjects(){
 
         return provinceDistrictService.getAllProvincesWithProjects();
@@ -27,11 +40,16 @@ public class ProvinceControllerAPI {
 
 
     //  GET ALL DISTRICTS WITH PROJECTS BELONGING TO A PROVINCE.
-    @GetMapping(value = "/{provinceId}/allDistrict", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData getAllDistrictByProvinceId(@PathVariable int provinceId){
+    @GetMapping(value = "/{provinceId}/allDistrictWithProject", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData getAllDistrictWithProjectByProvinceId(@PathVariable int provinceId){
 
         return provinceDistrictService.getAllDistrictWithProjectByProvinceId(provinceId);
     }
+
+
+
+
+
 
 }
 

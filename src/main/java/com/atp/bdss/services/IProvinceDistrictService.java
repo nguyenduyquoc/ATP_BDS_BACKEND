@@ -17,4 +17,7 @@ public interface IProvinceDistrictService {
     ResponseData getAllDistrictWithProjectByProvinceId(int provinceId);
 
 
+    ResponseData getAllProvinces();
+
+    ResponseData getAllDistrictByProvinceId(int provinceId);
 }

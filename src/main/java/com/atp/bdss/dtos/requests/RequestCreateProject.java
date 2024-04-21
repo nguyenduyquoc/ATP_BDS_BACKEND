@@ -1,9 +1,8 @@
 package com.atp.bdss.dtos.requests;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -11,6 +10,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @Builder
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestCreateProject {
 
     String id;
@@ -19,7 +19,7 @@ public class RequestCreateProject {
 
     String description;
 
-    String thumbnail;
+    MultipartFile thumbnail;
 
     short status;
 
@@ -29,7 +29,7 @@ public class RequestCreateProject {
 
     LocalDate endDate;
 
-    String qrImg;
+    MultipartFile qrImg;
 
     String bankNumber;
 

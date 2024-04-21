@@ -1,9 +1,7 @@
 package com.atp.bdss.dtos.requests;
 
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Getter
@@ -11,13 +9,13 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestPaginationLand {
 
-    Short pageIndex;
+    Integer pageIndex;
 
-    Short pageSize;
+    Long pageSize;
+
+    String searchName;
 
     String projectId;
 
     String areaId;
-
-    String landName;
 }
