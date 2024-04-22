@@ -19,4 +19,6 @@ public interface IProjectService {
 
 
     ResponseData updateProject(RequestCreateProject request) throws IOException;
+
+    ResponseData allProjectsNoPagination();
 }

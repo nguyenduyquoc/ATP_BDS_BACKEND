@@ -19,14 +19,21 @@ public class AreaDTO {
 
     String name;
 
+    String projectId;
+
     String projectName;
 
     List<LandDTO> lands;
 
-
     public AreaDTO(String id, String name, String projectName) {
         this.id = id;
         this.name = name;
+        this.projectName = projectName;
+    }
+    public AreaDTO(String id, String name,String projectId, String projectName) {
+        this.id = id;
+        this.name = name;
+        this.projectId = projectId;
         this.projectName = projectName;
     }
 }

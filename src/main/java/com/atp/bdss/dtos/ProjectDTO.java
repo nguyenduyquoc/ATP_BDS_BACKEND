@@ -71,4 +71,9 @@ public class ProjectDTO {
         this.projectType = projectType;
         this.district = district;
     }
+
+    public ProjectDTO(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

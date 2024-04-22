@@ -45,7 +45,8 @@ public class AreaControllerAPI {
         return  areaService.createAreaForProject(request);
     }
 
-    // Chinh sua phan khu trong du an
+    // Chinh sua phan khu trong du an - hien tai chi cho chinh sua name, chua cho chinh sua project, them vao sau
+    // neu phan khu day da co land thi k cho doi phan khu
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData updateArea(@Valid @RequestBody AreaCreate request) {
         return areaService.updateAreaForProject(request);

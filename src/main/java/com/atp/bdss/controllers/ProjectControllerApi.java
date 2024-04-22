@@ -54,6 +54,12 @@ public class ProjectControllerApi {
         return projectService.allProjects(requestParam);
     }
 
+    @GetMapping(value = "/allProjects", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData allProjectsNoPagination(
+    ) {
+        return projectService.allProjectsNoPagination();
+    }
+
 
     // tìm dự án theo id
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

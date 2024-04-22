@@ -1,64 +1,60 @@
-/**
+/*
 package com.atp.bdss.controllers;
 
-import com.atp.bdss.entities.Root;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
+import com.atp.bdss.dtos.TokenDto;
+import com.atp.bdss.dtos.UrlDto;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
+import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
-
+import java.io.IOException;
+import java.util.Arrays;
 
 @RestController
-@RequestMapping("/ATP_BDS")
+@RequestMapping("/auth")
 public class AuthController {
+    @Value("${spring.security.oauth2.resourceserver.opaque-token.clientId}")
+    private String clientId;
 
-    private final OAuth2AuthorizedClientService clientService;
+    @Value("${spring.security.oauth2.resourceserver.opaque-token.clientSecret}")
+    private String clientSecret;
 
-    public AuthController(OAuth2AuthorizedClientService clientService) {
-        this.clientService = clientService;
+    @GetMapping("/url")
+    public ResponseEntity<UrlDto> auth() {
+        String url = new GoogleAuthorizationCodeRequestUrl(
+           clientId,
+           "http://localhost:4200",
+                Arrays.asList("email","profile", "openid")
+        ).build();
+        return ResponseEntity.ok(new UrlDto(url));
     }
 
-    @GetMapping("/sign_in")
-    public Map<String, Object> currentUser(OAuth2AuthenticationToken oAuth2AuthenticationToken) {
-System.out.println(toPerson(oAuth2AuthenticationToken.getPrincipal().getAttributes()).getEmail());
-        System.out.println(toPerson(oAuth2AuthenticationToken.getPrincipal().getAttributes()).getName());
-        System.out.println(toPerson(oAuth2AuthenticationToken.getPrincipal().getAttributes()).getPicture());
-        System.out.println(oAuth2AuthenticationToken);
+    @GetMapping("/callback")
+    public ResponseEntity<TokenDto> callback(@RequestParam("code") String code) {
+        String token;
+        try {
+            token = new GoogleAuthorizationCodeTokenRequest(
+                    new NetHttpTransport(),
+                    new GsonFactory(),
+                    clientId,
+                    clientSecret,
+                    code,
+                    "http://localhost:4200"
 
-
-        return oAuth2AuthenticationToken.getPrincipal().getAttributes();
+            ).execute().getAccessToken();
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.ok(new TokenDto(token));
     }
 
-    @GetMapping("/user-info")
-    public String getUserInfo(Authentication authentication) {
-        OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(
-                ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId(),
-                authentication.getName());
-
-        OAuth2AccessToken accessToken = client.getAccessToken();
-        String tokenValue = accessToken.getTokenValue();
-        System.out.println(tokenValue);
-        // Sử dụng tokenValue cho các mục đích cần thiết, như truy cập các API bảo vệ bằng OAuth 2.0
-        return "Access Token: " + tokenValue;
-    }
-
-
-
-    public Root toPerson(Map<String, Object> map) {
-        if (map == null)
-            return null;
-        Root root =new Root();
-        root.setEmail((String) map.get("email"));
-        root.setName((String) map.get("name"));
-        root.setPicture((String) map.get("picture"));
-        return root;
-    }
 }
 */

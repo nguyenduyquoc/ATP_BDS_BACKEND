@@ -212,6 +212,21 @@ public class ProjectService implements IProjectService {
                 .build();
     }
 
+    @Override
+    public ResponseData allProjectsNoPagination() {
+        List<ProjectDTO> projectList = projectRepository.findAll()
+                .stream().map(project -> {
+                    ProjectDTO projectDTO = new ProjectDTO();
+                    projectDTO.setId(project.getId());
+                    projectDTO.setName(project.getName());
+                    return projectDTO;
+                }).toList();
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .data(projectList)
+                .build();
+    }
 
 
     static boolean findStatusProject(Short status) {
