@@ -50,16 +50,14 @@ public class LandService implements ILandService {
     @Override
     public ResponseData createLand(RequestCreateLand request) throws IOException {
         // kiem tra area co ton tai hay k
-        Optional<Area> area = areaRepository.findById(request.getAreaId());
-        if (area.isEmpty())
-            throw new CustomException(ErrorsApp.RECORD_NOT_FOUND);
+        Area area = areaRepository.findById(request.getAreaId())
+                .orElseThrow(() -> new CustomException(ErrorsApp.RECORD_NOT_FOUND));
 
         // check xem name truyen vao da trung voi name thuoc phan khu nay hay chua
-        List<Land> landList = area.get().getLands();
+        List<Land> landList = area.getLands();
 
         boolean nameExistsArea = landList.stream()
                 .anyMatch(land -> land.getName().equalsIgnoreCase(request.getName()));
-
         if (nameExistsArea) {
             throw new CustomException(ErrorsApp.DUPLICATE_AREA_NAME);
         }
@@ -68,7 +66,7 @@ public class LandService implements ILandService {
 
         Land land = modelMapper.map(request, Land.class);
         land.setThumbnail(thumbnail);
-        land.setArea(area.get());
+        land.setArea(area);
         landRepository.save(land);
 
         return ResponseData

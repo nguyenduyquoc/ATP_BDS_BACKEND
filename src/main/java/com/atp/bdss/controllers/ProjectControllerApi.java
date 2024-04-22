@@ -106,7 +106,7 @@ public class ProjectControllerApi {
     }
 
     // chỉnh sửa dự án (thay đổi trạng thái dự án có thể dùng api này)
-    @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData updateProject(@RequestParam("id") String id,
                                       @RequestParam("name") String name,
                                       @RequestParam("description") String description,

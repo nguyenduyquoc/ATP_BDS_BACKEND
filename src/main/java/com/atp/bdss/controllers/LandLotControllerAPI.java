@@ -5,6 +5,7 @@ import com.atp.bdss.dtos.requests.RequestPaginationLand;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.services.ILandService;
+import com.atp.bdss.utils.Constants;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,7 +17,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 @RestController
-@RequestMapping(value = "/lands")
+@RequestMapping(value = Constants.REQUEST_MAPPING_PREFIX + Constants.VERSION_API_V1 + "/lands")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LandLotControllerAPI {
@@ -31,7 +32,6 @@ public class LandLotControllerAPI {
                                                   @RequestParam("areaId") String areaId){
 
         RequestPaginationLand request = new RequestPaginationLand();
-
         request.setPageIndex(pageIndex);
         request.setPageSize(pageSize);
         request.setSearchName(searchName);
@@ -40,10 +40,10 @@ public class LandLotControllerAPI {
         return landService.allLands(request);
     }
 
-    @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData createLandLot(@RequestParam("name") String name,
                                       @RequestParam("description") String description,
-                                      @RequestParam("thumbnail") MultipartFile image,
+                                      @RequestParam(value = "thumbnail", required = false) MultipartFile image,
                                       @RequestParam("address") String address,
                                       @RequestParam("status") Short status,
                                       @RequestParam("price") BigDecimal price,
@@ -66,7 +66,7 @@ public class LandLotControllerAPI {
         return landService.createLand(request);
     }
 
-    @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData updateLandLot(@RequestParam("id") String id,
                                       @RequestParam("name") String name,
                                       @RequestParam("description") String description,
