@@ -25,11 +25,11 @@ public class LandLotControllerAPI {
     final ILandService landService;
 
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDataWithPagination allLandLots(@RequestParam("pageIndex") int pageIndex,
-                                                  @RequestParam("pageSize") long pageSize,
-                                                  @RequestParam("searchName") String searchName,
-                                                  @RequestParam("projectId") String projectId,
-                                                  @RequestParam("areaId") String areaId){
+    public ResponseDataWithPagination allLandLots(@RequestParam(name = "pageIndex", defaultValue = "0") int pageIndex,
+                                                  @RequestParam(name = "pageSize", defaultValue = "10") long pageSize,
+                                                  @RequestParam(name = "searchName", required = false) String searchName,
+                                                  @RequestParam(name = "projectId", required = false) String projectId,
+                                                  @RequestParam(name = "areaId", required = false) String areaId){
 
         RequestPaginationLand request = new RequestPaginationLand();
         request.setPageIndex(pageIndex);

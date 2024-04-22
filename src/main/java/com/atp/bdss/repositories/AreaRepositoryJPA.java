@@ -48,4 +48,6 @@ public interface AreaRepositoryJPA extends JpaRepository<Area, String> {
 
     boolean existsByNameIgnoreCaseAndProjectId(String name, String projectId);
 
+
+
 }

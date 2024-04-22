@@ -24,7 +24,7 @@ import java.time.LocalDate;
 public class ProjectControllerApi {
 
     final IProjectService projectService;
-    final CloudinaryService cloudinaryService;
+
 
     // phân trang dự án
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -55,8 +55,7 @@ public class ProjectControllerApi {
     }
 
     @GetMapping(value = "/allProjects", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData allProjectsNoPagination(
-    ) {
+    public ResponseData allProjectsNoPagination() {
         return projectService.allProjectsNoPagination();
     }
 
@@ -152,12 +151,6 @@ public class ProjectControllerApi {
         return null;
     }
 
-    private static String uploadImage(MultipartFile image, CloudinaryService cloudinaryService) throws IOException {
-        String thumbnail = null;
-        if(image != null && !image.isEmpty())
-            thumbnail = cloudinaryService.upload(image);
-        return thumbnail;
-    }
 
 
 }

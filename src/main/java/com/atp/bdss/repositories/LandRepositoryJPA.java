@@ -13,7 +13,7 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
 
     boolean existsByNameIgnoreCase(String name);
 
-    @Query(value = "select new com.atp.bdss.entities.Land( " +
+    @Query(value = "select distinct new com.atp.bdss.entities.Land( " +
             "   l.id, " +
             "   l.name, " +
             "   l.description, " +
@@ -22,16 +22,35 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
             "   l.status, " +
             "   l.price, " +
             "   l.deposit, " +
-            "   l.acreage" +
+            "   l.acreage," +
+            "   l.area" +
             ")" +
-            "from Land l " +
-            "left join l.area a " +
-            "where (:#{#request.projectId} is null or l.area.project.id = :#{#request.projectId}) " +
-            "and (:#{#request.areaId} IS NULL OR :#{#request.areaId} = '' OR l.name LIKE %:#{#request.searchName}%) " +
-            "and (:#{#request.areaId} is null or l.area.id = :#{#request.areaId}) " +
-            "order by l.id desc"
-    )
+            "FROM Land l " +
+            "LEFT JOIN l.area a " +
+            "LEFT JOIN a.project p " +
+            "WHERE ((:#{#request.searchName} IS NULL OR :#{#request.searchName} = '') " +
+            "OR (l.name LIKE %:#{#request.searchName}% " +
+            "OR a.name LIKE %:#{#request.searchName}% " +
+            "OR p.name LIKE %:#{#request.searchName}%)) " +
+            "AND (:#{#request.projectId} IS NULL OR p.id = :#{#request.projectId}) " +
+            "AND (:#{#request.areaId} IS NULL OR a.id = :#{#request.areaId}) " +
+            "ORDER BY l.id DESC")
+
     Page<Land> getLandPagination(@Param("request") RequestPaginationLand request, Pageable pageable);
 
+    /*@Query("SELECT DISTINCT l " +
+            "FROM Land l " +
+            "LEFT JOIN l.area a " +
+            "LEFT JOIN a.project p " +
+            "WHERE ((:#{#request.searchName} IS NULL OR :#{#request.searchName} = '') " +
+            "OR (l.name LIKE %:#{#request.searchName}% " +
+            "OR a.name LIKE %:#{#request.searchName}% " +
+            "OR p.name LIKE %:#{#request.searchName}%)) " +
+            "AND (:#{#request.projectId} IS NULL OR p.id = :#{#request.projectId}) " +
+            "AND (:#{#request.areaId} IS NULL OR a.id = :#{#request.areaId}) " +
+            "ORDER BY l.id DESC")
+    Page<Land> getLandPagination(@Param("request") RequestPaginationLand request, Pageable pageable);
+
+    */
     boolean existsByNameIgnoreCaseAndAreaId(String name, String areaId);
 }

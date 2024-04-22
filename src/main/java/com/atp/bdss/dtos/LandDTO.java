@@ -33,4 +33,7 @@ public class LandDTO {
 
     long acreage;
 
+    AreaDTO areaDTO;
+
+
 }

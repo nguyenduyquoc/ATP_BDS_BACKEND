@@ -52,18 +52,19 @@ public class AreaControllerAPI {
         return areaService.updateAreaForProject(request);
     }
 
+
     // Tao nhieu phan khu trong mot lan tao
     @PostMapping(value = "/{id}/addMultiArea", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData createMultiArea(@PathVariable String id, @Valid @RequestBody RequestCreateMultiObject<AreaCreate> request) {
         request.setId(id);
         return areaService.createAreaMultiProject(request);
     }
+
+
     // tìm dự án theo id
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData getAreaById(@PathVariable String id){
         return areaService.findAreaById(id);
     }
-
-
 
 }
