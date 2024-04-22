@@ -6,6 +6,7 @@ import com.atp.bdss.dtos.ProjectDTO;
 import com.atp.bdss.dtos.ProjectTypeDTO;
 import com.atp.bdss.dtos.requests.RequestCreateProject;
 import com.atp.bdss.dtos.requests.RequestPaginationProject;
+import com.atp.bdss.dtos.requests.RequestUpdateProject;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.District;
@@ -162,7 +163,7 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public ResponseData updateProject(RequestCreateProject request) throws IOException {
+    public ResponseData updateProject(RequestUpdateProject request) throws IOException {
 
         Project project = projectRepository.findById(request.getId())
                 .orElseThrow(() -> new CustomException(ErrorsApp.RECORD_NOT_FOUND));
@@ -183,14 +184,16 @@ public class ProjectService implements IProjectService {
         project.setStatus(request.getStatus());
 
         // setThumbnail
-        if(request.getThumbnail() != null && !request.getThumbnail().isEmpty()){
-            String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
+        if(request.getThumbnailNew() != null && !request.getThumbnailNew().isEmpty()){
+            String thumbnail = uploadImage(request.getThumbnailNew(), cloudinary);
             project.setThumbnail(thumbnail);
         }
 
         // set Qr image
-        String qrImage = uploadImage(request.getQrImg(), cloudinary);
-        project.setQrImg(qrImage);
+        if(request.getQrImgNew() != null && !request.getQrImgNew().isEmpty()){
+            String qrImage = uploadImage(request.getQrImgNew(), cloudinary);
+            project.setQrImg(qrImage);
+        }
 
         project.setName(request.getName());
         project.setDescription(request.getDescription());

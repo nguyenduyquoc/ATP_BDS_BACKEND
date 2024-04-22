@@ -110,12 +110,12 @@ public class ProjectControllerApi {
     public ResponseData updateProject(@RequestParam("id") String id,
                                       @RequestParam("name") String name,
                                       @RequestParam("description") String description,
-                                      @RequestParam("thumbnail") MultipartFile image,
+                                      @RequestParam(value = "thumbnail", required = false) MultipartFile newImage,
                                       @RequestParam("status") String status,
                                       @RequestParam("address") String address,
                                       @RequestParam("startDate") String startDate,
                                       @RequestParam("endDate") String endDate,
-                                      @RequestParam("qrImg") MultipartFile qrImg,
+                                      @RequestParam(value = "qrImg", required = false) MultipartFile newQrImg,
                                       @RequestParam("bankNumber") String bankNumber,
                                       @RequestParam("bankName") String bankName,
                                       @RequestParam("hostBank") String hostBank,
@@ -124,16 +124,16 @@ public class ProjectControllerApi {
                                       @RequestParam("projectTypeId") String projectTypeId,
                                       @RequestParam("districtId") String districtId) throws IOException {
 
-        RequestCreateProject request = RequestCreateProject.builder()
+        RequestUpdateProject request = RequestUpdateProject.builder()
                 .id(id)
                 .name(name)
                 .description(description)
-                .thumbnail(image)
+                .thumbnailNew(newImage)
                 .status(Short.parseShort(status))
                 .address(address)
                 .startDate(LocalDate.parse(startDate))
                 .endDate(LocalDate.parse(endDate))
-                .qrImg(qrImg)
+                .qrImgNew(newQrImg)
                 .bankNumber(bankNumber)
                 .bankName(bankName)
                 .hostBank(hostBank)
