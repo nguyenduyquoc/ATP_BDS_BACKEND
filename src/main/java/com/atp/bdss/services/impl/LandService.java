@@ -116,12 +116,4 @@ public class LandService implements ILandService {
 
 
 
-    private static void nameExisted (List<Land> landList, RequestCreateLand request) {
-        boolean nameExistsLand = landList.stream()
-                .anyMatch(land -> land.getName().equalsIgnoreCase(request.getName()));
-        if (nameExistsLand) {
-            throw new CustomException(ErrorsApp.DUPLICATE_LAND_NAME);
-        }
-    }
-
 }

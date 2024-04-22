@@ -110,12 +110,12 @@ public class ProjectControllerApi {
     public ResponseData updateProject(@RequestParam("id") String id,
                                       @RequestParam("name") String name,
                                       @RequestParam("description") String description,
-                                      @RequestParam(value = "thumbnail", required = false) MultipartFile newImage,
+                                      @RequestParam(value = "thumbnail", required = false) MultipartFile image,
                                       @RequestParam("status") String status,
                                       @RequestParam("address") String address,
                                       @RequestParam("startDate") String startDate,
                                       @RequestParam("endDate") String endDate,
-                                      @RequestParam(value = "qrImg", required = false) MultipartFile newQrImg,
+                                      @RequestParam(value = "qrImg", required = false) MultipartFile qrImg,
                                       @RequestParam("bankNumber") String bankNumber,
                                       @RequestParam("bankName") String bankName,
                                       @RequestParam("hostBank") String hostBank,
@@ -124,21 +124,16 @@ public class ProjectControllerApi {
                                       @RequestParam("projectTypeId") String projectTypeId,
                                       @RequestParam("districtId") String districtId) throws IOException {
 
-        if(newImage.isEmpty())
-            newImage = null;
-
-        if (newQrImg.isEmpty())
-            newQrImg = null;
         RequestCreateProject request = RequestCreateProject.builder()
                 .id(id)
                 .name(name)
                 .description(description)
-                .thumbnail(newImage)
+                .thumbnail(image)
                 .status(Short.parseShort(status))
                 .address(address)
                 .startDate(LocalDate.parse(startDate))
                 .endDate(LocalDate.parse(endDate))
-                .qrImg(newQrImg)
+                .qrImg(qrImg)
                 .bankNumber(bankNumber)
                 .bankName(bankName)
                 .hostBank(hostBank)
