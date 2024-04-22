@@ -158,10 +158,14 @@ public class AreaService implements IAreaService {
 
         // check xem name truyen vao da trung voi name thuoc du an nay hay chua
         boolean areaExists = areaRepository.existsByNameIgnoreCaseAndProjectId(request.getName(), request.getProjectId());
-        if (areaExists) {
-            throw new CustomException(ErrorsApp.DUPLICATE_AREA_NAME);
+        // Kiểm tra nếu tên mới không trùng với các tên đã có trước đó
+        if (!areaExists || !area.getName().equalsIgnoreCase(request.getName())) {
+            area.setName(request.getName());
         }
-        area.setName(request.getName());
+
+        // Cập nhật expiryDate
+        area.setExpiryDate(request.getExpiryDate());
+
         areaRepository.save(area);
 
         return ResponseData
