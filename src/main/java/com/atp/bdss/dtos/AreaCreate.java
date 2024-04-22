@@ -10,4 +10,5 @@ public class AreaCreate {
     String id;
     String projectId;
     String name;
+    Integer expiryDate;
 }

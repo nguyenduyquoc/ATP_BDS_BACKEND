@@ -20,6 +20,7 @@ public interface AreaRepositoryJPA extends JpaRepository<Area, String> {
     @Query(value = "select new com.atp.bdss.entities.Area( " +
             "   a.id, " +
             "   a.name, " +
+            "   a.expiryDate, " +
             "   a.lands" +
             ")" +
             "from Area a " +
@@ -33,6 +34,7 @@ public interface AreaRepositoryJPA extends JpaRepository<Area, String> {
     @Query(value = "select new com.atp.bdss.dtos.AreaDTO( " +
             "   a.id, " +
             "   a.name, " +
+            "   a.expiryDate, " +
             "   a.project.name " +
             ")" +
             "from Area a " +

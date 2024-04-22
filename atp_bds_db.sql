@@ -74,6 +74,7 @@ CREATE TABLE project (
 CREATE TABLE area (
                       id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
                       name VARCHAR(100) NOT NULL,
+                      expiry_date INT,
                       project_id VARCHAR(36),
                       FOREIGN KEY (project_id) REFERENCES project(id)
 );

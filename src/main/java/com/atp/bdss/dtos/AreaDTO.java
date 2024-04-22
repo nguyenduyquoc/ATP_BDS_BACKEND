@@ -19,20 +19,24 @@ public class AreaDTO {
 
     String name;
 
+    Integer expiryDate;
+
     String projectId;
 
     String projectName;
 
     List<LandDTO> lands;
 
-    public AreaDTO(String id, String name, String projectName) {
+    public AreaDTO(String id, String name,int expiryDate, String projectName) {
         this.id = id;
         this.name = name;
+        this.expiryDate =expiryDate;
         this.projectName = projectName;
     }
-    public AreaDTO(String id, String name,String projectId, String projectName) {
+    public AreaDTO(String id, String name,int expiryDate, String projectId, String projectName) {
         this.id = id;
         this.name = name;
+        this.expiryDate = expiryDate;
         this.projectId = projectId;
         this.projectName = projectName;
     }
