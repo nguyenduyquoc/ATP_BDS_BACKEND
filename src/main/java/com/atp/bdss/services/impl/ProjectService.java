@@ -6,7 +6,6 @@ import com.atp.bdss.dtos.ProjectDTO;
 import com.atp.bdss.dtos.ProjectTypeDTO;
 import com.atp.bdss.dtos.requests.RequestCreateProject;
 import com.atp.bdss.dtos.requests.RequestPaginationProject;
-import com.atp.bdss.dtos.requests.RequestUpdateProject;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.District;
@@ -30,7 +29,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -39,6 +37,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.atp.bdss.utils.UploadImage.uploadImage;
 
 
 @Component
@@ -55,26 +55,24 @@ public class ProjectService implements IProjectService {
 
     @Override
     public ResponseDataWithPagination allProjects(RequestPaginationProject request) {
-        Pageable pageable;
-        long pageIndex = request.getPageIndex() != null ? request.getPageIndex() : 0;
-        long pageSize = request.getPageSize() != null ? request.getPageSize() : 8;
-        long adjustedPageSize = Math.max(pageSize, 1L);
 
-        pageable = PageRequest.of((int) pageIndex, (int) adjustedPageSize);
+        Pageable pageable = PageRequest.of(request.getPageIndex() != null ? request.getPageIndex().intValue() : 0,
+                Math.max(request.getPageSize() != null ? request.getPageSize().intValue() : 8, 1));
 
         if (request.getNameProject() != null)
             request.setNameProject(request.getNameProject().replace("%", "\\%").replace("_", "\\_").trim());
 
         Page<Project> data = projectRepository.getProjectPagination(request, pageable);
+
         if(data.isEmpty()){
             throw new CustomException(ErrorsApp.RECORD_NOT_FOUND);
         }
 
         Page<ProjectDTO> projectDTOPage = data.map(project -> {
             ProjectDTO projectDTO = modelMapper.map(project, ProjectDTO.class);
-            ProjectTypeDTO projectType;
+
             if(project.getProjectType() != null) {
-                 projectType =  modelMapper.map(project.getProjectType(), ProjectTypeDTO.class);
+                ProjectTypeDTO projectType = modelMapper.map(project.getProjectType(), ProjectTypeDTO.class);
                 projectDTO.setProjectType(projectType);
             }
 
@@ -88,11 +86,11 @@ public class ProjectService implements IProjectService {
         });
 
         return ResponseDataWithPagination.builder()
-                .currentPage((int) pageIndex)
-                .currentSize((int) adjustedPageSize)
+                .currentPage(data.getNumber())
+                .currentSize(data.getSize())
                 .totalRecords((int) data.getTotalElements())
                 .totalPages(data.getTotalPages())
-                .totalRecordFiltered(data.getContent().size())
+                .totalRecordFiltered(data.getNumberOfElements())
                 .data(projectDTOPage.getContent())
                 .build();
     }
@@ -102,7 +100,7 @@ public class ProjectService implements IProjectService {
     public ResponseData create(RequestCreateProject request) throws IOException {
 
         if(projectRepository.existsByNameIgnoreCase(request.getName()))
-            throw new CustomException(ErrorsApp.PROJECT_EXISTED);
+            throw new CustomException(ErrorsApp.DUPLICATE_PROJECT_NAME);
 
         ProjectType projectType = projectTypeRepository.findById(request.getProjectTypeId())
                 .orElseThrow(() -> new CustomException(ErrorsApp.PROJECT_TYPE_NOT_FOUND));
@@ -113,10 +111,10 @@ public class ProjectService implements IProjectService {
         if (!findStatusProject(request.getStatus()))
             throw new CustomException(ErrorsApp.STATUS_NOT_FOUND);
 
-        String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
-        String qrImage = uploadImage(request.getQrImg(), cloudinary);
         Project project = modelMapper.map(request, Project.class);
+        String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
         project.setThumbnail(thumbnail);
+        String qrImage = uploadImage(request.getQrImg(), cloudinary);
         project.setQrImg(qrImage);
         project.setCreatedAt(LocalDateTime.now());
         project.setIsDeleted(Constants.ENTITY_STATUS.ACTIVE);
@@ -137,7 +135,7 @@ public class ProjectService implements IProjectService {
 
         Optional<Project> project = projectRepository.findById(id);
         if (project.isEmpty())
-            throw new CustomException(ErrorsApp.RECORD_NOT_FOUND);
+            throw new CustomException(ErrorsApp.PROJECT_NOT_FOUND);
 
         ProjectDTO projectDTO = modelMapper.map(project.get(), ProjectDTO.class);
 
@@ -163,10 +161,17 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public ResponseData updateProject(RequestUpdateProject request) throws IOException {
+    public ResponseData updateProject(RequestCreateProject request) throws IOException {
 
         Project project = projectRepository.findById(request.getId())
-                .orElseThrow(() -> new CustomException(ErrorsApp.RECORD_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorsApp.PROJECT_NOT_FOUND));
+
+        if (!project.getName().equalsIgnoreCase(request.getName())) {
+            if (projectRepository.existsByNameIgnoreCase(request.getName())) {
+                throw new CustomException(ErrorsApp.DUPLICATE_PROJECT_NAME);
+            }
+            project.setName(request.getName());
+        }
 
         // set projectType
         ProjectType projectType = projectTypeRepository.findById(request.getProjectTypeId())
@@ -178,29 +183,28 @@ public class ProjectService implements IProjectService {
                 .orElseThrow(() -> new CustomException(ErrorsApp.DISTRICT_NOT_FOUND));
         project.setDistrict(district);
 
+
+
         // setStatus
         if (!findStatusProject(request.getStatus()))
             throw new CustomException(ErrorsApp.STATUS_NOT_FOUND);
         project.setStatus(request.getStatus());
 
         // setThumbnail
-        if(request.getThumbnailNew() != null && !request.getThumbnailNew().isEmpty()){
-            String thumbnail = uploadImage(request.getThumbnailNew(), cloudinary);
+        if(request.getThumbnail() != null && !request.getThumbnail().isEmpty()){
+            String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
             project.setThumbnail(thumbnail);
         }
 
         // set Qr image
-        if(request.getQrImgNew() != null && !request.getQrImgNew().isEmpty()){
-            String qrImage = uploadImage(request.getQrImgNew(), cloudinary);
+        if(request.getQrImg() != null && !request.getQrImg().isEmpty()){
+            String qrImage = uploadImage(request.getQrImg(), cloudinary);
             project.setQrImg(qrImage);
         }
-
-        project.setName(request.getName());
         project.setDescription(request.getDescription());
         project.setAddress(request.getAddress());
         project.setStartDate(request.getStartDate());
         project.setEndDate(request.getEndDate());
-        project.setBankNumber(request.getBankNumber());
         project.setBankName(request.getBankName());
         project.setHostBank(request.getHostBank());
         project.setInvestor(request.getInvestor());
@@ -242,12 +246,5 @@ public class ProjectService implements IProjectService {
         return validStatuses.contains(status);
     }
 
-
-    private static String uploadImage(MultipartFile image, CloudinaryService cloudinaryService) throws IOException {
-        String thumbnail = null;
-        if(image != null && !image.isEmpty())
-            thumbnail = cloudinaryService.upload(image);
-        return thumbnail;
-    }
 
 }

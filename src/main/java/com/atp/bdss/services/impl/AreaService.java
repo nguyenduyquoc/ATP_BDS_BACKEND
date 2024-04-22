@@ -41,12 +41,8 @@ public class AreaService implements IAreaService {
 
     @Override
     public ResponseDataWithPagination allAreas(RequestPaginationArea request) {
-        Pageable pageable;
-        long pageIndex = request.getPageIndex() != null ? request.getPageIndex() : 0;
-        long pageSize = request.getPageSize() != null ? request.getPageSize() : 10;
-        long adjustedPageSize = Math.max(1, pageSize);
-
-        pageable = PageRequest.of((int) pageIndex, (int) adjustedPageSize);
+        Pageable pageable = PageRequest.of(request.getPageIndex() != null ? request.getPageIndex().intValue() : 0,
+                Math.max(request.getPageSize() != null ? request.getPageSize().intValue() : 8, 1));
 
         if (request.getAreaName() != null)
             request.setAreaName(request.getAreaName().replace("%", "\\%").replace("_", "\\_").trim());
@@ -57,8 +53,8 @@ public class AreaService implements IAreaService {
         }
         return ResponseDataWithPagination
                 .builder()
-                .currentPage((int) pageIndex)
-                .currentSize((int) adjustedPageSize)
+                .currentPage(data.getNumber())
+                .currentSize(data.getSize())
                 .totalRecords((int) data.getTotalElements())
                 .totalPages(data.getTotalPages())
                 .totalRecordFiltered(data.getContent().size())
@@ -70,27 +66,17 @@ public class AreaService implements IAreaService {
     @Override
     public ResponseData createAreaForProject(AreaCreate request) {
 
-        // check xem id nay có ton tai khong
+        // check xem project nay có ton tai khong
         Project project = projectRepository.findById(request.getProjectId())
-                .orElseThrow(() -> new CustomException(ErrorsApp.RECORD_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorsApp.PROJECT_NOT_FOUND));
 
-        // check xem name truyen vao da trung voi name thuoc du an nay hay chua
-        List<Area> areasInProject = project.getAreas();
-
-        /*boolean nameExistsInProject = areasInProject.stream()
-                .anyMatch(area -> area.getName().equalsIgnoreCase(request.getName()));
-
-        if (nameExistsInProject) {
-            throw new CustomException(ErrorsApp.DUPLICATE_AREA_NAME);
-        }*/
         // Kiểm tra xem tên khu vực đã tồn tại trong dự án hay chưa
-        boolean areaExists = areaRepository.existsByNameIgnoreCaseAndProjectId(request.getName(), request.getProjectId());
-        if (areaExists) {
+        if (areaRepository.existsByNameIgnoreCaseAndProjectId(request.getName(), request.getProjectId()))
             throw new CustomException(ErrorsApp.DUPLICATE_AREA_NAME);
-        }
 
         Area area = Area.builder()
                 .name(request.getName())
+                .expiryDate(request.getExpiryDate())
                 .project(project)
                 .build();
         areaRepository.save(area);
@@ -106,7 +92,7 @@ public class AreaService implements IAreaService {
     public ResponseData createAreaMultiProject(RequestCreateMultiObject<AreaCreate> request) {
         // check xem id nay có ton tai khong
         Project project =  projectRepository.findById(request.getId())
-                .orElseThrow(() -> new CustomException(ErrorsApp.RECORD_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorsApp.PROJECT_NOT_FOUND));
 
         Set<String> areaNames = new HashSet<>();
 
@@ -130,6 +116,7 @@ public class AreaService implements IAreaService {
         for(AreaCreate areaCreate : request.getMultiObject()) {
             Area area = Area.builder()
                     .name(areaCreate.getName())
+                    .expiryDate(areaCreate.getExpiryDate())
                     .project(project)
                     .build();
 
@@ -149,18 +136,18 @@ public class AreaService implements IAreaService {
     @Override
     public ResponseData updateAreaForProject(AreaCreate request) {
         Area area = areaRepository.findById(request.getId())
-                .orElseThrow(() -> new CustomException(ErrorsApp.RECORD_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorsApp.AREA_NOT_FOUND));
 
-        // check xem project id nay có ton tai khong
+        // check xem project nay có ton tai khong
         Project project = projectRepository.findById(request.getProjectId())
-                .orElseThrow(() -> new CustomException(ErrorsApp.RECORD_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorsApp.PROJECT_NOT_FOUND));
         area.setProject(project);
 
         // check xem name truyen vao da trung voi name thuoc du an nay hay chua
-        boolean areaExists = areaRepository.existsByNameIgnoreCaseAndProjectId(request.getName(), request.getProjectId());
-        // Kiểm tra nếu tên mới không trùng với các tên đã có trước đó
-        if (!areaExists || !area.getName().equalsIgnoreCase(request.getName())) {
-            area.setName(request.getName());
+        if (!area.getName().equalsIgnoreCase(request.getName())) {
+            if (areaRepository.existsByNameIgnoreCaseAndProjectId(request.getName(), request.getProjectId())) {
+                throw new CustomException(ErrorsApp.DUPLICATE_PROJECT_NAME);
+            }
         }
 
         // Cập nhật expiryDate
@@ -177,14 +164,13 @@ public class AreaService implements IAreaService {
 
     @Override
     public ResponseData findAreaById(String id) {
-        Optional<Area> area = areaRepository.findById(id);
-        if (area.isEmpty())
-            throw new CustomException(ErrorsApp.RECORD_NOT_FOUND);
+        Area area = areaRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorsApp.AREA_NOT_FOUND));
 
-        AreaDTO areaDTO = modelMapper.map(area.get(), AreaDTO.class);
+        AreaDTO areaDTO = modelMapper.map(area, AreaDTO.class);
         List<LandDTO> landDTOS;
-        if (!area.get().getLands().isEmpty()) {
-            landDTOS = area.get().getLands().stream()
+        if (!area.getLands().isEmpty()) {
+            landDTOS = area.getLands().stream()
                     .map(land -> modelMapper.map(land, LandDTO.class))
                     .collect(Collectors.toList());
 

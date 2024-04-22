@@ -15,13 +15,13 @@ public class RequestCreateProject {
 
     String id;
 
-    String name;
+    String name;//
 
     String description;
 
-    MultipartFile thumbnail;
+    MultipartFile thumbnail;//
 
-    short status;
+    short status;//
 
     String address;
 
@@ -29,7 +29,7 @@ public class RequestCreateProject {
 
     LocalDate endDate;
 
-    MultipartFile qrImg;
+    MultipartFile qrImg;//
 
     String bankNumber;
 
@@ -41,7 +41,7 @@ public class RequestCreateProject {
 
     String investorPhone;
 
-    short projectTypeId;
+    short projectTypeId;//
 
-    int districtId;
+    int districtId;//
 }

@@ -20,11 +20,11 @@ import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
+
+import static com.atp.bdss.utils.UploadImage.uploadImage;
 
 
 @Component
@@ -51,19 +51,13 @@ public class LandService implements ILandService {
     public ResponseData createLand(RequestCreateLand request) throws IOException {
         // kiem tra area co ton tai hay k
         Area area = areaRepository.findById(request.getAreaId())
-                .orElseThrow(() -> new CustomException(ErrorsApp.RECORD_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorsApp.AREA_NOT_FOUND));
 
-        // check xem name truyen vao da trung voi name thuoc phan khu nay hay chua
-        List<Land> landList = area.getLands();
-
-        boolean nameExistsArea = landList.stream()
-                .anyMatch(land -> land.getName().equalsIgnoreCase(request.getName()));
-        if (nameExistsArea) {
-            throw new CustomException(ErrorsApp.DUPLICATE_AREA_NAME);
-        }
+        // check xem name truyen vao da trung voi name cua cac land thuoc phan khu nay hay chua
+        if (landRepository.existsByNameIgnoreCaseAndAreaId(request.getName(), request.getAreaId()))
+            throw new CustomException(ErrorsApp.DUPLICATE_LAND_NAME);
 
         String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
-
         Land land = modelMapper.map(request, Land.class);
         land.setThumbnail(thumbnail);
         land.setArea(area);
@@ -77,8 +71,37 @@ public class LandService implements ILandService {
     }
 
     @Override
-    public ResponseData updateLand(RequestCreateLand request) {
-        return null;
+    public ResponseData updateLand(RequestCreateLand request) throws IOException {
+        // kiem tra area co ton tai hay k
+        Land optionalLand = landRepository.findById(request.getId())
+                .orElseThrow(() -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
+
+        // kiem tra area co ton tai hay k
+        Area area = areaRepository.findById(request.getAreaId())
+                .orElseThrow(() -> new CustomException(ErrorsApp.AREA_NOT_FOUND));
+
+        // check xem name truyen vao da trung voi name cua cac land thuoc phan khu nay hay chua
+        if (!optionalLand.getName().equalsIgnoreCase(request.getName())) {
+            if (landRepository.existsByNameIgnoreCaseAndAreaId(request.getName(), area.getId())) {
+                throw new CustomException(ErrorsApp.DUPLICATE_LAND_NAME);
+            }
+        }
+
+        modelMapper.map(request, optionalLand);
+
+        // setThumbnail
+        if(request.getThumbnail() != null && !request.getThumbnail().isEmpty()){
+            String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
+            optionalLand.setThumbnail(thumbnail);
+        }
+
+        landRepository.save(optionalLand);
+
+        return ResponseData
+                .builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .build();
     }
 
     @Override
@@ -91,10 +114,14 @@ public class LandService implements ILandService {
         return null;
     }
 
-    private static String uploadImage(MultipartFile image, CloudinaryService cloudinaryService) throws IOException {
-        String thumbnail = null;
-        if(image != null && !image.isEmpty())
-            thumbnail = cloudinaryService.upload(image);
-        return thumbnail;
+
+
+    private static void nameExisted (List<Land> landList, RequestCreateLand request) {
+        boolean nameExistsLand = landList.stream()
+                .anyMatch(land -> land.getName().equalsIgnoreCase(request.getName()));
+        if (nameExistsLand) {
+            throw new CustomException(ErrorsApp.DUPLICATE_LAND_NAME);
+        }
     }
+
 }

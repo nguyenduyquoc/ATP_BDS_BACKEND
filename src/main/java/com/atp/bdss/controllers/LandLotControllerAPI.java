@@ -70,13 +70,13 @@ public class LandLotControllerAPI {
     public ResponseData updateLandLot(@RequestParam("id") String id,
                                       @RequestParam("name") String name,
                                       @RequestParam("description") String description,
-                                      @RequestParam("thumbnail") MultipartFile image,
+                                      @RequestParam(value = "thumbnail", required = false) MultipartFile image,
                                       @RequestParam("address") String address,
                                       @RequestParam("status") Short status,
                                       @RequestParam("price") BigDecimal price,
                                       @RequestParam("deposit") BigDecimal deposit,
                                       @RequestParam("acreage") Short acreage,
-                                      @RequestParam("areaId") String areaId) {
+                                      @RequestParam("areaId") String areaId) throws IOException {
 
         RequestCreateLand request = new RequestCreateLand();
         request.setId(id);

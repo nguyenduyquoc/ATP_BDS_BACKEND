@@ -19,8 +19,6 @@ public class RequestUpdateProject {
 
     String description;
 
-    String thumbnail;
-
     MultipartFile thumbnailNew;
 
     short status;
@@ -30,8 +28,6 @@ public class RequestUpdateProject {
     LocalDate startDate;
 
     LocalDate endDate;
-
-    String qrImg;
 
     MultipartFile qrImgNew;
 

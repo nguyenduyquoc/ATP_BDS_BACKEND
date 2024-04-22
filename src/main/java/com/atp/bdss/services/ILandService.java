@@ -21,7 +21,7 @@ public interface ILandService {
 
     ResponseData createMultiLand(RequestCreateMultiObject<RequestCreateLand> request);
 
-    ResponseData updateLand(RequestCreateLand request);
+    ResponseData updateLand(RequestCreateLand request) throws IOException;
 
     ResponseData findLandById(String id);
 

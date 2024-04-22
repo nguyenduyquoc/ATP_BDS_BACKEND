@@ -124,16 +124,21 @@ public class ProjectControllerApi {
                                       @RequestParam("projectTypeId") String projectTypeId,
                                       @RequestParam("districtId") String districtId) throws IOException {
 
-        RequestUpdateProject request = RequestUpdateProject.builder()
+        if(newImage.isEmpty())
+            newImage = null;
+
+        if (newQrImg.isEmpty())
+            newQrImg = null;
+        RequestCreateProject request = RequestCreateProject.builder()
                 .id(id)
                 .name(name)
                 .description(description)
-                .thumbnailNew(newImage)
+                .thumbnail(newImage)
                 .status(Short.parseShort(status))
                 .address(address)
                 .startDate(LocalDate.parse(startDate))
                 .endDate(LocalDate.parse(endDate))
-                .qrImgNew(newQrImg)
+                .qrImg(newQrImg)
                 .bankNumber(bankNumber)
                 .bankName(bankName)
                 .hostBank(hostBank)

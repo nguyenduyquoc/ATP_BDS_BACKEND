@@ -2,7 +2,6 @@ package com.atp.bdss.services;
 
 import com.atp.bdss.dtos.requests.RequestCreateProject;
 import com.atp.bdss.dtos.requests.RequestPaginationProject;
-import com.atp.bdss.dtos.requests.RequestUpdateProject;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ public interface IProjectService {
     ResponseData findProjectById(String id);
 
 
-    ResponseData updateProject(RequestUpdateProject request) throws IOException;
+    ResponseData updateProject(RequestCreateProject request) throws IOException;
 
     ResponseData allProjectsNoPagination();
 }

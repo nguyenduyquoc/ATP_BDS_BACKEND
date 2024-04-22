@@ -29,6 +29,10 @@ public class ProjectDTO {
 
     short status;
 
+    LocalDate startDate;
+
+    LocalDate endDate;
+
     String qrImg;
 
     String bankNumber;
@@ -40,10 +44,6 @@ public class ProjectDTO {
     String investor;
 
     String investorPhone;
-
-    LocalDate startDate;
-
-    LocalDate endDate;
 
     ProjectTypeDTO projectType;
 

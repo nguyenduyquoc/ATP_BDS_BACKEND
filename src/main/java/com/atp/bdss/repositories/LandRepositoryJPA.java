@@ -27,9 +27,11 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
             "from Land l " +
             "left join l.area a " +
             "where (:#{#request.projectId} is null or l.area.project.id = :#{#request.projectId}) " +
-            "and (:#{#request.areaId} IS NULL OR :#{#request.areaId} = '' OR l.name LIKE %:#{#request.landName}%) " +
+            "and (:#{#request.areaId} IS NULL OR :#{#request.areaId} = '' OR l.name LIKE %:#{#request.searchName}%) " +
             "and (:#{#request.areaId} is null or l.area.id = :#{#request.areaId}) " +
             "order by l.id desc"
     )
     Page<Land> getLandPagination(@Param("request") RequestPaginationLand request, Pageable pageable);
+
+    boolean existsByNameIgnoreCaseAndAreaId(String name, String areaId);
 }

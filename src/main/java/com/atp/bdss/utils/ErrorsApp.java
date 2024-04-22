@@ -17,17 +17,19 @@ public enum ErrorsApp {
     PHONE_NUMBER_EXISTED(1003, "auth.phone-number-existed", HttpStatus.BAD_REQUEST),
     PROJECT_TYPE_NOT_FOUND(2000, "project-type.project-type-not-found", HttpStatus.BAD_REQUEST),
     PROJECT_TYPE_EXISTED(2001, "project-type.project-type-existed", HttpStatus.BAD_REQUEST),
-    PROJECT_NOT_FOUND(2000, "project.project-not-found", HttpStatus.BAD_REQUEST),
-    PROJECT_EXISTED(2001, "project.project-existed", HttpStatus.BAD_REQUEST),
-    LAND_NOT_FOUND(2002, "land.land-not-found", HttpStatus.BAD_REQUEST),
-    LAND_EXISTED(2003, "land.land-existed", HttpStatus.BAD_REQUEST),
-    RECORD_NOT_FOUND(3000, "msg.record-not-found", HttpStatus.BAD_REQUEST),
-    STATUS_NOT_FOUND(8000, "status.status-not-found", HttpStatus.BAD_REQUEST),
-    INVESTOR_NOT_FOUND(4000, "investor.investor-not-found",  HttpStatus.BAD_REQUEST),
-    DISTRICT_NOT_FOUND(5000,"district.district-not-found" , HttpStatus.BAD_REQUEST),
-    UPLOAD_FAIL(6000,"upload-file.upload-file-fail" , HttpStatus.BAD_REQUEST),
-    DUPLICATE_AREA_NAME(7000, "area.area-duplicate", HttpStatus.BAD_REQUEST),
-    DUPLICATE_LAND_NAME(7001, "land.land-duplicate", HttpStatus.BAD_REQUEST),;
+    PROJECT_NOT_FOUND(3000, "project.project-not-found", HttpStatus.BAD_REQUEST),
+    PROJECT_EXISTED(3001, "project.project-existed", HttpStatus.BAD_REQUEST),
+    DUPLICATE_PROJECT_NAME(3002, "project.project-name-duplicate", HttpStatus.BAD_REQUEST),
+    AREA_NOT_FOUND(4000, "area-not-found", HttpStatus.BAD_REQUEST),
+    DUPLICATE_AREA_NAME(4001, "area.area-duplicate", HttpStatus.BAD_REQUEST),
+    LAND_NOT_FOUND(5000, "land.land-not-found", HttpStatus.BAD_REQUEST),
+    DUPLICATE_LAND_NAME(5001, "land.land-duplicate", HttpStatus.BAD_REQUEST),
+    LAND_EXISTED(5002, "land.land-existed", HttpStatus.BAD_REQUEST),
+    RECORD_NOT_FOUND(9999, "msg.record-not-found", HttpStatus.BAD_REQUEST),
+    STATUS_NOT_FOUND(6000, "status.status-not-found", HttpStatus.BAD_REQUEST),
+    INVESTOR_NOT_FOUND(8888, "investor.investor-not-found",  HttpStatus.BAD_REQUEST),
+    DISTRICT_NOT_FOUND(7000,"district.district-not-found" , HttpStatus.BAD_REQUEST),
+    UPLOAD_FAIL(8000,"upload-file.upload-file-fail" , HttpStatus.BAD_REQUEST);
 
 
     private final int code;
