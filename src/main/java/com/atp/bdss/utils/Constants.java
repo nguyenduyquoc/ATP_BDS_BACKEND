@@ -10,21 +10,27 @@ public class Constants {
     }
 
     public interface STATUS_PROJECT {
-        short NOT_STARTED = 0;
-        short COMING_SOON = 1;
-        short IN_PROGRESS = 2;
-        short COMPLETED = 3;
+        short COMING_SOON = 0;
+        short IN_PROGRESS = 1;
+        short COMPLETED = 2;
     }
 
     public interface STATUS_lAND {
-        short NOT_STARTED = 0;
+        short COMING_SOON = 0;
         short IN_PROGRESS = 1;
-        short LOCKED = 2;
+        short LOCKING = 2;
+        short LOCKED = 3;
 
     }
 
     public interface STATUS_ACCOUNT {
         short INACTIVE = 0;
         short ACTIVE = 1;
+    }
+
+    public interface STATUS_TRANSACTION {
+        short WAIT_FOR_CONFIRMATION = 0;
+        short PAYMENT_SUCCESS = 1;
+        short PAYMENT_FAILED = 2;
     }
 }

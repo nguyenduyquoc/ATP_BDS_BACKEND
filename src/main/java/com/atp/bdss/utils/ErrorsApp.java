@@ -27,9 +27,11 @@ public enum ErrorsApp {
     LAND_EXISTED(5002, "land.land-existed", HttpStatus.BAD_REQUEST),
     RECORD_NOT_FOUND(9999, "msg.record-not-found", HttpStatus.BAD_REQUEST),
     STATUS_NOT_FOUND(6000, "status.status-not-found", HttpStatus.BAD_REQUEST),
-    INVESTOR_NOT_FOUND(8888, "investor.investor-not-found",  HttpStatus.BAD_REQUEST),
-    DISTRICT_NOT_FOUND(7000,"district.district-not-found" , HttpStatus.BAD_REQUEST),
-    UPLOAD_FAIL(8000,"upload-file.upload-file-fail" , HttpStatus.BAD_REQUEST);
+    INVESTOR_NOT_FOUND(8888, "investor.investor-not-found", HttpStatus.BAD_REQUEST),
+    DISTRICT_NOT_FOUND(7000,"district.district-not-found", HttpStatus.BAD_REQUEST),
+    UPLOAD_FAIL(8000,"upload-file.upload-file-fail", HttpStatus.BAD_REQUEST),
+    USER_NOT_FOUND(9000, "account.user-not-existed", HttpStatus.BAD_REQUEST),
+    TRANSACTION_NOT_FOUND(10000, "transaction.transaction-not-foung", HttpStatus.BAD_REQUEST);
 
 
     private final int code;

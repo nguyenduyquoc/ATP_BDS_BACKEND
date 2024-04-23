@@ -90,6 +90,9 @@ public class LandService implements ILandService {
         if (landRepository.existsByNameIgnoreCaseAndAreaId(request.getName(), request.getAreaId()))
             throw new CustomException(ErrorsApp.DUPLICATE_LAND_NAME);
 
+        if (!findStatusLand(request.getStatus()))
+            throw new CustomException(ErrorsApp.STATUS_NOT_FOUND);
+
         String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
         Land land = modelMapper.map(request, Land.class);
         land.setThumbnail(thumbnail);
@@ -126,6 +129,9 @@ public class LandService implements ILandService {
             String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
             optionalLand.setThumbnail(thumbnail);
         }
+        if (!findStatusLand(request.getStatus()))
+            throw new CustomException(ErrorsApp.STATUS_NOT_FOUND);
+
         optionalLand.setDescription(request.getDescription());
         optionalLand.setAddress(request.getAddress());
         optionalLand.setStatus(request.getStatus());
@@ -149,7 +155,6 @@ public class LandService implements ILandService {
 
         Area area = land.getArea();
         if(area != null) {
-
             AreaDTO areaDTO = AreaDTO.builder()
                     .id(area.getId())
                     .name(area.getName())

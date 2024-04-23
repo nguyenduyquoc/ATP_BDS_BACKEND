@@ -110,7 +110,6 @@ CREATE TABLE transaction (
                              FOREIGN KEY (land_id) REFERENCES land(id),
                              stk VARCHAR(50),
                              bank_name VARCHAR(255),
-                             otp VARCHAR(10),
                              created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                              updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                              is_deleted TINYINT DEFAULT 0

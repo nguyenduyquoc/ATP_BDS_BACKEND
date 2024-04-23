@@ -101,8 +101,10 @@ public class LandLotControllerAPI {
     }
 
     @PutMapping(value = "/temporarilyLockOrUnLock", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData temporarilyLock(@RequestParam("id") String id,
-                                        @RequestParam("status") short status){
+    public ResponseData temporarilyLockOrUnLock(
+            @RequestParam("id") String id,
+            @RequestParam("status") short status)
+    {
 
         return landService.temporarilyLockOrUnLock(id, status);
     }
