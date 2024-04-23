@@ -12,9 +12,6 @@ import java.io.IOException;
 @Service
 public interface ILandService {
 
-
-    void LockLandFromUser(String id);
-
     ResponseDataWithPagination allLands(RequestPaginationLand request);
 
     ResponseData createLand(RequestCreateLand request) throws IOException;
@@ -26,6 +23,7 @@ public interface ILandService {
     ResponseData findLandById(String id);
 
 
+    ResponseData temporarilyLockOrUnLock(String id, short status);
 
 
 }

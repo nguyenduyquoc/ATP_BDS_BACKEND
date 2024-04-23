@@ -19,7 +19,7 @@ public class Constants {
     public interface STATUS_lAND {
         short NOT_STARTED = 0;
         short IN_PROGRESS = 1;
-        short LOCKED = 1;
+        short LOCKED = 2;
 
     }
 

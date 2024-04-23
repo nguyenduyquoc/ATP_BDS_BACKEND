@@ -8,7 +8,6 @@ import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.Area;
 import com.atp.bdss.entities.Land;
-import com.atp.bdss.entities.Project;
 import com.atp.bdss.exceptions.CustomException;
 import com.atp.bdss.repositories.AreaRepositoryJPA;
 import com.atp.bdss.repositories.LandRepositoryJPA;
@@ -27,8 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.List;
-
+import static com.atp.bdss.utils.CheckerStatus.findStatusLand;
 import static com.atp.bdss.utils.UploadImage.uploadImage;
 
 
@@ -42,10 +40,6 @@ public class LandService implements ILandService {
     final AreaRepositoryJPA areaRepository;
     final ModelMapper modelMapper;
     final CloudinaryService cloudinary;
-    @Override
-    public void LockLandFromUser(String id) {
-
-    }
 
     @Override
     public ResponseDataWithPagination allLands(RequestPaginationLand request) {
@@ -173,6 +167,23 @@ public class LandService implements ILandService {
                 .data(landDTO)
                 .build();
     }
+
+    @Override
+    public ResponseData temporarilyLockOrUnLock(String id, short status) {
+        Land land = landRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
+        if (!findStatusLand(status))
+            throw new CustomException(ErrorsApp.STATUS_NOT_FOUND);
+
+        land.setStatus(status);
+        landRepository.save(land);
+        return ResponseData
+                .builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .build();
+    }
+
 
     @Override
     public ResponseData createMultiLand(RequestCreateMultiObject<RequestCreateLand> request) {

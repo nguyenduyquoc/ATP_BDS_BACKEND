@@ -33,11 +33,11 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.atp.bdss.utils.CheckerStatus.findStatusProject;
 import static com.atp.bdss.utils.UploadImage.uploadImage;
 
 
@@ -235,16 +235,6 @@ public class ProjectService implements IProjectService {
                 .build();
     }
 
-
-    static boolean findStatusProject(Short status) {
-        List<Short> validStatuses = Arrays.asList(
-                Constants.STATUS_PROJECT.NOT_STARTED,
-                Constants.STATUS_PROJECT.COMING_SOON,
-                Constants.STATUS_PROJECT.IN_PROGRESS,
-                Constants.STATUS_PROJECT.COMPLETED)
-                ;
-        return validStatuses.contains(status);
-    }
 
 
 }
