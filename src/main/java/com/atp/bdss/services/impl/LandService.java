@@ -149,7 +149,29 @@ public class LandService implements ILandService {
 
     @Override
     public ResponseData findLandById(String id) {
-        return null;
+        Land land = landRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
+        LandDTO landDTO = modelMapper.map(land, LandDTO.class);
+
+        Area area = land.getArea();
+        if(area != null) {
+
+            AreaDTO areaDTO = AreaDTO.builder()
+                    .id(area.getId())
+                    .name(area.getName())
+                    .expiryDate(area.getExpiryDate())
+                    .projectId(area.getProject().getId())
+                    .projectName(area.getProject().getName())
+                    .build();
+            landDTO.setAreaDTO(areaDTO);
+        }
+
+        return ResponseData
+                .builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .data(landDTO)
+                .build();
     }
 
     @Override
