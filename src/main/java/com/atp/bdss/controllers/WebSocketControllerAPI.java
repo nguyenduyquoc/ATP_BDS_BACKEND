@@ -19,15 +19,14 @@ import java.io.IOException;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class WebSocketControllerAPI {
 
-    final IProjectService projectService;
 
-    @MessageMapping("/lands")@SendTo("/topic/unlock_land")
+    @MessageMapping("/lands_unlock")@SendTo("/topic/unlock_land")
     public String handleAddProjectRequest(Land land) throws IOException {
         System.out.println("Lô đất "+ land.getName() + " đã được mở!!!");
         return  "Lô đất "+ land.getName() + "  đã được mở !!!";
     }
 
-    @MessageMapping("/lands")@SendTo("/topic/block_land")
+    @MessageMapping("/lands_lock")@SendTo("/topic/block_land")
     public String handleBlockLandRequest(Land land) throws IOException {
         System.out.println("Lô đất "+ land.getName() + " đã được khóa!!!");
         return  "Lô đất "+ land.getName() + "  đã được khóa!!!";

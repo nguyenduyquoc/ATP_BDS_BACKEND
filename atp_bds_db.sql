@@ -25,7 +25,7 @@ CREATE TABLE account (
                          name VARCHAR(100) NOT NULL,
                          mail VARCHAR(100) NOT NULL,
                          phone_number VARCHAR(10) NOT NULL UNIQUE,
-                         password VARCHAR(255) NOT NULL,
+                         password VARCHAR(255),
                          created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                          is_deleted TINYINT DEFAULT 0,
@@ -108,8 +108,6 @@ CREATE TABLE transaction (
                              FOREIGN KEY (user_id) REFERENCES account(id),
                              land_id VARCHAR(36),
                              FOREIGN KEY (land_id) REFERENCES land(id),
-                             stk VARCHAR(50),
-                             bank_name VARCHAR(255),
                              created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                              updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                              is_deleted TINYINT DEFAULT 0
