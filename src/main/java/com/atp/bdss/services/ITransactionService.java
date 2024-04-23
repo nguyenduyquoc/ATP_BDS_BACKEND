@@ -16,7 +16,10 @@ public interface ITransactionService {
     ResponseData createTransaction(RequestCreateTransaction request);
 
 
-    ResponseData updateTransaction(String id, short status);
+    ResponseData confirmTransactionSuccessOrFail(String id, short status);
+
 
     ResponseData deleteTransaction(String id);
+
+    ResponseDataWithPagination allProjects(RequestPaginationTransaction request);
 }

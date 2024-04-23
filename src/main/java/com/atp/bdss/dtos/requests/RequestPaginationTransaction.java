@@ -17,4 +17,6 @@ public class RequestPaginationTransaction {
 
     String searchByLandName;
 
+    Short status;
+
 }

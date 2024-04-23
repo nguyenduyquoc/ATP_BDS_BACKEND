@@ -1,5 +1,6 @@
 package com.atp.bdss.services.impl;
 
+import com.atp.bdss.dtos.AreaDTO;
 import com.atp.bdss.dtos.LandDTO;
 import com.atp.bdss.dtos.TransactionDTO;
 import com.atp.bdss.dtos.UserDTO;
@@ -8,6 +9,7 @@ import com.atp.bdss.dtos.requests.RequestPaginationTransaction;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.Account;
+import com.atp.bdss.entities.Area;
 import com.atp.bdss.entities.Land;
 import com.atp.bdss.entities.Transaction;
 import com.atp.bdss.exceptions.CustomException;
@@ -22,10 +24,14 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+
 import static com.atp.bdss.utils.CheckerStatus.findStatusTransaction;
 
 @Component
@@ -73,6 +79,18 @@ public class TransactionService implements ITransactionService {
                 .deposit(land.getDeposit())
                 .acreage(land.getAcreage())
                 .build();
+        Area area = land.getArea();
+        AreaDTO areaDTO = null;
+        if (area != null) {
+            areaDTO = AreaDTO.builder()
+                    .id(area.getId())
+                    .name(area.getName())
+                    .expiryDate(area.getExpiryDate())
+                    .projectId(area.getProject().getId())
+                    .projectName(area.getProject().getName())
+                    .build();
+        }
+        landDTO.setAreaDTO(areaDTO);
         transactionDTO.setLand(landDTO);
 
         return ResponseData.builder()
@@ -84,14 +102,21 @@ public class TransactionService implements ITransactionService {
 
     @Override
     public ResponseData createTransaction(RequestCreateTransaction request) {
-
+        // Kiểm tra sự tồn tại của người dùng
         boolean userExisted = userRepository.existsById(request.getUserId());
         if (!userExisted)
             throw new CustomException(ErrorsApp.USER_NOT_FOUND);
 
-        boolean landExisted = landRepository.existsById(request.getLandId());
-        if (!landExisted)
-            throw new CustomException(ErrorsApp.LAND_NOT_FOUND);
+        // Kiểm tra sự tồn tại và trạng thái của đất, nếu != STATUS_lAND.IN_PROGRESS thi k duoc
+        Land landExisted = landRepository.findById(request.getLandId())
+                .orElseThrow(() -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
+        if (landExisted.getStatus() != Constants.STATUS_lAND.IN_PROGRESS)
+            throw new CustomException(ErrorsApp.CAN_NOT_BUY_LAND);
+
+        // kiem tra database transaction, neu land day ma co trang thai khac PAYMENT_FAILED la k dc mua
+        Transaction landExistedInTransaction = transactionRepository.getTransactionByLandId(request.getLandId());
+        if (landExistedInTransaction != null && landExistedInTransaction.getStatus() != Constants.STATUS_TRANSACTION.PAYMENT_FAILED)
+            throw new CustomException(ErrorsApp.CAN_NOT_BUY_LAND);
 
         Transaction transaction = Transaction.builder()
                 .userId(request.getUserId())
@@ -99,7 +124,9 @@ public class TransactionService implements ITransactionService {
                 .status(Constants.STATUS_TRANSACTION.WAIT_FOR_CONFIRMATION)
                 .createdAt(LocalDateTime.now())
                 .build();
+        landExisted.setStatus(Constants.STATUS_lAND.LOCKING);
 
+        landRepository.save(landExisted);
         transactionRepository.save(transaction);
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
@@ -108,14 +135,36 @@ public class TransactionService implements ITransactionService {
     }
 
     @Override
-    public ResponseData updateTransaction(String id, short status) {
+    public ResponseData confirmTransactionSuccessOrFail(String id, short status) {
+        // // Kiểm tra sự tồn tại của transaction và land
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorsApp.TRANSACTION_NOT_FOUND));
+        Land land = landRepository.findById(transaction.getLandId()).orElseThrow(
+                () -> new CustomException(ErrorsApp.LAND_NOT_FOUND)
+        );
+
+        // kiem tra trang thai cua giao dich, chi cho cap nhat neu status cua transaction là wait_for_confirmation
+        if(transaction.getStatus() != Constants.STATUS_TRANSACTION.WAIT_FOR_CONFIRMATION)
+            throw new CustomException(ErrorsApp.CANNOT_UPDATE_ANYMORE);
+
+        // Kiểm tra trạng thái từ request có tồn tại không
         if (!findStatusTransaction(status))
             throw new CustomException(ErrorsApp.STATUS_NOT_FOUND);
 
-        transaction.setStatus(status);
+        // Xác định trạng thái mới cho đất và giao dịch
+        if (status == Constants.STATUS_TRANSACTION.PAYMENT_SUCCESS) {
+            land.setStatus(Constants.STATUS_lAND.LOCKED);
+            transaction.setStatus(Constants.STATUS_TRANSACTION.PAYMENT_SUCCESS);
+        } else if (status == Constants.STATUS_TRANSACTION.PAYMENT_FAILED) {
+            land.setStatus(Constants.STATUS_lAND.IN_PROGRESS);
+            transaction.setStatus(Constants.STATUS_TRANSACTION.PAYMENT_FAILED);
+        } else {
+            throw new CustomException(ErrorsApp.STATUS_INCORRECT);
+        }
+
+        landRepository.save(land);
         transactionRepository.save(transaction);
+
         return ResponseData
                 .builder()
                 .code(HttpStatus.OK.value())
@@ -123,10 +172,57 @@ public class TransactionService implements ITransactionService {
                 .build();
     }
 
+
     @Override
     public ResponseData deleteTransaction(String id) {
 
 
         return null;
+    }
+
+    @Override
+    public ResponseDataWithPagination allProjects(RequestPaginationTransaction request) {
+        Pageable pageable = PageRequest.of(request.getPageIndex() != null ? request.getPageIndex() : 0,
+                Math.max(request.getPageSize() != null ? request.getPageSize().intValue() : 10, 1));
+
+        if (request.getSearchByLandName() != null)
+            request.setSearchByLandName(request.getSearchByLandName().replace("%", "\\%").replace("_", "\\_").trim());
+
+        Page<Transaction> data = transactionRepository.transactionPagination(request, pageable);
+
+        Page<TransactionDTO> transactions = data.map(transaction -> {
+            TransactionDTO transactionDTO = modelMapper.map(transaction, TransactionDTO.class);
+            UserDTO userDTO = userRepository.findById(transaction.getUserId()).map(
+                   user -> modelMapper.map(user, UserDTO.class)
+            ).orElseThrow(() -> new CustomException(ErrorsApp.USER_NOT_FOUND));
+            transactionDTO.setUser(userDTO);
+
+            Land land = landRepository.findById(transaction.getLandId()).orElseThrow(
+                    () -> new CustomException(ErrorsApp.LAND_NOT_FOUND)
+            );
+            LandDTO landDTO = modelMapper.map(land, LandDTO.class);
+
+            AreaDTO areaDTO = AreaDTO.builder()
+                        .id(land.getArea().getId())
+                        .name(land.getArea().getName())
+                        .expiryDate(land.getArea().getExpiryDate())
+                        .projectId(land.getArea().getProject().getId())
+                        .projectName(land.getArea().getProject().getName())
+                        .build();
+            landDTO.setAreaDTO(areaDTO);
+
+            transactionDTO.setLand(landDTO);
+
+            return transactionDTO;
+        });
+
+        return ResponseDataWithPagination.builder()
+                .currentPage(data.getNumber())
+                .currentSize(data.getSize())
+                .totalRecords((int) data.getTotalElements())
+                .totalPages(data.getTotalPages())
+                .totalRecordFiltered(data.getNumberOfElements())
+                .data(transactions.getContent())
+                .build();
     }
 }

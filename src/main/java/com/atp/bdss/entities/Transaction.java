@@ -40,4 +40,13 @@ public class Transaction {
 
     @Column(name = "is_deleted")
     short isDeleted;
+
+    public Transaction(String id, String userId, String landId, short status, LocalDateTime createdAt, LocalDateTime updateAt) {
+        this.id = id;
+        this.userId = userId;
+        this.landId = landId;
+        this.status = status;
+        this.createdAt = createdAt;
+        this.updateAt = updateAt;
+    }
 }

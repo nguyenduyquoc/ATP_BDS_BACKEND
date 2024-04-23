@@ -25,13 +25,16 @@ public enum ErrorsApp {
     LAND_NOT_FOUND(5000, "land.land-not-found", HttpStatus.BAD_REQUEST),
     DUPLICATE_LAND_NAME(5001, "land.land-duplicate", HttpStatus.BAD_REQUEST),
     LAND_EXISTED(5002, "land.land-existed", HttpStatus.BAD_REQUEST),
+    CAN_NOT_BUY_LAND(5003, "land.can-not-buy-this-land", HttpStatus.BAD_REQUEST),
     RECORD_NOT_FOUND(9999, "msg.record-not-found", HttpStatus.BAD_REQUEST),
     STATUS_NOT_FOUND(6000, "status.status-not-found", HttpStatus.BAD_REQUEST),
+    STATUS_INCORRECT(6001, "status.status-incorrect", HttpStatus.BAD_REQUEST),
     INVESTOR_NOT_FOUND(8888, "investor.investor-not-found", HttpStatus.BAD_REQUEST),
     DISTRICT_NOT_FOUND(7000,"district.district-not-found", HttpStatus.BAD_REQUEST),
     UPLOAD_FAIL(8000,"upload-file.upload-file-fail", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(9000, "account.user-not-existed", HttpStatus.BAD_REQUEST),
-    TRANSACTION_NOT_FOUND(10000, "transaction.transaction-not-foung", HttpStatus.BAD_REQUEST);
+    TRANSACTION_NOT_FOUND(10000, "transaction.transaction-not-found", HttpStatus.BAD_REQUEST)
+    ,CANNOT_UPDATE_ANYMORE(10001, "transaction.transaction-cannot-update-anymore", HttpStatus.BAD_REQUEST);
 
 
     private final int code;

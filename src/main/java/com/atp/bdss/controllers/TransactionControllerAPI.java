@@ -1,7 +1,9 @@
 package com.atp.bdss.controllers;
 
 import com.atp.bdss.dtos.requests.RequestCreateTransaction;
+import com.atp.bdss.dtos.requests.RequestPaginationTransaction;
 import com.atp.bdss.dtos.responses.ResponseData;
+import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.services.ITransactionService;
 import com.atp.bdss.utils.Constants;
 import jakarta.validation.Valid;
@@ -11,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping(value = Constants.REQUEST_MAPPING_PREFIX + Constants.VERSION_API_V1 + "/transactions")
 @RequiredArgsConstructor
@@ -18,6 +21,21 @@ import org.springframework.web.bind.annotation.*;
 public class TransactionControllerAPI {
 
     final ITransactionService transactionService;
+
+    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseDataWithPagination allTransaction(
+            @RequestParam(name = "pageIndex", defaultValue = "0") Short pageIndex,
+            @RequestParam(name = "pageSize", defaultValue = "10") Short pageSize,
+            @RequestParam(name = "searchByLandName", required = false) String searchByLandName,
+            @RequestParam(name = "status", required = false) Short status
+    ) {
+        RequestPaginationTransaction requestParam = new RequestPaginationTransaction();
+        requestParam.setPageIndex(pageIndex);
+        requestParam.setPageSize(pageSize);
+        requestParam.setSearchByLandName(searchByLandName);
+        requestParam.setStatus(status);
+        return transactionService.allProjects(requestParam);
+    }
 
     //create transaction when user buy land
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -27,13 +45,13 @@ public class TransactionControllerAPI {
     }
 
     // update transaction status
-    @PutMapping(value = "/updateTransactionStatus", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData updateTransactionStatus(
+    @PutMapping(value = "/confirmTransactionSuccessOrFail", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData confirmTransactionSuccess(
             @RequestParam("id") String id,
             @RequestParam("status") short status)
     {
 
-        return transactionService.updateTransaction(id, status);
+        return transactionService.confirmTransactionSuccessOrFail(id, status);
     }
 
 
