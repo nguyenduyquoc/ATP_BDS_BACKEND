@@ -4,7 +4,6 @@ import com.atp.bdss.dtos.requests.*;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.services.IProjectService;
-import com.atp.bdss.services.customService.CloudinaryService;
 import com.atp.bdss.utils.Constants;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

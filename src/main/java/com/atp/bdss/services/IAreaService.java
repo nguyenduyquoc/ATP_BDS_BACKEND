@@ -1,6 +1,6 @@
 package com.atp.bdss.services;
 
-import com.atp.bdss.dtos.AreaCreate;
+import com.atp.bdss.dtos.requests.RequestCreateArea;
 import com.atp.bdss.dtos.requests.RequestCreateMultiObject;
 import com.atp.bdss.dtos.requests.RequestPaginationArea;
 import com.atp.bdss.dtos.responses.ResponseData;
@@ -12,11 +12,11 @@ public interface IAreaService {
 
     ResponseDataWithPagination allAreas(RequestPaginationArea request);
 
-    ResponseData createAreaForProject(AreaCreate request);
+    ResponseData createAreaForProject(RequestCreateArea request);
 
-    ResponseData createAreaMultiProject(RequestCreateMultiObject<AreaCreate> request);
+    ResponseData createAreaMultiProject(RequestCreateMultiObject<RequestCreateArea> request);
 
-    ResponseData updateAreaForProject(AreaCreate request);
+    ResponseData updateAreaForProject(RequestCreateArea request);
 
     ResponseData findAreaById(String id);
 }

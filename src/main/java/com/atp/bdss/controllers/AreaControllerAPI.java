@@ -1,6 +1,6 @@
 package com.atp.bdss.controllers;
 
-import com.atp.bdss.dtos.AreaCreate;
+import com.atp.bdss.dtos.requests.RequestCreateArea;
 import com.atp.bdss.dtos.requests.RequestCreateMultiObject;
 import com.atp.bdss.dtos.requests.RequestPaginationArea;
 import com.atp.bdss.dtos.responses.ResponseData;
@@ -41,21 +41,21 @@ public class AreaControllerAPI {
 
     // Tao mot phan khu trong mot lan tao
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData createArea(@Valid @RequestBody AreaCreate request) {
+    public ResponseData createArea(@Valid @RequestBody RequestCreateArea request) {
         return  areaService.createAreaForProject(request);
     }
 
     // Chinh sua phan khu trong du an - hien tai chi cho chinh sua name, chua cho chinh sua project, them vao sau
     // neu phan khu day da co land thi k cho doi phan khu
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData updateArea(@Valid @RequestBody AreaCreate request) {
+    public ResponseData updateArea(@Valid @RequestBody RequestCreateArea request) {
         return areaService.updateAreaForProject(request);
     }
 
 
     // Tao nhieu phan khu trong mot lan tao
     @PostMapping(value = "/{id}/addMultiArea", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData createMultiArea(@PathVariable String id, @Valid @RequestBody RequestCreateMultiObject<AreaCreate> request) {
+    public ResponseData createMultiArea(@PathVariable String id, @Valid @RequestBody RequestCreateMultiObject<RequestCreateArea> request) {
         request.setId(id);
         return areaService.createAreaMultiProject(request);
     }

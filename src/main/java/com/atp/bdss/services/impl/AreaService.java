@@ -1,7 +1,7 @@
 package com.atp.bdss.services.impl;
 
 
-import com.atp.bdss.dtos.AreaCreate;
+import com.atp.bdss.dtos.requests.RequestCreateArea;
 import com.atp.bdss.dtos.AreaDTO;
 import com.atp.bdss.dtos.LandDTO;
 import com.atp.bdss.dtos.requests.RequestCreateMultiObject;
@@ -64,7 +64,7 @@ public class AreaService implements IAreaService {
     }
 
     @Override
-    public ResponseData createAreaForProject(AreaCreate request) {
+    public ResponseData createAreaForProject(RequestCreateArea request) {
 
         // check xem project nay có ton tai khong
         Project project = projectRepository.findById(request.getProjectId())
@@ -89,7 +89,7 @@ public class AreaService implements IAreaService {
     }
 
     @Override
-    public ResponseData createAreaMultiProject(RequestCreateMultiObject<AreaCreate> request) {
+    public ResponseData createAreaMultiProject(RequestCreateMultiObject<RequestCreateArea> request) {
         // check xem id nay có ton tai khong
         Project project =  projectRepository.findById(request.getId())
                 .orElseThrow(() -> new CustomException(ErrorsApp.PROJECT_NOT_FOUND));
@@ -99,7 +99,7 @@ public class AreaService implements IAreaService {
         if (request.getMultiObject().isEmpty())
             throw new CustomException(ErrorsApp.BAD_REQUEST);
 
-        for (AreaCreate area : request.getMultiObject()) {
+        for (RequestCreateArea area : request.getMultiObject()) {
             // Kiểm tra xem tên đối tượng đã tồn tại trong danh sách hay chưa
             if (!areaNames.add(area.getName().toLowerCase())) {
                 throw new CustomException(ErrorsApp.DUPLICATE_AREA_NAME);
@@ -113,7 +113,7 @@ public class AreaService implements IAreaService {
 
         List<Area> areaList = project.getAreas();
 
-        for(AreaCreate areaCreate : request.getMultiObject()) {
+        for(RequestCreateArea areaCreate : request.getMultiObject()) {
             Area area = Area.builder()
                     .name(areaCreate.getName())
                     .expiryDate(areaCreate.getExpiryDate())
@@ -134,7 +134,7 @@ public class AreaService implements IAreaService {
     }
 
     @Override
-    public ResponseData updateAreaForProject(AreaCreate request) {
+    public ResponseData updateAreaForProject(RequestCreateArea request) {
         Area area = areaRepository.findById(request.getId())
                 .orElseThrow(() -> new CustomException(ErrorsApp.AREA_NOT_FOUND));
 

@@ -1,5 +1,7 @@
 package com.atp.bdss.dtos.requests;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,13 +17,15 @@ public class RequestCreateProject {
 
     String id;
 
-    String name;//
+    @NotBlank(message = "Name must not be blank")
+    String name;
 
     String description;
 
-    MultipartFile thumbnail;//
+    MultipartFile thumbnail;
 
-    short status;//
+    @NotNull(message = "Status must not be null")
+    Short status;
 
     String address;
 
@@ -29,7 +33,7 @@ public class RequestCreateProject {
 
     LocalDate endDate;
 
-    MultipartFile qrImg;//
+    MultipartFile qrImg;
 
     String bankNumber;
 
@@ -41,7 +45,9 @@ public class RequestCreateProject {
 
     String investorPhone;
 
-    short projectTypeId;//
+    @NotNull(message = "Project type ID must not be null")
+    Short projectTypeId;
 
-    int districtId;//
+    @NotNull(message = "District ID must not be null")
+    int districtId;
 }
