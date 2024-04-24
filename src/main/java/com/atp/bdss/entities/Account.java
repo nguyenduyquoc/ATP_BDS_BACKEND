@@ -30,10 +30,10 @@ public class Account implements Serializable {
     @Column(name = "email", unique = true)
     String email;
 
-    @Column(name = "phone_number", unique = true, nullable = false)
+    @Column(name = "phone_number", unique = true)
     String phone;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     String password;
 
     @Column(name = "created_at", updatable = false)
@@ -44,6 +44,9 @@ public class Account implements Serializable {
 
     @Column(name = "is_deleted")
     Short isDeleted;
+
+    @Column(name = "otp")
+    String otp;
 
     @ManyToOne()
     @JoinColumn(name = "role_id")

@@ -15,6 +15,7 @@ public enum ErrorsApp {
     USER_EXISTED(1001, "msg.user-existed",HttpStatus.CREATED),
     PHONE_NUMBER_OR_PASSWORD_INCORRECT(1002, "auth.phone-number-or-password-are-incorrect", HttpStatus.BAD_REQUEST),
     PHONE_NUMBER_EXISTED(1003, "auth.phone-number-existed", HttpStatus.BAD_REQUEST),
+    USER_NOT_YET_AUTHENTICATED(1004,"user.user-not-yet-authenticated", HttpStatus.UNAUTHORIZED),
     PROJECT_TYPE_NOT_FOUND(2000, "project-type.project-type-not-found", HttpStatus.BAD_REQUEST),
     PROJECT_TYPE_EXISTED(2001, "project-type.project-type-existed", HttpStatus.BAD_REQUEST),
     PROJECT_NOT_FOUND(3000, "project.project-not-found", HttpStatus.BAD_REQUEST),
@@ -33,8 +34,9 @@ public enum ErrorsApp {
     DISTRICT_NOT_FOUND(7000,"district.district-not-found", HttpStatus.BAD_REQUEST),
     UPLOAD_FAIL(8000,"upload-file.upload-file-fail", HttpStatus.BAD_REQUEST),
     USER_NOT_FOUND(9000, "account.user-not-existed", HttpStatus.BAD_REQUEST),
-    TRANSACTION_NOT_FOUND(10000, "transaction.transaction-not-found", HttpStatus.BAD_REQUEST)
-    ,CANNOT_UPDATE_ANYMORE(10001, "transaction.transaction-cannot-update-anymore", HttpStatus.BAD_REQUEST);
+    TRANSACTION_NOT_FOUND(10000, "transaction.transaction-not-found", HttpStatus.BAD_REQUEST),
+    CANNOT_UPDATE_ANYMORE(10001, "transaction.transaction-cannot-update-anymore", HttpStatus.BAD_REQUEST),
+    OTP_INCORRECT(10002, "otp.otp-incorrect", HttpStatus.BAD_REQUEST);
 
 
     private final int code;

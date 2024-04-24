@@ -26,11 +26,18 @@ public class Constants {
     public interface STATUS_ACCOUNT {
         short INACTIVE = 0;
         short ACTIVE = 1;
+
+        short NOT_YET_AUTHENTICATED = 2;
     }
 
     public interface STATUS_TRANSACTION {
         short WAIT_FOR_CONFIRMATION = 0;
         short PAYMENT_SUCCESS = 1;
         short PAYMENT_FAILED = 2;
+    }
+
+    public interface ROLE {
+        short ADMIN = 1;
+        short USER = 0;
     }
 }

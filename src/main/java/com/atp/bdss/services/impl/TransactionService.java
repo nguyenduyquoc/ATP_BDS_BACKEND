@@ -103,9 +103,12 @@ public class TransactionService implements ITransactionService {
     @Override
     public ResponseData createTransaction(RequestCreateTransaction request) {
         // Kiểm tra sự tồn tại của người dùng
-        boolean userExisted = userRepository.existsById(request.getUserId());
-        if (!userExisted)
-            throw new CustomException(ErrorsApp.USER_NOT_FOUND);
+        Account account = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new CustomException(ErrorsApp.USER_NOT_YET_AUTHENTICATED));
+
+        // kiem tra trang thai cua nguoi dung
+        if (account.getIsDeleted() == Constants.STATUS_ACCOUNT.NOT_YET_AUTHENTICATED)
+            throw new CustomException(ErrorsApp.CAN_NOT_BUY_LAND);
 
         // Kiểm tra sự tồn tại và trạng thái của đất, nếu != STATUS_lAND.IN_PROGRESS thi k duoc
         Land landExisted = landRepository.findById(request.getLandId())

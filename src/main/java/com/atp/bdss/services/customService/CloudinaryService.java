@@ -19,6 +19,7 @@ public class CloudinaryService {
 
         Map<String, Object> options = new HashMap<>();
         options.put("resource_type", "image"); // Or use an upload preset
+        options.put("folder", "ATP_BDS");
 
         Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), options);
         return uploadResult.get("secure_url").toString();

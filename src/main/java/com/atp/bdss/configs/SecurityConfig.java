@@ -1,24 +1,28 @@
-/*
 package com.atp.bdss.configs;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
+import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.proc.SecurityContext;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
@@ -26,34 +30,38 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
-public class SecurityConfig {
+@EnableConfigurationProperties(RsaKeyProperties.class)
+public class SecurityConfig{
 
-    private final WebClient userInfoClient;
+    private final RsaKeyProperties rsaKeys;
+
+    public SecurityConfig(RsaKeyProperties rsaKeys) {
+        this.rsaKeys = rsaKeys;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfiguration()))
-                .exceptionHandling(customizer -> customizer.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> { auth
-                        .requestMatchers("/sign_in").permitAll()
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/public/messages").permitAll()
-                        .requestMatchers("/log_out").permitAll()
-                        .requestMatchers("/sign_up").permitAll()
-                        .anyRequest().authenticated();
+                        .requestMatchers(HttpMethod.POST, "api/v1/areas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "api/v1/areas").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "api/v1/lands").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "api/v1/lands").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "api/v1/projects").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "api/v1/projects").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "api/v1/transactions/confirmTransactionSuccessOrFail").hasRole("ADMIN")
+                        .anyRequest().permitAll();
                 })
-                .oauth2ResourceServer(c -> c.opaqueToken(Customizer.withDefaults()))
+                .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .build()
         ;
 
-    }
-
-    @Bean
-    public OpaqueTokenIntrospector introspector() {
-        return new GoogleOpaqueTokenIntrospector(userInfoClient);
     }
 
 
@@ -68,5 +76,16 @@ public class SecurityConfig {
         return urlBasedCorsConfigurationSource;
     }
 
+    @Bean
+    JwtDecoder jwtDecoder() {
+        return NimbusJwtDecoder.withPublicKey(rsaKeys.publicKey()).build();
+    }
+
+    @Bean
+    JwtEncoder jwtEncoder() {
+        JWK jwk = new RSAKey.Builder(rsaKeys.publicKey()).privateKey(rsaKeys.privateKey()).build();
+        JWKSource<SecurityContext> jwks = new ImmutableJWKSet<>(new JWKSet(jwk));
+        return new NimbusJwtEncoder(jwks);
+    }
+
 }
-*/

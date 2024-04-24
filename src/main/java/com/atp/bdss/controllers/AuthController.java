@@ -1,60 +1,26 @@
-/*
 package com.atp.bdss.controllers;
 
-import com.atp.bdss.dtos.TokenDto;
-import com.atp.bdss.dtos.UrlDto;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeRequestUrl;
-import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
-import java.util.Arrays;
+import com.atp.bdss.dtos.requests.RequestLogin;
+import com.atp.bdss.dtos.responses.ResponseData;
+import com.atp.bdss.services.customService.AuthenticationService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@RequiredArgsConstructor
 public class AuthController {
-    @Value("${spring.security.oauth2.resourceserver.opaque-token.clientId}")
-    private String clientId;
 
-    @Value("${spring.security.oauth2.resourceserver.opaque-token.clientSecret}")
-    private String clientSecret;
+    final AuthenticationService authenticationService;
 
-    @GetMapping("/url")
-    public ResponseEntity<UrlDto> auth() {
-        String url = new GoogleAuthorizationCodeRequestUrl(
-           clientId,
-           "http://localhost:4200",
-                Arrays.asList("email","profile", "openid")
-        ).build();
-        return ResponseEntity.ok(new UrlDto(url));
+    @PostMapping("/sign_in")
+    public ResponseData login(@RequestBody RequestLogin userLogin){
+
+        return authenticationService.authentication(userLogin);
     }
 
-    @GetMapping("/callback")
-    public ResponseEntity<TokenDto> callback(@RequestParam("code") String code) {
-        String token;
-        try {
-            token = new GoogleAuthorizationCodeTokenRequest(
-                    new NetHttpTransport(),
-                    new GsonFactory(),
-                    clientId,
-                    clientSecret,
-                    code,
-                    "http://localhost:4200"
-
-            ).execute().getAccessToken();
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-        return ResponseEntity.ok(new TokenDto(token));
-    }
 
 }
-*/

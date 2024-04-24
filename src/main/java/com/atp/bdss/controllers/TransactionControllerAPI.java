@@ -48,7 +48,7 @@ public class TransactionControllerAPI {
     @PutMapping(value = "/confirmTransactionSuccessOrFail", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData confirmTransactionSuccess(
             @RequestParam("id") String id,
-            @RequestParam("status") short status)
+            @RequestParam("status") Short status)
     {
 
         return transactionService.confirmTransactionSuccessOrFail(id, status);
