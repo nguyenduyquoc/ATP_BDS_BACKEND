@@ -31,6 +31,6 @@ public class TransactionDTO {
 
     LocalDateTime updateAt;
 
-
+    ProjectDTO projectDTO;
 
 }

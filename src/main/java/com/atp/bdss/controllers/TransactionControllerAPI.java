@@ -34,7 +34,7 @@ public class TransactionControllerAPI {
         requestParam.setPageSize(pageSize);
         requestParam.setSearchByLandName(searchByLandName);
         requestParam.setStatus(status);
-        return transactionService.allProjects(requestParam);
+        return transactionService.allTransactionWithPagination(requestParam);
     }
 
     //create transaction when user buy land

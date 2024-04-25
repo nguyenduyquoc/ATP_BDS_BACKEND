@@ -1,6 +1,5 @@
 package com.atp.bdss.dtos;
 
-import com.atp.bdss.entities.District;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;

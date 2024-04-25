@@ -1,17 +1,11 @@
 package com.atp.bdss.services.impl;
 
-import com.atp.bdss.dtos.AreaDTO;
-import com.atp.bdss.dtos.LandDTO;
-import com.atp.bdss.dtos.TransactionDTO;
-import com.atp.bdss.dtos.UserDTO;
+import com.atp.bdss.dtos.*;
 import com.atp.bdss.dtos.requests.RequestCreateTransaction;
 import com.atp.bdss.dtos.requests.RequestPaginationTransaction;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
-import com.atp.bdss.entities.Account;
-import com.atp.bdss.entities.Area;
-import com.atp.bdss.entities.Land;
-import com.atp.bdss.entities.Transaction;
+import com.atp.bdss.entities.*;
 import com.atp.bdss.exceptions.CustomException;
 import com.atp.bdss.repositories.AccountRepositoryJPA;
 import com.atp.bdss.repositories.LandRepositoryJPA;
@@ -46,11 +40,6 @@ public class TransactionService implements ITransactionService {
     final ModelMapper modelMapper;
 
     @Override
-    public ResponseDataWithPagination allTransactionWithPagination(RequestPaginationTransaction request) {
-        return null;
-    }
-
-    @Override
     public ResponseData findTransactionById(String id) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorsApp.TRANSACTION_NOT_FOUND));
@@ -64,6 +53,7 @@ public class TransactionService implements ITransactionService {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .build();
+
         transactionDTO.setUser(userDTO);
 
         Land land = landRepository.findById(transaction.getLandId())
@@ -92,6 +82,17 @@ public class TransactionService implements ITransactionService {
         }
         landDTO.setAreaDTO(areaDTO);
         transactionDTO.setLand(landDTO);
+
+        Project project = land.getArea().getProject();
+        ProjectDTO projectDTO = ProjectDTO.builder()
+                .id(project.getId())
+                .name(project.getName())
+                .qrImg(project.getQrImg())
+                .bankNumber(project.getBankNumber())
+                .bankName(project.getBankName())
+                .hostBank(project.getHostBank())
+                .build();
+        transactionDTO.setProjectDTO(projectDTO);
 
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
@@ -184,7 +185,7 @@ public class TransactionService implements ITransactionService {
     }
 
     @Override
-    public ResponseDataWithPagination allProjects(RequestPaginationTransaction request) {
+    public ResponseDataWithPagination allTransactionWithPagination(RequestPaginationTransaction request) {
         Pageable pageable = PageRequest.of(request.getPageIndex() != null ? request.getPageIndex() : 0,
                 Math.max(request.getPageSize() != null ? request.getPageSize().intValue() : 10, 1));
 

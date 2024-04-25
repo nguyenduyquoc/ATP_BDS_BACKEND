@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ITransactionService {
 
-    ResponseDataWithPagination allTransactionWithPagination(RequestPaginationTransaction request);
 
     ResponseData findTransactionById(String id);
 
@@ -21,5 +20,5 @@ public interface ITransactionService {
 
     ResponseData deleteTransaction(String id);
 
-    ResponseDataWithPagination allProjects(RequestPaginationTransaction request);
+    ResponseDataWithPagination allTransactionWithPagination(RequestPaginationTransaction request);
 }
