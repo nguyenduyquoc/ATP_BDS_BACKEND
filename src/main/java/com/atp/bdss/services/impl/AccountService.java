@@ -47,7 +47,7 @@ public class AccountService implements IAccountService {
             // create new account
             Account account = Account.builder()
                     .name(userInfo.getName())
-                    .email(userInfo.getName())
+                    .email(userInfo.getEmail())
                     .createdAt(LocalDateTime.now())
                     .role(user_role)
                     .isDeleted(Constants.STATUS_ACCOUNT.NOT_YET_AUTHENTICATED)

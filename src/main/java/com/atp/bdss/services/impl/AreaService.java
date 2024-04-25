@@ -9,10 +9,12 @@ import com.atp.bdss.dtos.requests.RequestPaginationArea;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.Area;
+import com.atp.bdss.entities.Land;
 import com.atp.bdss.entities.Project;
 import com.atp.bdss.exceptions.CustomException;
 import com.atp.bdss.repositories.*;
 import com.atp.bdss.services.IAreaService;
+import com.atp.bdss.utils.Constants;
 import com.atp.bdss.utils.ErrorsApp;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -181,6 +183,25 @@ public class AreaService implements IAreaService {
                 .code(HttpStatus.OK.value())
                 .message("Query successfully")
                 .data(areaDTO)
+                .build();
+    }
+
+    @Override
+    public ResponseData delete(String id) {
+        Area area = areaRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorsApp.AREA_NOT_FOUND)
+        );
+
+        // kiem tra da co lo dat nao ton tai hay chua, neu chua co thi co the xoa
+
+        if (!area.getLands().isEmpty()) {
+            throw new CustomException(ErrorsApp.CAN_NOT_DELETE_PROJECT);
+        }
+
+        areaRepository.deleteById(id);
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
                 .build();
     }
 

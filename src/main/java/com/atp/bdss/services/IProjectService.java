@@ -1,6 +1,6 @@
 package com.atp.bdss.services;
 
-import com.atp.bdss.dtos.requests.RequestCreateProject;
+import  com.atp.bdss.dtos.requests.RequestCreateProject;
 import com.atp.bdss.dtos.requests.RequestPaginationProject;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
@@ -17,8 +17,9 @@ public interface IProjectService {
 
     ResponseData findProjectById(String id);
 
-
     ResponseData updateProject(RequestCreateProject request) throws IOException;
 
     ResponseData allProjectsNoPagination();
+
+    ResponseData delete(String id);
 }

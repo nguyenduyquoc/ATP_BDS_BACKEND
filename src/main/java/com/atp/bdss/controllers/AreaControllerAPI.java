@@ -70,4 +70,10 @@ public class AreaControllerAPI {
         return areaService.findAreaById(id);
     }
 
+    // xoa khu vuc
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData deleteArea(@PathVariable String id)
+    {
+        return areaService.delete(id);
+    }
 }

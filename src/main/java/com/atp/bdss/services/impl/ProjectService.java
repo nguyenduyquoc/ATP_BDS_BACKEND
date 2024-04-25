@@ -9,10 +9,12 @@ import com.atp.bdss.dtos.requests.RequestPaginationProject;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.District;
+import com.atp.bdss.entities.Land;
 import com.atp.bdss.entities.Project;
 import com.atp.bdss.entities.ProjectType;
 import com.atp.bdss.exceptions.CustomException;
 import com.atp.bdss.repositories.DistrictRepositoryJPA;
+import com.atp.bdss.repositories.LandRepositoryJPA;
 import com.atp.bdss.repositories.ProjectRepositoryJPA;
 import com.atp.bdss.repositories.ProjectTypeRepositoryJPA;
 import com.atp.bdss.services.IProjectService;
@@ -52,6 +54,7 @@ public class ProjectService implements IProjectService {
     final DistrictRepositoryJPA districtRepository;
     final ModelMapper modelMapper;
     final CloudinaryService cloudinary;
+    final LandRepositoryJPA landRepository;
 
     @Override
     public ResponseDataWithPagination allProjects(RequestPaginationProject request) {
@@ -235,6 +238,25 @@ public class ProjectService implements IProjectService {
                 .build();
     }
 
+    @Override
+    public ResponseData delete(String id) {
+        Project project = projectRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorsApp.PROJECT_NOT_FOUND)
+        );
+
+        // kiem tra da co lo dat nao ton tai hay chua, neu chua co thi co the xoa
+        List<Land> landList = landRepository.getLandFindByProjectId(id);
+
+        if (!landList.isEmpty()) {
+            throw new CustomException(ErrorsApp.CAN_NOT_DELETE_PROJECT);
+        }
+        project.setIsDeleted(Constants.STATUS_ACCOUNT.INACTIVE);
+        projectRepository.save(project);
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .build();
+    }
 
 
 }

@@ -21,6 +21,7 @@ public enum ErrorsApp {
     PROJECT_NOT_FOUND(3000, "project.project-not-found", HttpStatus.BAD_REQUEST),
     PROJECT_EXISTED(3001, "project.project-existed", HttpStatus.BAD_REQUEST),
     DUPLICATE_PROJECT_NAME(3002, "project.project-name-duplicate", HttpStatus.BAD_REQUEST),
+    CAN_NOT_DELETE_PROJECT(3003, "project.can-not-delete", HttpStatus.BAD_REQUEST),
     AREA_NOT_FOUND(4000, "area-not-found", HttpStatus.BAD_REQUEST),
     DUPLICATE_AREA_NAME(4001, "area.area-duplicate", HttpStatus.BAD_REQUEST),
     LAND_NOT_FOUND(5000, "land.land-not-found", HttpStatus.BAD_REQUEST),

@@ -146,10 +146,11 @@ public class ProjectControllerApi {
     }
 
 
-    // thay đổi trạng thái dự án
-    @PatchMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData updateStatusProject() {
-        return null;
+    // delete project
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData deleteProject(@PathVariable String id)
+    {
+        return projectService.delete(id);
     }
 
 

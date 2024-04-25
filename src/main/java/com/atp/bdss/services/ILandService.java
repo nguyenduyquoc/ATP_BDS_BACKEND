@@ -26,4 +26,5 @@ public interface ILandService {
     ResponseData temporarilyLockOrUnLock(String id, short status);
 
 
+    ResponseData delete(String id);
 }

@@ -44,7 +44,7 @@ public class TwilioSmsService {
         String phone = request.getPhoneNumber();
 
         try {
-            PhoneNumber to = new PhoneNumber(phone);
+            PhoneNumber to = new PhoneNumber(request.getPhoneNumber());
             PhoneNumber from = new PhoneNumber(twilioConfig.getPhoneNumber());
             String otp = generateOTP();
             String otpMessage = "Mã otp của bạn là "+ otp;
@@ -58,7 +58,6 @@ public class TwilioSmsService {
                 phone = "0" + request.getPhoneNumber().substring(3);
             }
             user.setPhone(phone);
-
             user.setOtp(otp);
             userRepository.save(user);
 
@@ -82,7 +81,7 @@ public class TwilioSmsService {
         Account user = userRepository.findById(userId).orElseThrow(
                 ()-> new CustomException(ErrorsApp.RECORD_NOT_FOUND)
         );
-        if (!Objects.equals(otp, user.getOtp()))
+        if (!otp.equals(user.getOtp()))
             throw new CustomException(ErrorsApp.OTP_INCORRECT);
 
         user.setIsDeleted(Constants.STATUS_ACCOUNT.ACTIVE);

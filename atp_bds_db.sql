@@ -24,7 +24,7 @@ CREATE TABLE account (
                          id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
                          name VARCHAR(100) NOT NULL,
                          mail VARCHAR(100) NOT NULL,
-                         phone_number VARCHAR(10) NOT NULL UNIQUE,
+                         phone_number VARCHAR(13) UNIQUE,
                          password VARCHAR(255),
                          created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

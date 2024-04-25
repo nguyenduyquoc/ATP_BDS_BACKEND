@@ -19,4 +19,6 @@ public interface IAreaService {
     ResponseData updateAreaForProject(RequestCreateArea request);
 
     ResponseData findAreaById(String id);
+
+    ResponseData delete(String id);
 }

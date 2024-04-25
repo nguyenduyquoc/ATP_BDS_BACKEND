@@ -115,6 +115,12 @@ public class LandLotControllerAPI {
         return landService.temporarilyLockOrUnLock(id, status);
     }
 
+    // xoa khu vuc
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData deleteLand(@PathVariable String id)
+    {
+        return landService.delete(id);
+    }
 
 
 

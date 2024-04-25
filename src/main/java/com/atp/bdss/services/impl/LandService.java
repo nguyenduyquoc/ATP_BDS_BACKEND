@@ -13,6 +13,7 @@ import com.atp.bdss.repositories.AreaRepositoryJPA;
 import com.atp.bdss.repositories.LandRepositoryJPA;
 import com.atp.bdss.services.ILandService;
 import com.atp.bdss.services.customService.CloudinaryService;
+import com.atp.bdss.utils.Constants;
 import com.atp.bdss.utils.ErrorsApp;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -184,6 +185,25 @@ public class LandService implements ILandService {
         landRepository.save(land);
         return ResponseData
                 .builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .build();
+    }
+
+    @Override
+    public ResponseData delete(String id) {
+        Land land = landRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorsApp.LAND_NOT_FOUND)
+        );
+
+        // kiem tra lo dat ay da ban hoac dang khoa hay k
+
+        if (land.getStatus() == Constants.STATUS_lAND.LOCKING || land.getStatus() == Constants.STATUS_lAND.LOCKED) {
+            throw new CustomException(ErrorsApp.CAN_NOT_DELETE_PROJECT);
+        }
+
+        landRepository.deleteById(id);
+        return ResponseData.builder()
                 .code(HttpStatus.OK.value())
                 .message("Query successfully")
                 .build();
