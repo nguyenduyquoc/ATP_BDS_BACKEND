@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "account")
@@ -51,4 +52,22 @@ public class Account implements Serializable {
     @ManyToOne()
     @JoinColumn(name = "role_id")
     Role role;
+
+    @OneToMany(mappedBy = "userId" , fetch = FetchType.LAZY)
+    List<Transaction> transactions;
+
+    public Account(String id, String name, String email, String phone) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+    }
+
+    public Account(String id, String name, String email, String phone, List<Transaction> transactions) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.transactions = transactions;
+    }
 }

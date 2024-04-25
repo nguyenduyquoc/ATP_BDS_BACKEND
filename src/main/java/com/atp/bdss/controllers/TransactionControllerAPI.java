@@ -63,4 +63,12 @@ public class TransactionControllerAPI {
     }
 
 
+    @GetMapping(value = "/withUser", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData getTransactionByUserId(@RequestParam("id") String id,
+                                               @RequestParam(name = "status", required = false) Short status
+    ) {
+
+        return transactionService.findTransactionByUserId(id, status);
+    }
+
 }

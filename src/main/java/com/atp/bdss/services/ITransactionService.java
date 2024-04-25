@@ -21,4 +21,6 @@ public interface ITransactionService {
     ResponseData deleteTransaction(String id);
 
     ResponseDataWithPagination allTransactionWithPagination(RequestPaginationTransaction request);
+
+    ResponseData findTransactionByUserId(String userid, Short status);
 }

@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.atp.bdss.utils.CheckerStatus.findStatusTransaction;
 
@@ -228,5 +229,47 @@ public class TransactionService implements ITransactionService {
                 .totalRecordFiltered(data.getNumberOfElements())
                 .data(transactions.getContent())
                 .build();
+    }
+
+    @Override
+    public ResponseData findTransactionByUserId(String userid, Short status) {
+
+        List<TransactionDTO> transactions = transactionRepository.transactionFromUser(userid, status).stream().map(
+                transaction -> {
+                    TransactionDTO transactionDTO = modelMapper.map(transaction, TransactionDTO.class);
+                    Land land = landRepository.findById(transaction.getLandId())
+                            .orElseThrow(() -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
+                    LandDTO landDTO = LandDTO.builder()
+                            .id(land.getId())
+                            .name(land.getName())
+                            .description(land.getDescription())
+                            .thumbnail(land.getThumbnail())
+                            .status(land.getStatus())
+                            .address(land.getAddress())
+                            .price(land.getPrice())
+                            .deposit(land.getDeposit())
+                            .acreage(land.getAcreage())
+                            .build();
+                    Area area = land.getArea();
+                    AreaDTO areaDTO = null;
+                    if (area != null) {
+                        areaDTO = AreaDTO.builder()
+                                .id(area.getId())
+                                .name(area.getName())
+                                .expiryDate(area.getExpiryDate())
+                                .projectId(area.getProject().getId())
+                                .projectName(area.getProject().getName())
+                                .build();
+                    }
+                    landDTO.setAreaDTO(areaDTO);
+                    transactionDTO.setLand(landDTO);
+                    return transactionDTO;
+                }
+
+        ).toList();
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .data(transactions).build();
     }
 }
