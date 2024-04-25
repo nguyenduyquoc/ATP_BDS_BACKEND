@@ -23,12 +23,14 @@ public class DistrictControllerAPI {
     //  GET ALL DISTRICTS WITH PROJECTS
     @GetMapping(value = "/withProject", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData addDistrictWithProject(){
+
         return provinceDistrictService.getAllDistrictWithProject();
     }
 
     //  GET PROVINCE BY DISTRICT ID
     @GetMapping(value = "/{districtId}/getProvince", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData getProvinceByDistrictId(@PathVariable int districtId){
+
         return provinceDistrictService.getProvinceByDistrictId(districtId);
     }
 

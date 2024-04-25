@@ -20,12 +20,15 @@ public class UserControllerAPI {
 
     final AccountService accountService;
 
+    // check user info
     @PostMapping("/login_user")
     public ResponseData login(@RequestBody UserInfoFromGoogle userInfo){
 
         return accountService.checkUserInformation(userInfo);
     }
 
+
+    // list user by pagination
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDataWithPagination allProjects(
             @RequestParam(name = "pageIndex", defaultValue = "0") Short pageIndex,
@@ -39,6 +42,7 @@ public class UserControllerAPI {
         return accountService.allUserPagination(requestParam);
     }
 
+    // get user info
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData getInfoUserById(@PathVariable String id) {
 

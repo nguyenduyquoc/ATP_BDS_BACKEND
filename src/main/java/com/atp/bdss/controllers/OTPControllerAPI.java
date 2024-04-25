@@ -17,12 +17,14 @@ public class OTPControllerAPI {
     @Autowired
     private TwilioSmsService twilioSmsService;
 
+    // gui otp de xac thuc nguoi dung
     @PostMapping("/send-otp")
     public ResponseData sendOtp(@RequestBody RequestOTP request) {
 
         return twilioSmsService.sendOtp(request);
     }
 
+    // api xac thuc otp
     @PostMapping("/validate")
     public void validate(@RequestParam String otp,
                         @RequestParam String userId) {

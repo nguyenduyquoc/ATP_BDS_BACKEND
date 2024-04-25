@@ -59,29 +59,8 @@ public class TransactionService implements ITransactionService {
 
         Land land = landRepository.findById(transaction.getLandId())
                 .orElseThrow(() -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
-        LandDTO landDTO = LandDTO.builder()
-                .id(land.getId())
-                .name(land.getName())
-                .description(land.getDescription())
-                .thumbnail(land.getThumbnail())
-                .status(land.getStatus())
-                .address(land.getAddress())
-                .price(land.getPrice())
-                .deposit(land.getDeposit())
-                .acreage(land.getAcreage())
-                .build();
-        Area area = land.getArea();
-        AreaDTO areaDTO = null;
-        if (area != null) {
-            areaDTO = AreaDTO.builder()
-                    .id(area.getId())
-                    .name(area.getName())
-                    .expiryDate(area.getExpiryDate())
-                    .projectId(area.getProject().getId())
-                    .projectName(area.getProject().getName())
-                    .build();
-        }
-        landDTO.setAreaDTO(areaDTO);
+
+        LandDTO landDTO = returnLadDTO(landRepository, transaction.getLandId());
         transactionDTO.setLand(landDTO);
 
         Project project = land.getArea().getProject();
@@ -112,10 +91,10 @@ public class TransactionService implements ITransactionService {
         if (account.getIsDeleted() == Constants.STATUS_ACCOUNT.NOT_YET_AUTHENTICATED)
             throw new CustomException(ErrorsApp.CAN_NOT_BUY_LAND);
 
-        // Kiểm tra sự tồn tại và trạng thái của đất, nếu != STATUS_lAND.IN_PROGRESS thi k duoc
+        // Kiểm tra sự tồn tại và trạng thái của đất, nếu != STATUS_lAND.LOCKING thi k duoc
         Land landExisted = landRepository.findById(request.getLandId())
                 .orElseThrow(() -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
-        if (landExisted.getStatus() != Constants.STATUS_lAND.IN_PROGRESS)
+        if (landExisted.getStatus() != Constants.STATUS_lAND.LOCKING)
             throw new CustomException(ErrorsApp.CAN_NOT_BUY_LAND);
 
         // kiem tra database transaction, neu land day ma co trang thai khac PAYMENT_FAILED la k dc mua
@@ -129,9 +108,7 @@ public class TransactionService implements ITransactionService {
                 .status(Constants.STATUS_TRANSACTION.WAIT_FOR_CONFIRMATION)
                 .createdAt(LocalDateTime.now())
                 .build();
-        landExisted.setStatus(Constants.STATUS_lAND.LOCKING);
 
-        landRepository.save(landExisted);
         transactionRepository.save(transaction);
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
@@ -202,19 +179,8 @@ public class TransactionService implements ITransactionService {
             ).orElseThrow(() -> new CustomException(ErrorsApp.USER_NOT_FOUND));
             transactionDTO.setUser(userDTO);
 
-            Land land = landRepository.findById(transaction.getLandId()).orElseThrow(
-                    () -> new CustomException(ErrorsApp.LAND_NOT_FOUND)
-            );
-            LandDTO landDTO = modelMapper.map(land, LandDTO.class);
-
-            AreaDTO areaDTO = AreaDTO.builder()
-                        .id(land.getArea().getId())
-                        .name(land.getArea().getName())
-                        .expiryDate(land.getArea().getExpiryDate())
-                        .projectId(land.getArea().getProject().getId())
-                        .projectName(land.getArea().getProject().getName())
-                        .build();
-            landDTO.setAreaDTO(areaDTO);
+            LandDTO landDTO = returnLadDTO(landRepository, transaction.getLandId());
+            transactionDTO.setLand(landDTO);
 
             transactionDTO.setLand(landDTO);
 
@@ -237,31 +203,7 @@ public class TransactionService implements ITransactionService {
         List<TransactionDTO> transactions = transactionRepository.transactionFromUser(userid, status).stream().map(
                 transaction -> {
                     TransactionDTO transactionDTO = modelMapper.map(transaction, TransactionDTO.class);
-                    Land land = landRepository.findById(transaction.getLandId())
-                            .orElseThrow(() -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
-                    LandDTO landDTO = LandDTO.builder()
-                            .id(land.getId())
-                            .name(land.getName())
-                            .description(land.getDescription())
-                            .thumbnail(land.getThumbnail())
-                            .status(land.getStatus())
-                            .address(land.getAddress())
-                            .price(land.getPrice())
-                            .deposit(land.getDeposit())
-                            .acreage(land.getAcreage())
-                            .build();
-                    Area area = land.getArea();
-                    AreaDTO areaDTO = null;
-                    if (area != null) {
-                        areaDTO = AreaDTO.builder()
-                                .id(area.getId())
-                                .name(area.getName())
-                                .expiryDate(area.getExpiryDate())
-                                .projectId(area.getProject().getId())
-                                .projectName(area.getProject().getName())
-                                .build();
-                    }
-                    landDTO.setAreaDTO(areaDTO);
+                    LandDTO landDTO = returnLadDTO(landRepository, transaction.getLandId());
                     transactionDTO.setLand(landDTO);
                     return transactionDTO;
                 }
@@ -271,5 +213,34 @@ public class TransactionService implements ITransactionService {
                 .code(HttpStatus.OK.value())
                 .message("Query successfully")
                 .data(transactions).build();
+    }
+
+    private static LandDTO returnLadDTO(LandRepositoryJPA landRepository, String landId){
+        Land land = landRepository.findById(landId)
+                .orElseThrow(() -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
+        LandDTO landDTO = LandDTO.builder()
+                .id(land.getId())
+                .name(land.getName())
+                .description(land.getDescription())
+                .thumbnail(land.getThumbnail())
+                .status(land.getStatus())
+                .address(land.getAddress())
+                .price(land.getPrice())
+                .deposit(land.getDeposit())
+                .acreage(land.getAcreage())
+                .build();
+        Area area = land.getArea();
+        AreaDTO areaDTO = null;
+        if (area != null) {
+            areaDTO = AreaDTO.builder()
+                    .id(area.getId())
+                    .name(area.getName())
+                    .expiryDate(area.getExpiryDate())
+                    .projectId(area.getProject().getId())
+                    .projectName(area.getProject().getName())
+                    .build();
+        }
+         landDTO.setAreaDTO(areaDTO);
+        return landDTO;
     }
 }

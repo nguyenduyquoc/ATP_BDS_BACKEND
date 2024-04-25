@@ -53,6 +53,7 @@ public class ProjectControllerApi {
         return projectService.allProjects(requestParam);
     }
 
+    // lay tat ca du an khong phan trang
     @GetMapping(value = "/allProjects", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData allProjectsNoPagination() {
         return projectService.allProjectsNoPagination();
@@ -66,6 +67,7 @@ public class ProjectControllerApi {
         return projectService.findProjectById(id);
     }
 
+    // tao moi du an
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData createProject(@RequestParam("name") String name,
                                       @RequestParam("description") String description,

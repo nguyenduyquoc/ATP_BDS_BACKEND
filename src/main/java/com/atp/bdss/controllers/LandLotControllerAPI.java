@@ -24,6 +24,8 @@ public class LandLotControllerAPI {
 
     final ILandService landService;
 
+
+    // lay danh sach cac lo dat co phan trang
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDataWithPagination allLandLots(@RequestParam(name = "pageIndex", defaultValue = "0") int pageIndex,
                                                   @RequestParam(name = "pageSize", defaultValue = "10") long pageSize,
@@ -40,6 +42,7 @@ public class LandLotControllerAPI {
         return landService.allLands(request);
     }
 
+    // tao moi lo dat
     @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData createLandLot(@RequestParam("name") String name,
                                       @RequestParam("description") String description,
@@ -66,6 +69,7 @@ public class LandLotControllerAPI {
         return landService.createLand(request);
     }
 
+    // cap nhat lo dat
     @PutMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData updateLandLot(@RequestParam("id") String id,
                                       @RequestParam("name") String name,
@@ -93,13 +97,15 @@ public class LandLotControllerAPI {
     }
 
 
+    // tim lo dat bang id
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData getAreaById(@PathVariable String id){
+    public ResponseData getLandById(@PathVariable String id){
 
         return landService.findLandById(id);
 
     }
 
+    // khoa hoac mo khoa lo dat
     @PutMapping(value = "/temporarilyLockOrUnLock", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData temporarilyLockOrUnLock(
             @RequestParam("id") String id,

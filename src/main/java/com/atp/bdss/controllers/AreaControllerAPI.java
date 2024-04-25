@@ -42,6 +42,7 @@ public class AreaControllerAPI {
     // Tao mot phan khu trong mot lan tao
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData createArea(@Valid @RequestBody RequestCreateArea request) {
+
         return  areaService.createAreaForProject(request);
     }
 
@@ -49,6 +50,7 @@ public class AreaControllerAPI {
     // neu phan khu day da co land thi k cho doi phan khu
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData updateArea(@Valid @RequestBody RequestCreateArea request) {
+
         return areaService.updateAreaForProject(request);
     }
 
@@ -64,6 +66,7 @@ public class AreaControllerAPI {
     // tìm dự án theo id
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData getAreaById(@PathVariable String id){
+
         return areaService.findAreaById(id);
     }
 

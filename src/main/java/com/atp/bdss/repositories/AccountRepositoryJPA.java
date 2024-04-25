@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface AccountRepositoryJPA extends JpaRepository<Account, String> {
     Optional<Account> findByEmail(String email);
 
-    @Query(value = "select distinct new com.atp.bdss.entities.Account( " +
+    @Query(value = "select new com.atp.bdss.entities.Account( " +
             "   a.id, " +
             "   a.name, " +
             "   a.email, " +

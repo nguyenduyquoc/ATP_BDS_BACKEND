@@ -16,6 +16,7 @@ public class AuthController {
 
     final AuthenticationService authenticationService;
 
+    // check du lieu truyen vao, neu da ton tai thi update, chua thi luu vao database
     @PostMapping("/sign_in")
     public ResponseData login(@RequestBody RequestLogin userLogin){
 

@@ -22,6 +22,7 @@ public class TransactionControllerAPI {
 
     final ITransactionService transactionService;
 
+    // list transaction with pagination
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDataWithPagination allTransaction(
             @RequestParam(name = "pageIndex", defaultValue = "0") Short pageIndex,
@@ -63,6 +64,7 @@ public class TransactionControllerAPI {
     }
 
 
+    //list transaction with user Id
     @GetMapping(value = "/withUser", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData getTransactionByUserId(@RequestParam("id") String id,
                                                @RequestParam(name = "status", required = false) Short status

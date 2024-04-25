@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface DistrictRepositoryJPA extends JpaRepository<District, Integer> {
 
-    @Query(value = "select distinct new com.atp.bdss.entities.District( " +
+    @Query(value = "select new com.atp.bdss.entities.District( " +
             "   d.id, " +
             "   d.name, " +
             "   d.province " +
