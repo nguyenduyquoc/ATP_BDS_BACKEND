@@ -18,15 +18,15 @@ public class RequestPaginationProject {
 
     String nameProject;
 
-    String provinceId;
+    Short provinceId;
 
-    String districtId;
+    Short districtId;
 
-    String status;
+    Short status;
 
     String investor;
 
-    String projectTypeId;
+    Short projectTypeId;
 
     BigDecimal priceFrom;
 

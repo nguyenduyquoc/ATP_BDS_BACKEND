@@ -3,26 +3,33 @@ package com.atp.bdss.services.customService;
 import com.atp.bdss.dtos.requests.RequestLogin;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.entities.Account;
+import com.atp.bdss.exceptions.CustomException;
 import com.atp.bdss.repositories.AccountRepositoryJPA;
+import com.atp.bdss.utils.ErrorsApp;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jwt.SignedJWT;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Service
 public class AuthenticationService {
-    private final JwtEncoder encoder;
+    private final JwtEncoder jwtEncoder;
+    private final JwtDecoder jwtDecoder;
     private final AccountRepositoryJPA userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthenticationService(JwtEncoder encoder, AccountRepositoryJPA userRepository, PasswordEncoder passwordEncoder) {
-        this.encoder = encoder;
+    public AuthenticationService(JwtEncoder encoder, JwtDecoder decoder, AccountRepositoryJPA userRepository, PasswordEncoder passwordEncoder) {
+        this.jwtEncoder = encoder;
+        this.jwtDecoder = decoder;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -56,7 +63,7 @@ public class AuthenticationService {
                 ).toInstant())
                 .claim("scope", buildScope(account))
                 .build();
-        return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
     private String buildScope(Account user) {
@@ -65,6 +72,31 @@ public class AuthenticationService {
             scope = user.getRole().getName();
         }
         return scope;
+    }
+
+    /*public String introspect(String request) throws ParseException, JOSEException {
+        var token = request;
+
+        verifyToken(token);
+        return IntrospectResponse.builder()
+                .valid(true)
+                .build();
+
+    }*/
+
+    public boolean verifyToken(String token) {
+        try {
+            Jwt jwt = jwtDecoder.decode(token);
+            Instant expiresAt = jwt.getExpiresAt();
+            if (expiresAt != null && expiresAt.isBefore(Instant.now())) {
+                return false; // Token đã hết hạn
+            }
+
+            // Token hợp lệ nếu không có ngoại lệ và không hết hạn
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
 }

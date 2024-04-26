@@ -22,6 +22,14 @@ public class AuthController {
 
         return authenticationService.authentication(userLogin);
     }
+/*
+
+    @PostMapping("/check")
+    public boolean checkToken(@RequestBody String token){
+
+        return authenticationService.verifyToken(token);
+    }
+*/
 
 
 }

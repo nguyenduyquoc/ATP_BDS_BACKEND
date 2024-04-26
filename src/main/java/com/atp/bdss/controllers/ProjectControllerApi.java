@@ -31,11 +31,11 @@ public class ProjectControllerApi {
             @RequestParam(name = "pageIndex", defaultValue = "0") Short pageIndex,
             @RequestParam(name = "pageSize", defaultValue = "10") Short pageSize,
             @RequestParam(name = "nameProject", required = false) String nameProject,
-            @RequestParam(name = "provinceId", required = false) String provinceId,
-            @RequestParam(name = "districtId", required = false) String districtId,
-            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(name = "provinceId", required = false) Short provinceId,
+            @RequestParam(name = "districtId", required = false) Short districtId,
+            @RequestParam(name = "status", required = false) Short status,
             @RequestParam(name = "investor", required = false) String investor,
-            @RequestParam(name = "projectTypeId", required = false) String projectTypeId,
+            @RequestParam(name = "projectTypeId", required = false) Short projectTypeId,
             @RequestParam(name = "priceFrom", required = false) BigDecimal priceFrom,
             @RequestParam(name = "priceTo", required = false) BigDecimal priceTo
     ) {
@@ -45,7 +45,8 @@ public class ProjectControllerApi {
         requestParam.setNameProject(nameProject);
         requestParam.setProvinceId(provinceId);
         requestParam.setDistrictId(districtId);
-        requestParam.setStatus(status);
+        if (status != null)
+            requestParam.setStatus(status);
         requestParam.setInvestor(investor);
         requestParam.setProjectTypeId(projectTypeId);
         requestParam.setPriceFrom(priceFrom);
