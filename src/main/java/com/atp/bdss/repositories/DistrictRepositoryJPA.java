@@ -36,7 +36,7 @@ public interface DistrictRepositoryJPA extends JpaRepository<District, Integer> 
     // lay cac quan/ huyen thuoc tinh/thanh pho theo provinceId ma co du an
 
 
-    @Query(value = "select distinct new com.atp.bdss.entities.District( " +
+    @Query(value = "select new com.atp.bdss.entities.District( " +
             "   d.id, " +
             "   d.name, " +
             "   d.province " +
