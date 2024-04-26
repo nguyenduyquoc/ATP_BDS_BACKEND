@@ -7,6 +7,7 @@ import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.services.ILandService;
 import com.atp.bdss.utils.Constants;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -45,55 +46,15 @@ public class LandLotControllerAPI {
 
     // tao moi lo dat
     @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData createLandLot(@RequestParam("name") String name,
-                                      @RequestParam("description") String description,
-                                      @RequestParam(value = "thumbnail", required = false) MultipartFile image,
-                                      @RequestParam("address") String address,
-                                      @RequestParam("status") Short status,
-                                      @RequestParam("price") BigDecimal price,
-                                      @RequestParam("deposit") BigDecimal deposit,
-                                      @RequestParam("acreage") Short acreage,
-                                      @RequestParam("areaId") String areaId) throws IOException {
-
-        RequestCreateLand request = new RequestCreateLand();
-
-        request.setName(name);
-        request.setDescription(description);
-        request.setThumbnail(image);
-        request.setAddress(address);
-        request.setStatus(status);
-        request.setPrice(price);
-        request.setDeposit(deposit);
-        request.setAcreage(acreage);
-        request.setAreaId(areaId);
+    public ResponseData createLandLot(@ModelAttribute @Valid RequestCreateLand request) throws IOException {
 
         return landService.createLand(request);
     }
 
     // cap nhat lo dat
     @PutMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData updateLandLot(@RequestParam("id") String id,
-                                      @RequestParam("name") String name,
-                                      @RequestParam("description") String description,
-                                      @RequestParam(value = "thumbnail", required = false) MultipartFile image,
-                                      @RequestParam("address") String address,
-                                      @RequestParam("status") Short status,
-                                      @RequestParam("price") BigDecimal price,
-                                      @RequestParam("deposit") BigDecimal deposit,
-                                      @RequestParam("acreage") Short acreage,
-                                      @RequestParam("areaId") String areaId) throws IOException {
+    public ResponseData updateLandLot(@ModelAttribute @Valid RequestCreateLand request) throws IOException {
 
-        RequestCreateLand request = new RequestCreateLand();
-        request.setId(id);
-        request.setName(name);
-        request.setDescription(description);
-        request.setThumbnail(image);
-        request.setAddress(address);
-        request.setStatus(status);
-        request.setPrice(price);
-        request.setDeposit(deposit);
-        request.setAcreage(acreage);
-        request.setAreaId(areaId);
         return landService.updateLand(request);
     }
 

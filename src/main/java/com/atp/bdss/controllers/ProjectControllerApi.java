@@ -5,6 +5,7 @@ import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.services.IProjectService;
 import com.atp.bdss.utils.Constants;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -72,79 +73,16 @@ public class ProjectControllerApi {
 
     // tao moi du an
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData createProject(@RequestParam("name") String name,
-                                      @RequestParam("description") String description,
-                                      @RequestParam(value = "thumbnail", required = false) MultipartFile image,
-                                      @RequestParam("status") String status,
-                                      @RequestParam("address") String address,
-                                      @RequestParam("startDate") String startDate,
-                                      @RequestParam("endDate") String endDate,
-                                      @RequestParam(value = "qrImg", required = false) MultipartFile qrImg,
-                                      @RequestParam("bankNumber") String bankNumber,
-                                      @RequestParam("bankName") String bankName,
-                                      @RequestParam("hostBank") String hostBank,
-                                      @RequestParam("investor") String investor,
-                                      @RequestParam("investorPhone") String investorPhone,
-                                      @RequestParam("projectTypeId") String projectTypeId,
-                                      @RequestParam("districtId") String districtId) throws IOException {
-        RequestCreateProject request = RequestCreateProject.builder()
-                .name(name)
-                .description(description)
-                .thumbnail(image)
-                .status(Short.parseShort(status))
-                .address(address)
-                .startDate(LocalDate.parse(startDate))
-                .endDate(LocalDate.parse(endDate))
-                .qrImg(qrImg)
-                .bankNumber(bankNumber)
-                .bankName(bankName)
-                .hostBank(hostBank)
-                .investor(investor)
-                .investorPhone(investorPhone)
-                .projectTypeId(Short.parseShort(projectTypeId))
-                .districtId(Integer.parseInt(districtId))
-                .build();
+    public ResponseData createProject(@ModelAttribute @Valid RequestCreateProject request) throws IOException {
+
         return projectService.create(request);
 
     }
 
     // chỉnh sửa dự án (thay đổi trạng thái dự án có thể dùng api này)
     @PutMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData updateProject(@RequestParam("id") String id,
-                                      @RequestParam("name") String name,
-                                      @RequestParam("description") String description,
-                                      @RequestParam(value = "thumbnail", required = false) MultipartFile image,
-                                      @RequestParam("status") String status,
-                                      @RequestParam("address") String address,
-                                      @RequestParam("startDate") String startDate,
-                                      @RequestParam("endDate") String endDate,
-                                      @RequestParam(value = "qrImg", required = false) MultipartFile qrImg,
-                                      @RequestParam("bankNumber") String bankNumber,
-                                      @RequestParam("bankName") String bankName,
-                                      @RequestParam("hostBank") String hostBank,
-                                      @RequestParam("investor") String investor,
-                                      @RequestParam("investorPhone") String investorPhone,
-                                      @RequestParam("projectTypeId") String projectTypeId,
-                                      @RequestParam("districtId") String districtId) throws IOException {
+    public ResponseData updateProject(@ModelAttribute @Valid RequestCreateProject request) throws IOException {
 
-        RequestCreateProject request = RequestCreateProject.builder()
-                .id(id)
-                .name(name)
-                .description(description)
-                .thumbnail(image)
-                .status(Short.parseShort(status))
-                .address(address)
-                .startDate(LocalDate.parse(startDate))
-                .endDate(LocalDate.parse(endDate))
-                .qrImg(qrImg)
-                .bankNumber(bankNumber)
-                .bankName(bankName)
-                .hostBank(hostBank)
-                .investor(investor)
-                .investorPhone(investorPhone)
-                .projectTypeId(Short.parseShort(projectTypeId))
-                .districtId(Integer.parseInt(districtId))
-                .build();
         return  projectService.updateProject(request);
     }
 

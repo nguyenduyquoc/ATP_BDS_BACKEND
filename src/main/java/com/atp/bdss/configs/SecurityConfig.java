@@ -49,13 +49,13 @@ public class SecurityConfig{
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfiguration()))
                 .authorizeHttpRequests(auth -> { auth
-                        .requestMatchers(HttpMethod.POST, "api/v1/areas").hasRole("ADMIN")
+                        /*.requestMatchers(HttpMethod.POST, "api/v1/areas").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "api/v1/areas").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "api/v1/lands").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "api/v1/lands").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "api/v1/projects").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "api/v1/projects").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "api/v1/transactions/confirmTransactionSuccessOrFail").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "api/v1/transactions/confirmTransactionSuccessOrFail").hasRole("ADMIN")*/
                         .anyRequest().permitAll();
                 })
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
