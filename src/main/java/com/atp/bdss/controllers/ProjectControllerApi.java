@@ -43,12 +43,14 @@ public class ProjectControllerApi {
         requestParam.setPageIndex(pageIndex);
         requestParam.setPageSize(pageSize);
         requestParam.setNameProject(nameProject);
-        requestParam.setProvinceId(provinceId);
+        if (provinceId != null)
+            requestParam.setProvinceId(provinceId);
         requestParam.setDistrictId(districtId);
         if (status != null)
             requestParam.setStatus(status);
         requestParam.setInvestor(investor);
-        requestParam.setProjectTypeId(projectTypeId);
+        if (projectTypeId != null)
+            requestParam.setProjectTypeId(projectTypeId);
         requestParam.setPriceFrom(priceFrom);
         requestParam.setPriceTo(priceTo);
         return projectService.allProjects(requestParam);

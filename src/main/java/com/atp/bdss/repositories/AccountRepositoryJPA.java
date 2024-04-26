@@ -26,9 +26,9 @@ public interface AccountRepositoryJPA extends JpaRepository<Account, String> {
             "OR a.phone LIKE %:#{#request.search}%)) " +
             "AND a.role.id = 2 " +
             " ORDER BY CASE " +
-            "            WHEN a.isDeleted = 1 THEN 0 " + // Ưu tiên các dự án có status là 1 lên trên cùng
-            "            WHEN a.isDeleted = 2 THEN 1 " + // Sau đó đến các dự án sắp diên ra (status = 0)
-            "            ELSE 0 " + // Cuối cùng là các dự án đã kết thúc (các giá trị status khác)
+            "            WHEN a.isDeleted = 1 THEN 0 " + // Cac user co status la 1 se duoc hien thi truoc
+            "            WHEN a.isDeleted = 2 THEN 1 " + // Tiep theo la cac user co status la 2, tuc la chua xac thuc
+            "            ELSE 0 " + // Cuối cùng là các user da bi xoa
             "          " +
             "          END, " +
             "          a.id DESC")
