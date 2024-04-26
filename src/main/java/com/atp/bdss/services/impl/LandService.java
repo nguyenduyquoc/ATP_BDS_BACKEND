@@ -4,6 +4,7 @@ import com.atp.bdss.dtos.*;
 import com.atp.bdss.dtos.requests.RequestCreateLand;
 import com.atp.bdss.dtos.requests.RequestCreateMultiObject;
 import com.atp.bdss.dtos.requests.RequestPaginationLand;
+import com.atp.bdss.dtos.requests.RequestPaginationLandByAreaId;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.Area;
@@ -27,6 +28,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
+
 import static com.atp.bdss.utils.CheckerStatus.findStatusLand;
 import static com.atp.bdss.utils.UploadImage.uploadImage;
 
@@ -125,6 +128,7 @@ public class LandService implements ILandService {
             optionalLand.setName(request.getName());
         }
 
+
         // setThumbnail
         if(request.getThumbnail() != null && !request.getThumbnail().isEmpty()){
             String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
@@ -206,6 +210,31 @@ public class LandService implements ILandService {
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
                 .message("Query successfully")
+                .build();
+    }
+
+    @Override
+    public ResponseData allLandsByAreaId(RequestPaginationLandByAreaId request) {
+        List<LandDTO> landList = landRepository.getLandPaginationByAreaID(request)
+                .stream().map(land -> {
+                    LandDTO landDTO = modelMapper.map(land, LandDTO.class);
+                    if(land.getArea() != null) {
+                        AreaDTO areaDTO = AreaDTO.builder()
+                                .id(land.getArea().getId())
+                                .name(land.getArea().getName())
+                                .expiryDate(land.getArea().getExpiryDate())
+                                .projectId(land.getArea().getProject().getId())
+                                .projectName(land.getArea().getProject().getName())
+                                .build();
+                        landDTO.setAreaDTO(areaDTO);
+                    }
+                    return landDTO;
+                }).toList();
+
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .data(landList)
                 .build();
     }
 

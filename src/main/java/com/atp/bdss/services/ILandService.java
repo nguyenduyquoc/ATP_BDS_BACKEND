@@ -3,6 +3,7 @@ package com.atp.bdss.services;
 import com.atp.bdss.dtos.requests.RequestCreateLand;
 import com.atp.bdss.dtos.requests.RequestCreateMultiObject;
 import com.atp.bdss.dtos.requests.RequestPaginationLand;
+import com.atp.bdss.dtos.requests.RequestPaginationLandByAreaId;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import org.springframework.stereotype.Service;
@@ -27,4 +28,6 @@ public interface ILandService {
 
 
     ResponseData delete(String id);
+
+    ResponseData allLandsByAreaId(RequestPaginationLandByAreaId request);
 }

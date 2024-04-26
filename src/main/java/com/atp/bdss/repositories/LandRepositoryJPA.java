@@ -2,6 +2,7 @@ package com.atp.bdss.repositories;
 
 
 import com.atp.bdss.dtos.requests.RequestPaginationLand;
+import com.atp.bdss.dtos.requests.RequestPaginationLandByAreaId;
 import com.atp.bdss.entities.Land;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,4 +48,29 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
     List<Land> getLandFindByProjectId(@Param("projectId") String projectId);
 
     boolean existsByNameIgnoreCaseAndAreaId(String name, String areaId);
+
+
+    @Query(value = "select distinct new com.atp.bdss.entities.Land( " +
+            "   l.id, " +
+            "   l.name, " +
+            "   l.description, " +
+            "   l.thumbnail, " +
+            "   l.address, " +
+            "   l.status, " +
+            "   l.price, " +
+            "   l.deposit, " +
+            "   l.acreage," +
+            "   l.area" +
+            ")" +
+            "FROM Land l " +
+            "LEFT JOIN l.area a " +
+            "LEFT JOIN a.project p " +
+            "WHERE (:#{#request.areaId} IS NULL OR a.id = :#{#request.areaId}) " +
+            "   AND (:#{#request.status} IS NULL OR l.status = :#{#request.status}) " +
+            "   AND (:#{#request.description} IS NULL OR :#{#request.description} = '' OR l.description LIKE %:#{#request.description}%) " +
+            "ORDER BY " +
+            "   CASE WHEN :#{#request.price} = 1 THEN l.price END DESC, " +
+            "   CASE WHEN :#{#request.price} = 0 THEN l.price END ASC")
+
+    List<Land> getLandPaginationByAreaID(@Param("request") RequestPaginationLandByAreaId request);
 }
