@@ -13,10 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 
 @RestController
 @RequestMapping(value = Constants.REQUEST_MAPPING_PREFIX + Constants.VERSION_API_V1 + "/lands")
@@ -85,30 +83,30 @@ public class LandLotControllerAPI {
     }
 
 
-    // lay danh sach cac lo dat co phan trang
+    // filter cac lo dat thuoc 1 phan khu
     @GetMapping(value = "/allLandByAreaId", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData allLandLotsByAreaId(
             @RequestParam(name = "areaId", required = false) String areaId,
             @RequestParam(name = "price", required = false) Short price,
             @RequestParam(name = "status", required = false) Short status,
-            @RequestParam(name = "description", required = false) String description
+            @RequestParam(name = "typeOfApartment", required = false) Short typeOfApartment,
+            @RequestParam(name = "direction", required = false) Short direction
     ){
 
         RequestPaginationLandByAreaId request = new RequestPaginationLandByAreaId();
-        /*request.setPageIndex(pageIndex);
-        request.setPageSize(pageSize);*/
         if (price != null)
             request.setPrice(price);
         if (status != null)
             request.setStatus(status);
 
-        if (description.equals(",")) {
-            request.setDescription(null);
-        } else request.setDescription(description);
+        if (typeOfApartment != null)
+            request.setTypeOfApartment(typeOfApartment);
+        if (direction != null)
+            request.setDirection(direction);
         if (areaId != null)
             request.setAreaId(areaId);
 
-        return landService.allLandsByAreaId(request);
+        return landService.filterAllLandsByAreaId(request);
     }
 
 

@@ -30,7 +30,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.List;
 
-import static com.atp.bdss.utils.CheckerStatus.findStatusLand;
+import static com.atp.bdss.utils.CheckerStatus.*;
 import static com.atp.bdss.utils.UploadImage.uploadImage;
 
 
@@ -95,7 +95,13 @@ public class LandService implements ILandService {
             throw new CustomException(ErrorsApp.DUPLICATE_LAND_NAME);
 
         if (!findStatusLand(request.getStatus()))
-            throw new CustomException(ErrorsApp.STATUS_NOT_FOUND);
+            throw new CustomException(ErrorsApp.STATUS_LAND_NOT_FOUND);
+
+        if (!findDirection(request.getDirection()))
+            throw new CustomException(ErrorsApp.DIRECTION_NOT_FOUND);
+
+        if (!findTypeOfApartment(request.getTypeOfApartment()))
+            throw new CustomException(ErrorsApp.TYPE_OF_APARTMENT_NOT_FOUND);
 
         String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
         Land land = modelMapper.map(request, Land.class);
@@ -134,8 +140,15 @@ public class LandService implements ILandService {
             String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
             optionalLand.setThumbnail(thumbnail);
         }
+
         if (!findStatusLand(request.getStatus()))
-            throw new CustomException(ErrorsApp.STATUS_NOT_FOUND);
+            throw new CustomException(ErrorsApp.STATUS_LAND_NOT_FOUND);
+
+        if (!findDirection(request.getDirection()))
+            throw new CustomException(ErrorsApp.DIRECTION_NOT_FOUND);
+
+        if (!findTypeOfApartment(request.getTypeOfApartment()))
+            throw new CustomException(ErrorsApp.TYPE_OF_APARTMENT_NOT_FOUND);
 
         optionalLand.setDescription(request.getDescription());
         optionalLand.setAddress(request.getAddress());
@@ -143,6 +156,8 @@ public class LandService implements ILandService {
         optionalLand.setPrice(request.getPrice());
         optionalLand.setDeposit(request.getDeposit());
         optionalLand.setAcreage(request.getAcreage());
+        optionalLand.setTypeOfApartment(request.getTypeOfApartment());
+        optionalLand.setDirection(request.getDirection());
         landRepository.save(optionalLand);
 
         return ResponseData
@@ -214,7 +229,7 @@ public class LandService implements ILandService {
     }
 
     @Override
-    public ResponseData allLandsByAreaId(RequestPaginationLandByAreaId request) {
+    public ResponseData filterAllLandsByAreaId(RequestPaginationLandByAreaId request) {
         List<LandDTO> landList = landRepository.getLandPaginationByAreaID(request)
                 .stream().map(land -> {
                     LandDTO landDTO = modelMapper.map(land, LandDTO.class);

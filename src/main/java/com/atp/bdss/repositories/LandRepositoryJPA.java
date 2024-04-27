@@ -24,6 +24,8 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
             "   l.price, " +
             "   l.deposit, " +
             "   l.acreage," +
+            "   l.typeOfApartment," +
+            "   l.direction," +
             "   l.area" +
             ")" +
             "FROM Land l " +
@@ -38,6 +40,7 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
             "ORDER BY l.id DESC")
 
     Page<Land> getLandPagination(@Param("request") RequestPaginationLand request, Pageable pageable);
+    //phan trang land cho man hinh admin
 
     @Query("SELECT DISTINCT l " +
             "FROM Land l " +
@@ -46,6 +49,7 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
             "WHERE :#{#projectId} = p.id " +
             "ORDER BY l.id DESC")
     List<Land> getLandFindByProjectId(@Param("projectId") String projectId);
+    // tim cac land thuoc project
 
     boolean existsByNameIgnoreCaseAndAreaId(String name, String areaId);
 
@@ -60,6 +64,8 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
             "   l.price, " +
             "   l.deposit, " +
             "   l.acreage," +
+            "   l.typeOfApartment," +
+            "   l.direction," +
             "   l.area" +
             ")" +
             "FROM Land l " +
@@ -67,10 +73,13 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
             "LEFT JOIN a.project p " +
             "WHERE (:#{#request.areaId} IS NULL OR a.id = :#{#request.areaId}) " +
             "   AND (:#{#request.status} IS NULL OR l.status = :#{#request.status}) " +
-            "   AND (:#{#request.description} IS NULL OR :#{#request.description} = '' OR l.description LIKE %:#{#request.description}%) " +
+            "   AND (:#{#request.typeOfApartment} IS NULL OR l.typeOfApartment = :#{#request.typeOfApartment}) " +
+            "   AND (:#{#request.direction} IS NULL OR l.direction = :#{#request.direction}) " +
             "ORDER BY " +
             "   CASE WHEN :#{#request.price} = 1 THEN l.price END DESC, " +
             "   CASE WHEN :#{#request.price} = 0 THEN l.price END ASC")
 
     List<Land> getLandPaginationByAreaID(@Param("request") RequestPaginationLandByAreaId request);
+    // filter land thuoc areaId cho can ho, dat nen
+
 }

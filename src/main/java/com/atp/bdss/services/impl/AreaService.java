@@ -9,12 +9,10 @@ import com.atp.bdss.dtos.requests.RequestPaginationArea;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.Area;
-import com.atp.bdss.entities.Land;
 import com.atp.bdss.entities.Project;
 import com.atp.bdss.exceptions.CustomException;
 import com.atp.bdss.repositories.*;
 import com.atp.bdss.services.IAreaService;
-import com.atp.bdss.utils.Constants;
 import com.atp.bdss.utils.ErrorsApp;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
@@ -42,7 +40,7 @@ public class AreaService implements IAreaService {
     final ModelMapper modelMapper;
 
     @Override
-    public ResponseDataWithPagination allAreas(RequestPaginationArea request) {
+    public ResponseDataWithPagination allAreasWithPagination(RequestPaginationArea request) {
         Pageable pageable = PageRequest.of(request.getPageIndex() != null ? request.getPageIndex().intValue() : 0,
                 Math.max(request.getPageSize() != null ? request.getPageSize().intValue() : 8, 1));
 
@@ -202,6 +200,27 @@ public class AreaService implements IAreaService {
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
                 .message("Query successfully")
+                .build();
+    }
+
+    @Override
+    public ResponseData allAreasNoPagination() {
+        List<AreaDTO> areas =  areaRepository.findAll().stream().map(
+                area -> {
+                    return AreaDTO.builder()
+                            .id(area.getId())
+                            .name(area.getName())
+                            .expiryDate(area.getExpiryDate())
+                            .projectId(area.getProject().getId())
+                            .projectName(area.getProject().getName())
+                            .build();
+                }
+        ).toList();
+
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .data(areas)
                 .build();
     }
 

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface IAreaService {
 
-    ResponseDataWithPagination allAreas(RequestPaginationArea request);
+    ResponseDataWithPagination allAreasWithPagination(RequestPaginationArea request);
 
     ResponseData createAreaForProject(RequestCreateArea request);
 
@@ -21,4 +21,6 @@ public interface IAreaService {
     ResponseData findAreaById(String id);
 
     ResponseData delete(String id);
+
+    ResponseData allAreasNoPagination();
 }

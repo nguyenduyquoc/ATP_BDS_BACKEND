@@ -29,5 +29,5 @@ public interface ILandService {
 
     ResponseData delete(String id);
 
-    ResponseData allLandsByAreaId(RequestPaginationLandByAreaId request);
+    ResponseData filterAllLandsByAreaId(RequestPaginationLandByAreaId request);
 }

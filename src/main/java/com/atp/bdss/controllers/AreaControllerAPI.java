@@ -22,9 +22,9 @@ public class AreaControllerAPI {
 
     final IAreaService areaService;
 
-    // Hien thi list phan khu theo id cua project
+    // Phan trang area cho admin
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDataWithPagination allAreas(
+    public ResponseDataWithPagination allAreasWithPagination(
             @RequestParam(name = "pageIndex", defaultValue = "0") Short pageIndex,
             @RequestParam(name = "pageSize", defaultValue = "10") Short pageSize,
             @RequestParam(name = "projectId", required = false) String projectId,
@@ -36,7 +36,17 @@ public class AreaControllerAPI {
                 request.setProjectId(projectId);
                 request.setAreaName(areaName);
 
-        return areaService.allAreas(request);
+        return areaService.allAreasWithPagination(request);
+    }
+
+
+
+    // lay tat ca area khong phan trang
+    @GetMapping(value = "/noPagination", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData allAreasNoPagination(){
+
+
+        return areaService.allAreasNoPagination();
     }
 
     // Tao mot phan khu trong mot lan tao
@@ -63,17 +73,18 @@ public class AreaControllerAPI {
     }
 
 
-    // tìm dự án theo id
+    // tìm phan khu theo id
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData getAreaById(@PathVariable String id){
 
         return areaService.findAreaById(id);
     }
 
-    // xoa khu vuc
+    // xoa phan khu
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData deleteArea(@PathVariable String id)
     {
+
         return areaService.delete(id);
     }
 }

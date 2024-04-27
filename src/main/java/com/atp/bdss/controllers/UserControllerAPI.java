@@ -28,7 +28,7 @@ public class UserControllerAPI {
     }
 
 
-    // list user by pagination
+    // list user by pagination for admin
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseDataWithPagination allProjects(
             @RequestParam(name = "pageIndex", defaultValue = "0") Short pageIndex,

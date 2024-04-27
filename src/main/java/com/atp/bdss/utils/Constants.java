@@ -40,4 +40,17 @@ public class Constants {
         short ADMIN = 1;
         short USER = 0;
     }
+
+    public interface TYPEOFAPARTMENT {
+        short TWO_ROOM_PLUS_ONE = 1;
+        short THREE_ROOM = 2;
+
+    }
+
+    public interface DIRECTION {
+        short TB = 0;
+        short TN_TB = 1;
+        short DN_TB = 2;
+
+    }
 }

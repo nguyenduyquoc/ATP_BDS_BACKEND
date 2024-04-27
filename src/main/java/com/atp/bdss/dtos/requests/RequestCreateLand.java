@@ -44,6 +44,10 @@ public class RequestCreateLand {
     @Positive(message = "Acreage must be a positive number")
     long acreage;
 
+    short typeOfApartment;
+
+    short direction;
+
     @NotBlank(message = "Area Id must not be blank")
     String areaId;
 }

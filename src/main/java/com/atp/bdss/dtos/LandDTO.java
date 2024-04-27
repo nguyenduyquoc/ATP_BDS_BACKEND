@@ -23,7 +23,7 @@ public class LandDTO {
 
     String thumbnail;
 
-    short status;
+    Short status;
 
     String address;
 
@@ -31,7 +31,11 @@ public class LandDTO {
 
     BigDecimal deposit;
 
-    long acreage;
+    Long acreage;
+
+    Short typeOfApartment;
+
+    Short direction;
 
     AreaDTO areaDTO;
 

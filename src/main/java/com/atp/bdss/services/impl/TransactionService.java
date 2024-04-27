@@ -60,7 +60,7 @@ public class TransactionService implements ITransactionService {
         Land land = landRepository.findById(transaction.getLandId())
                 .orElseThrow(() -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
 
-        LandDTO landDTO = returnLadDTO(landRepository, transaction.getLandId());
+        LandDTO landDTO = returnLandDTO(landRepository, transaction.getLandId());
         transactionDTO.setLand(landDTO);
 
         Project project = land.getArea().getProject();
@@ -157,8 +157,6 @@ public class TransactionService implements ITransactionService {
 
     @Override
     public ResponseData deleteTransaction(String id) {
-
-
         return null;
     }
 
@@ -179,7 +177,7 @@ public class TransactionService implements ITransactionService {
             ).orElseThrow(() -> new CustomException(ErrorsApp.USER_NOT_FOUND));
             transactionDTO.setUser(userDTO);
 
-            LandDTO landDTO = returnLadDTO(landRepository, transaction.getLandId());
+            LandDTO landDTO = returnLandDTO(landRepository, transaction.getLandId());
             transactionDTO.setLand(landDTO);
 
             transactionDTO.setLand(landDTO);
@@ -203,7 +201,7 @@ public class TransactionService implements ITransactionService {
         List<TransactionDTO> transactions = transactionRepository.transactionFromUser(userid, status).stream().map(
                 transaction -> {
                     TransactionDTO transactionDTO = modelMapper.map(transaction, TransactionDTO.class);
-                    LandDTO landDTO = returnLadDTO(landRepository, transaction.getLandId());
+                    LandDTO landDTO = returnLandDTO(landRepository, transaction.getLandId());
                     transactionDTO.setLand(landDTO);
                     return transactionDTO;
                 }
@@ -215,7 +213,7 @@ public class TransactionService implements ITransactionService {
                 .data(transactions).build();
     }
 
-    private static LandDTO returnLadDTO(LandRepositoryJPA landRepository, String landId){
+    private static LandDTO returnLandDTO(LandRepositoryJPA landRepository, String landId){
         Land land = landRepository.findById(landId)
                 .orElseThrow(() -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
         LandDTO landDTO = LandDTO.builder()
@@ -228,6 +226,8 @@ public class TransactionService implements ITransactionService {
                 .price(land.getPrice())
                 .deposit(land.getDeposit())
                 .acreage(land.getAcreage())
+                .typeOfApartment(land.getTypeOfApartment())
+                .direction(land.getDirection())
                 .build();
         Area area = land.getArea();
         AreaDTO areaDTO = null;

@@ -45,11 +45,17 @@ public class Land {
     @Column(name = "acreage")
     long acreage;
 
+    @Column(name = "type_of_apartment")
+    Short typeOfApartment;
+
+    @Column(name = "direction")
+    Short direction;
+
     @ManyToOne
     @JoinColumn(name = "area_id")
     Area area;
 
-    public Land(String id, String name, String description, String thumbnail, String address, short status, BigDecimal price, BigDecimal deposit, long acreage) {
+    public Land(String id, String name, String description, String thumbnail, String address, short status, BigDecimal price, BigDecimal deposit, long acreage, short typeOfApartment, short direction) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -59,5 +65,7 @@ public class Land {
         this.price = price;
         this.deposit = deposit;
         this.acreage = acreage;
+        this.typeOfApartment = typeOfApartment;
+        this.direction = direction;
     }
 }

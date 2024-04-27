@@ -10,9 +10,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestPaginationLandByAreaId {
 
-    //Integer pageIndex;
-
-    //Long pageSize;
 
     String areaId;
 
@@ -20,5 +17,7 @@ public class RequestPaginationLandByAreaId {
 
     Short status;
 
-    String description;
+    Short typeOfApartment;
+
+    Short direction;
 }

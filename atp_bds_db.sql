@@ -89,6 +89,8 @@ CREATE TABLE land (
                       price DECIMAL(18,2),
                       deposit DECIMAL(16,2),
                       acreage INT NOT NULL,
+                      typeOfApartment TINYINT,
+                      direction TINYINT,
                       area_id VARCHAR(36),
                       FOREIGN KEY (area_id) REFERENCES area(id)
 );
