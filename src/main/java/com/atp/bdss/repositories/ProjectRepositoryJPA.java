@@ -30,7 +30,8 @@ public interface ProjectRepositoryJPA extends JpaRepository<Project, String> {
             ")" +
             "from Project p " +
             "WHERE " +
-            "   (:#{#request.status} IS NULL OR p.status = :#{#request.status} OR p.status = 1) " +
+            "   (:#{#request.status} IS NULL AND p.status = 1) OR " +
+            "    p.status = :#{#request.status} " +
             "   AND (:#{#request.nameProject} IS NULL OR :#{#request.nameProject} = '' OR p.name LIKE %:#{#request.nameProject}%) " +
             "   AND (:#{#request.investor} IS NULL OR :#{#request.investor} = '' OR p.investor LIKE %:#{#request.investor}%) " +
             "   AND (:#{#request.provinceId} IS NULL OR p.district.province.id = :#{#request.provinceId}) " +
