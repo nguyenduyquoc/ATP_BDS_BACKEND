@@ -1,6 +1,7 @@
 package com.atp.bdss.services.impl;
 
 import com.atp.bdss.dtos.*;
+import com.atp.bdss.dtos.requests.RegisterRequest;
 import com.atp.bdss.dtos.requests.RequestPaginationUser;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
@@ -21,9 +22,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Optional;
 
 @Component
@@ -35,6 +38,7 @@ public class AccountService implements IAccountService {
     final AccountRepositoryJPA accountRepository;
     final RoleRepositoryJPA roleRepository;
     final ModelMapper modelMapper;
+    final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -107,5 +111,39 @@ public class AccountService implements IAccountService {
                 .data(user)
                 .build();
 
+    }
+
+
+    public ResponseData createAdmin(RegisterRequest request) {
+        //check if email existed
+        if(accountRepository.existsByEmail(request.getEmail()))
+            throw new CustomException(ErrorsApp.EMAIL_EXISTED);
+        //check if phone number existed
+        if(accountRepository.existsByPhone(request.getPhone()))
+            throw new CustomException(ErrorsApp.PHONE_NUMBER_EXISTED);
+
+        Account admin = Account.builder()
+                .email(request.getEmail())
+                .name(request.getName())
+                .phone(request.getPhone())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .isDeleted(Constants.ENTITY_STATUS.ACTIVE)
+                .createdAt(LocalDateTime.now())
+                .build();
+
+
+
+        // Find role USER, if not create one
+        Role admin_role = roleRepository.findByName("ADMIN")
+                .orElseGet(() -> roleRepository.save(Role.builder().name("ADMIN").build()));
+        admin.setRole((Role) Collections.singleton(admin_role));
+
+        // save into database
+        accountRepository.save(admin);
+
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Created user successfully")
+                .build();
     }
 }

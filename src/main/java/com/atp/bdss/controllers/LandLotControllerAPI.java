@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class LandLotControllerAPI {
     }
 
     // tao moi lo dat
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData createLandLot(@ModelAttribute @Valid RequestCreateLand request) throws IOException {
 
@@ -50,6 +52,7 @@ public class LandLotControllerAPI {
     }
 
     // cap nhat lo dat
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData updateLandLot(@ModelAttribute @Valid RequestCreateLand request) throws IOException {
 
@@ -75,7 +78,8 @@ public class LandLotControllerAPI {
         return landService.temporarilyLockOrUnLock(id, status);
     }
 
-    // xoa khu vuc
+    // xoa Lo dat
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData deleteLand(@PathVariable String id)
     {

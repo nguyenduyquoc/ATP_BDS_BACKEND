@@ -4,13 +4,14 @@ import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.utils.ErrorsApp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,15 +63,15 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(value = AccessDeniedException.class)
+    @ExceptionHandler(value = org.springframework.security.access.AccessDeniedException.class)
     public ResponseEntity<ResponseData> handleAccessDeniedException(AccessDeniedException exception){
 
         ErrorsApp errorsApp = ErrorsApp.UNAUTHORIZED;
 
         ResponseData responseData = new ResponseData();
-        responseData.setCode(errorsApp.getStatusCode().value());
-        responseData.setMessage("unauthorized");
-        responseData.setData(errorsApp.getDescription());
+        responseData.setCode(errorsApp.getCode());
+        responseData.setMessage(errorsApp.getDescription());
+        responseData.setData(exception.getMessage());
 
         return ResponseEntity
                 .status(errorsApp.getStatusCode())
@@ -82,11 +83,11 @@ public class GlobalExceptionHandler {
 
         ResponseData responseData = new ResponseData();
         responseData.setCode(HttpStatus.BAD_REQUEST.value());
-        responseData.setMessage("Error");
+        responseData.setMessage("Error upload image");
         responseData.setData(exception.getMessage());
 
         return ResponseEntity.status(
-                        HttpStatus.INTERNAL_SERVER_ERROR)
+                        HttpStatus.BAD_REQUEST)
                 .body(responseData);
     }
 }

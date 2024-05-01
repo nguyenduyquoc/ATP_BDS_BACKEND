@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -50,6 +51,7 @@ public class AreaControllerAPI {
     }
 
     // Tao mot phan khu trong mot lan tao
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData createArea(@Valid @RequestBody RequestCreateArea request) {
 
@@ -58,6 +60,7 @@ public class AreaControllerAPI {
 
     // Chinh sua phan khu trong du an - hien tai chi cho chinh sua name, chua cho chinh sua project, them vao sau
     // neu phan khu day da co land thi k cho doi phan khu
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData updateArea(@Valid @RequestBody RequestCreateArea request) {
 

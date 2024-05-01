@@ -10,12 +10,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+
 
 @RestController
 @RequestMapping(value = Constants.REQUEST_MAPPING_PREFIX + Constants.VERSION_API_V1 + "/projects")
@@ -72,6 +72,7 @@ public class ProjectControllerApi {
     }
 
     // tao moi du an
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData createProject(@ModelAttribute @Valid RequestCreateProject request) throws IOException {
 
@@ -79,7 +80,8 @@ public class ProjectControllerApi {
 
     }
 
-    // chỉnh sửa dự án (thay đổi trạng thái dự án có thể dùng api này)
+    // chỉnh sửa dự án (thay đổi trạng thái dự án có thể dùng api này
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData updateProject(@ModelAttribute @Valid RequestCreateProject request) throws IOException {
 
@@ -88,6 +90,7 @@ public class ProjectControllerApi {
 
 
     // delete project
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData deleteProject(@PathVariable String id)
     {

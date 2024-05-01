@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -46,6 +47,7 @@ public class TransactionControllerAPI {
     }
 
     // update transaction status
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(value = "/confirmTransactionSuccessOrFail", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData confirmTransactionSuccess(
             @RequestParam("id") String id,

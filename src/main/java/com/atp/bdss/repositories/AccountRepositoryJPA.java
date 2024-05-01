@@ -12,6 +12,9 @@ import java.util.Optional;
 
 public interface AccountRepositoryJPA extends JpaRepository<Account, String> {
     Optional<Account> findByEmail(String email);
+    boolean existsByEmail(String email);
+    boolean existsByPhone(String phone);
+    Optional<Account> findByPhone(String phone);
 
     @Query(value = "select new com.atp.bdss.entities.Account( " +
             "   a.id, " +

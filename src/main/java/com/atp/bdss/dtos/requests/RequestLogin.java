@@ -1,9 +1,6 @@
 package com.atp.bdss.dtos.requests;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,9 +11,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestLogin {
 
-    @Email(message = "Email is invalid")
-    @NotEmpty(message = "Email is required")
-    String email;
+    @NotNull(message = "Investor phone must not be null")
+    @Pattern(regexp = "^[0-9]*$", message = "Investor phone must contain only digits")
+    @Size(min = 10, max = 10, message = "Investor phone must have exactly 10 digits")
+    String phone;
 
     @NotBlank(message = "Password is required")
     // Min length of password is 6

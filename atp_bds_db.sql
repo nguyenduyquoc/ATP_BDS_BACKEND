@@ -36,8 +36,7 @@ CREATE TABLE account (
 
 CREATE TABLE token (
                        id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
-                       token_name VARCHAR(255) NOT NULL,
-                       expiry_date DATETIME NOT NULL,
+                       expiry_date DATE NOT NULL,
                        account_id VARCHAR(36),
                        FOREIGN KEY (account_id) REFERENCES account(id)
 );
