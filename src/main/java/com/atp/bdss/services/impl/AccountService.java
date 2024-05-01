@@ -136,14 +136,14 @@ public class AccountService implements IAccountService {
         // Find role USER, if not create one
         Role admin_role = roleRepository.findByName("ADMIN")
                 .orElseGet(() -> roleRepository.save(Role.builder().name("ADMIN").build()));
-        admin.setRole((Role) Collections.singleton(admin_role));
+        admin.setRole(admin_role);
 
         // save into database
         accountRepository.save(admin);
 
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
-                .message("Created user successfully")
+                .message("Created admin successfully")
                 .build();
     }
 }
