@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -55,4 +56,11 @@ public class AuthController {
         return authenticationService.refreshToken(request);
 
     }
+
+    @GetMapping(value = "/my_information", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostAuthorize("returnObject.data.phone == authentication.name")
+    public ResponseData getMyInformation() {
+        return accountService.getMyInformation();
+    }
+
 }

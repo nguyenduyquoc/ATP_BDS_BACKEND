@@ -22,11 +22,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -144,6 +146,25 @@ public class AccountService implements IAccountService {
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
                 .message("Created admin successfully")
+                .build();
+    }
+
+    @Override
+    public ResponseData getMyInformation() {
+        var context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+
+        Account user = accountRepository.findByPhone(name).orElseThrow(
+                () -> new CustomException(ErrorsApp.RECORD_NOT_FOUND)
+        );
+        UserDTO data = modelMapper.map(user, UserDTO.class);
+
+        data.setRole(user.getRole().getName());
+
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .data(data)
                 .build();
     }
 }

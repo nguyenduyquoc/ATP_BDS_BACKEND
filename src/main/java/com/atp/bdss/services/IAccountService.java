@@ -17,4 +17,6 @@ public interface IAccountService {
     ResponseData getInfoUserById(String id);
 
     ResponseData createAdmin(RegisterRequest request);
+
+    ResponseData getMyInformation();
 }

@@ -26,10 +26,10 @@ public class OTPControllerAPI {
 
     // api xac thuc otp
     @PostMapping("/validate")
-    public void validate(@RequestParam String otp,
+    public ResponseData validate(@RequestParam String otp,
                         @RequestParam String userId) {
 
-        twilioSmsService.validate(otp, userId);
+        return twilioSmsService.validate(otp, userId);
     }
 
 
