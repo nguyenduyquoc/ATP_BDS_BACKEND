@@ -18,7 +18,7 @@ public class ProjectType {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    short id;
+    Short id;
 
     @Column(name = "name")
     String name;

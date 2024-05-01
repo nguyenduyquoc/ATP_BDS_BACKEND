@@ -37,7 +37,7 @@ public class Project {
     String address;
 
     @Column(name = "status")
-    short status;
+    Short status;
 
     @Column(name = "start_date")
     LocalDate startDate;
@@ -70,7 +70,7 @@ public class Project {
     LocalDateTime updatedAt;
 
     @Column(name = "is_deleted")
-    short isDeleted;
+    Short isDeleted;
 
     @ManyToOne()
     @JoinColumn(name = "type_id")
@@ -83,7 +83,7 @@ public class Project {
     @JoinColumn(name = "district_id")
     District district;
 
-    public Project(String id, String name, String description, String thumbnail, String address, short status,
+    public Project(String id, String name, String description, String thumbnail, String address, Short status,
                    LocalDate startDate, LocalDate endDate, String qrImg, String bankNumber, String bankName,
                    String hostBank, String investor, String investorPhone, ProjectType projectType, District district) {
         this.id = id;

@@ -30,8 +30,7 @@ public interface ProjectRepositoryJPA extends JpaRepository<Project, String> {
             ")" +
             "from Project p " +
             "WHERE " +
-            "   (:#{#request.status} IS NULL AND p.status = 1) OR " +
-            "    p.status = :#{#request.status} " +
+            "   (:#{#request.status} IS NULL OR p.status = :#{#request.status}) " +
             "   AND (:#{#request.nameProject} IS NULL OR :#{#request.nameProject} = '' OR p.name LIKE %:#{#request.nameProject}%) " +
             "   AND (:#{#request.investor} IS NULL OR :#{#request.investor} = '' OR p.investor LIKE %:#{#request.investor}%) " +
             "   AND (:#{#request.provinceId} IS NULL OR p.district.province.id = :#{#request.provinceId}) " +
@@ -46,8 +45,9 @@ public interface ProjectRepositoryJPA extends JpaRepository<Project, String> {
             "            ELSE 2 " + // Cuối cùng là các dự án đã kết thúc (các giá trị status khác)
             "          " +
             "          END, " +
-            "          p.id DESC")
+            "  p.id DESC")
     Page<Project> getProjectPagination(@Param("request") RequestPaginationProject request, Pageable pageable);
+
 
     boolean existsByNameIgnoreCase(String name);
 }

@@ -21,14 +21,15 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setStatus(errorsApp.getStatusCode().value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        ObjectMapper objectMapper = new ObjectMapper();
-
         ResponseData responseData = ResponseData
                 .builder()
                 .code(errorsApp.getCode())
                 .message("Error")
                 .data(errorsApp.getDescription())
                 .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
         response.getWriter().write(objectMapper.writeValueAsString(responseData));
         response.flushBuffer();
     }
