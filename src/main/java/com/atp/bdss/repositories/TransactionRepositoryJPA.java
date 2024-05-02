@@ -26,7 +26,7 @@ public interface TransactionRepositoryJPA extends JpaRepository<Transaction, Str
             "left join Land l on l.id = t.landId " +
             "left join Account a on l.id = t.userId " +
             "WHERE " +
-            "(:#{#request.status} IS NULL OR t.status = :#{#request.status} OR t.status = 0) " +
+            "(:#{#request.status} IS NULL OR t.status = :#{#request.status}) " +
             "   AND ((:#{#request.searchByLandName} IS NULL OR :#{#request.searchByLandName} = '') " +
             "       OR (l.name LIKE %:#{#request.searchByLandName}% " +
             "       OR l.area.name LIKE %:#{#request.searchByLandName}% " +

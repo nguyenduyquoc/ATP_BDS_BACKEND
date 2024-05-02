@@ -34,8 +34,12 @@ public class TransactionControllerAPI {
         RequestPaginationTransaction requestParam = new RequestPaginationTransaction();
         requestParam.setPageIndex(pageIndex);
         requestParam.setPageSize(pageSize);
-        requestParam.setSearchByLandName(searchByLandName);
-        requestParam.setStatus(status);
+
+        if (searchByLandName != null)
+            requestParam.setSearchByLandName(searchByLandName);
+        if (status != null)
+            requestParam.setStatus(status);
+
         return transactionService.allTransactionWithPagination(requestParam);
     }
 

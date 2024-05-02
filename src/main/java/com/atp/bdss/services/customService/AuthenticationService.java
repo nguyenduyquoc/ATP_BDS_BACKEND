@@ -115,7 +115,6 @@ public class AuthenticationService {
         } catch (CustomException e) {
             isValid = false;
         }
-
         return IntrospectResponse.
                 builder().
                 valid(isValid)
