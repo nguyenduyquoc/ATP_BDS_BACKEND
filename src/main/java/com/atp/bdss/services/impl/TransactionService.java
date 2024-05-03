@@ -168,7 +168,27 @@ public class TransactionService implements ITransactionService {
 
     @Override
     public ResponseData deleteTransaction(String id) {
-        return null;
+        Transaction transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorsApp.TRANSACTION_NOT_FOUND));
+        if (transaction.getStatus() == Constants.STATUS_TRANSACTION.WAIT_FOR_CONFIRMATION) {
+            transactionRepository.deleteById(id);
+            Optional<Land> optionalLand = landRepository.findById(transaction.getLandId());
+            if (optionalLand.isPresent()) {
+                Land land = optionalLand.get();
+                land.setStatus(Constants.STATUS_lAND.IN_PROGRESS);
+                landRepository.save(land);
+            }
+            return ResponseData.builder()
+                    .code(HttpStatus.OK.value())
+                    .message("Query successfully").build();
+        }
+        else
+        {
+            return ResponseData.builder()
+                    .code(HttpStatus.BAD_REQUEST.value())
+                    .message("Transaction cannot be deleted as it is not in 'WAIT_FOR_CONFIRMATION' status").build();
+        }
+
     }
 
     @Override
