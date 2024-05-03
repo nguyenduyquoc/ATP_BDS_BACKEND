@@ -27,6 +27,8 @@ public class TransactionDTO {
 
     short status;
 
+    String code;
+
     LocalDateTime createdAt;
 
     LocalDateTime updateAt;

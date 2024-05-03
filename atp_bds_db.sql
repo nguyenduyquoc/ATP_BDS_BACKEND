@@ -98,6 +98,7 @@ CREATE TABLE image (
                        id INT AUTO_INCREMENT PRIMARY KEY,
                        url VARCHAR(255) NOT NULL,
                        description VARCHAR(255),
+                       image_id VARCHAR(255),
                        land_id VARCHAR(36),
                        FOREIGN KEY (land_id) REFERENCES land(id)
 );
@@ -105,6 +106,7 @@ CREATE TABLE image (
 CREATE TABLE transaction (
                              id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
                              status TINYINT DEFAULT 0,
+                             code VARCHAR(30) UNIQUE,
                              user_id VARCHAR(36),
                              FOREIGN KEY (user_id) REFERENCES account(id),
                              land_id VARCHAR(36),

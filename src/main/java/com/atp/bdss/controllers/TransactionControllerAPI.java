@@ -25,6 +25,7 @@ public class TransactionControllerAPI {
 
     // list transaction with pagination
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseDataWithPagination allTransaction(
             @RequestParam(name = "pageIndex", defaultValue = "0") Short pageIndex,
             @RequestParam(name = "pageSize", defaultValue = "10") Short pageSize,

@@ -9,10 +9,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TransactionRepositoryJPA extends JpaRepository<Transaction, String> {
 
-    Transaction getTransactionByLandId(String landId);
+    Optional<Transaction> getTransactionByLandId(String landId);
 
     @Query(value = "select distinct new com.atp.bdss.entities.Transaction( " +
             "   t.id, " +
@@ -63,4 +64,7 @@ public interface TransactionRepositoryJPA extends JpaRepository<Transaction, Str
             "          END, " +
             "          t.id DESC")
     List<Transaction> transactionFromUser(@Param("id") String id, @Param("status") Short status);
+
+
+    boolean existsByCode(String code);
 }

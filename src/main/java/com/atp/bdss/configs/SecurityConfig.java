@@ -1,6 +1,5 @@
 package com.atp.bdss.configs;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -25,8 +24,11 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig{
 
-    @Autowired
-    private CustomJwtDecoder customJwtDecoder;
+    private final CustomJwtDecoder customJwtDecoder;
+
+    public SecurityConfig(CustomJwtDecoder customJwtDecoder) {
+        this.customJwtDecoder = customJwtDecoder;
+    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -38,7 +40,7 @@ public class SecurityConfig{
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfiguration()))
-                .authorizeHttpRequests(auth -> { auth
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, "api/v1/areas").authenticated()
                         .requestMatchers(HttpMethod.PUT, "api/v1/areas").authenticated()
                         .requestMatchers(HttpMethod.POST, "api/v1/lands").authenticated()
@@ -46,8 +48,7 @@ public class SecurityConfig{
                         .requestMatchers(HttpMethod.POST, "api/v1/projects").authenticated()
                         .requestMatchers(HttpMethod.PUT, "api/v1/projects").authenticated()
                         .requestMatchers(HttpMethod.PUT, "api/v1/transactions/confirmTransactionSuccessOrFail").authenticated()
-                        .anyRequest().permitAll();
-                })
+                        .anyRequest().permitAll())
                 .oauth2ResourceServer(oauth2 ->
                         oauth2.jwt(jwtConfigurer ->
                                         // giai ma token duoc gui len server khi request

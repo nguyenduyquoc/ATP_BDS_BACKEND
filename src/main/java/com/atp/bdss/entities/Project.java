@@ -72,7 +72,7 @@ public class Project {
     @Column(name = "is_deleted")
     Short isDeleted;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "type_id")
     ProjectType projectType;
 

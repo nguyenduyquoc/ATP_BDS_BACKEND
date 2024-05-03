@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "land")
@@ -54,6 +55,9 @@ public class Land {
     @ManyToOne
     @JoinColumn(name = "area_id")
     Area area;
+
+    @OneToMany(mappedBy = "land" , fetch = FetchType.LAZY)
+    List<Image> images;
 
     public Land(String id, String name, String description, String thumbnail, String address, short status, BigDecimal price, BigDecimal deposit, long acreage, short typeOfApartment, short direction) {
         this.id = id;

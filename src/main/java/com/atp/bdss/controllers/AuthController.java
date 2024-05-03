@@ -3,8 +3,8 @@ package com.atp.bdss.controllers;
 import com.atp.bdss.dtos.requests.*;
 import com.atp.bdss.dtos.responses.IntrospectResponse;
 import com.atp.bdss.dtos.responses.ResponseData;
+import com.atp.bdss.services.IAccountService;
 import com.atp.bdss.services.customService.AuthenticationService;
-import com.atp.bdss.services.impl.AccountService;
 import com.nimbusds.jose.JOSEException;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
@@ -23,7 +23,7 @@ import java.text.ParseException;
 public class AuthController {
 
     final AuthenticationService authenticationService;
-    final AccountService accountService;
+    final IAccountService accountService;
 
     @PostMapping("/sign_in_admin")
     public ResponseData login(@RequestBody RequestLogin userLogin){

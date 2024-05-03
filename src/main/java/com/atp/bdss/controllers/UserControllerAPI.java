@@ -4,7 +4,7 @@ import com.atp.bdss.dtos.UserInfoFromGoogle;
 import com.atp.bdss.dtos.requests.RequestPaginationUser;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
-import com.atp.bdss.services.impl.AccountService;
+import com.atp.bdss.services.IAccountService;
 import com.atp.bdss.utils.Constants;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserControllerAPI {
 
-    final AccountService accountService;
+    final IAccountService accountService;
 
     // check user info
     @PostMapping("/login_user")

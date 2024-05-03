@@ -32,6 +32,10 @@ public class Transaction {
     @Column(name = "status", nullable = false)
     short status;
 
+    @Column(name = "code", nullable = false, unique = true)
+    String code;
+
+
     @Column(name = "created_at", nullable = false)
     LocalDateTime createdAt;
 

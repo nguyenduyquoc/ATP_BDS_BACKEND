@@ -24,8 +24,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static com.atp.bdss.utils.CheckerStatus.findStatusTransaction;
 
@@ -91,28 +94,38 @@ public class TransactionService implements ITransactionService {
         if (account.getIsDeleted() == Constants.STATUS_ACCOUNT.NOT_YET_AUTHENTICATED)
             throw new CustomException(ErrorsApp.CAN_NOT_BUY_LAND);
 
-        // Kiểm tra sự tồn tại và trạng thái của đất, nếu != STATUS_lAND.LOCKING thi k duoc
+        // Kiểm tra sự tồn tại và trạng thái của đất, nếu != STATUS_lAND.IN_PROGRESS thi k duoc
         Land landExisted = landRepository.findById(request.getLandId())
                 .orElseThrow(() -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
-        if (landExisted.getStatus() != Constants.STATUS_lAND.LOCKING)
+        if (landExisted.getStatus() != Constants.STATUS_lAND.IN_PROGRESS)
             throw new CustomException(ErrorsApp.CAN_NOT_BUY_LAND);
+        // Kiểm tra database transaction, nếu land đã tồn tại trong 1 giao dịch nao day và có trạng thái khác PAYMENT_FAILED thì không được mua
+        Optional<Transaction> transactionOptional = transactionRepository.getTransactionByLandId(request.getLandId());
 
-        // kiem tra database transaction, neu land day ma co trang thai khac PAYMENT_FAILED la k dc mua
-        Transaction landExistedInTransaction = transactionRepository.getTransactionByLandId(request.getLandId());
-        if (landExistedInTransaction != null && landExistedInTransaction.getStatus() != Constants.STATUS_TRANSACTION.PAYMENT_FAILED)
-            throw new CustomException(ErrorsApp.CAN_NOT_BUY_LAND);
+        if (transactionOptional.isPresent()) {
+            Transaction landExistedInTransaction = transactionOptional.get();
+
+            if (landExistedInTransaction.getStatus() != Constants.STATUS_TRANSACTION.PAYMENT_FAILED) {
+                throw new CustomException(ErrorsApp.CAN_NOT_BUY_LAND);
+            }
+        }
+
 
         Transaction transaction = Transaction.builder()
                 .userId(request.getUserId())
                 .landId(request.getLandId())
                 .status(Constants.STATUS_TRANSACTION.WAIT_FOR_CONFIRMATION)
+                .code(generateUniqueRandomString(transactionRepository, 12))
                 .createdAt(LocalDateTime.now())
                 .build();
 
         transactionRepository.save(transaction);
+        landExisted.setStatus(Constants.STATUS_lAND.LOCKING);
+        landRepository.save(landExisted);
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
                 .message("Query successfully")
+                .data(transaction)
                 .build();
     }
 
@@ -243,4 +256,49 @@ public class TransactionService implements ITransactionService {
          landDTO.setAreaDTO(areaDTO);
         return landDTO;
     }
+
+    /*public static String generateUniqueRandomString(TransactionRepositoryJPA transactionRepository) {
+
+        String randomString = null;
+        boolean isUnique = false;
+
+        while (!isUnique) {
+
+            randomString = UUID.randomUUID().toString().replaceAll("[^A-Z0-9]", "").substring(0, 12);
+
+
+            if (!transactionRepository.existsByCode(randomString)) {
+                isUnique = true;
+            }
+        }
+
+        return randomString;
+    }*/
+
+    private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static SecureRandom random = new SecureRandom();
+
+    public static String generateUniqueRandomString(TransactionRepositoryJPA transactionRepository, int length) {
+        StringBuilder sb = new StringBuilder(length);
+        boolean isUnique = false;
+
+        while (!isUnique) {
+            for (int i = 0; i < length; i++) {
+                int randomIndex = random.nextInt(ALLOWED_CHARACTERS.length());
+                sb.append(ALLOWED_CHARACTERS.charAt(randomIndex));
+            }
+
+            String randomString = sb.toString();
+
+            if (!transactionRepository.existsByCode(randomString)) {
+                isUnique = true;
+            } else {
+                sb.setLength(0); // Reset StringBuilder
+            }
+        }
+
+        return sb.toString();
+    }
+
+
 }

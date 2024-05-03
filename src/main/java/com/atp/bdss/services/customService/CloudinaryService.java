@@ -6,9 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -33,4 +37,41 @@ public class CloudinaryService {
             throw new IOException("Failed to delete image from Cloudinary: " + e.getMessage());
         }
     }
+
+    public Map uploadImage(MultipartFile multipartFile) throws IOException {
+        File file = convert(multipartFile);
+
+        Map<String, Object> options = new HashMap<>();
+        options.put("resource_type", "image"); // Or use an upload preset
+        options.put("folder", "ATP_BDS");
+
+
+        Map uploadResult = cloudinary.uploader().upload(file, options);
+        if (!Files.deleteIfExists(file.toPath())) {
+            throw new IOException("Fail to delete temporary file :" + file.getAbsolutePath());
+        }
+        return uploadResult;
+
+    }
+
+    public Map deleteImage(String id) throws IOException {
+        Map<String, Object> options = new HashMap<>();
+        options.put("resource_type", "image"); // Or use an upload preset
+        options.put("folder", "ATP_BDS");
+        return cloudinary.uploader().destroy(id, options);
+    }
+
+
+    private File convert(MultipartFile multipartFile) throws IOException{
+        File file = new File(Objects.requireNonNull(multipartFile.getOriginalFilename()));
+        FileOutputStream fo = new FileOutputStream(file);
+        fo.write(multipartFile.getBytes());
+        fo.close();
+        return file;
+    }
+
+
+
+
+
 }
