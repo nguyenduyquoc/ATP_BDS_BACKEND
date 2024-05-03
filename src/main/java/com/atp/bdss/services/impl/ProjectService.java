@@ -8,10 +8,7 @@ import com.atp.bdss.dtos.requests.RequestCreateProject;
 import com.atp.bdss.dtos.requests.RequestPaginationProject;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
-import com.atp.bdss.entities.District;
-import com.atp.bdss.entities.Land;
-import com.atp.bdss.entities.Project;
-import com.atp.bdss.entities.ProjectType;
+import com.atp.bdss.entities.*;
 import com.atp.bdss.exceptions.CustomException;
 import com.atp.bdss.repositories.DistrictRepositoryJPA;
 import com.atp.bdss.repositories.LandRepositoryJPA;
@@ -105,8 +102,8 @@ public class ProjectService implements IProjectService {
         if(projectRepository.existsByNameIgnoreCase(request.getName()))
             throw new CustomException(ErrorsApp.DUPLICATE_PROJECT_NAME);
 
-        ProjectType projectType = projectTypeRepository.findById(request.getProjectTypeId())
-                .orElseThrow(() -> new CustomException(ErrorsApp.PROJECT_TYPE_NOT_FOUND));
+        ProjectType projectType = projectTypeRepository.findByName(request.getProjectType())
+                .orElseGet(() -> projectTypeRepository.save(ProjectType.builder().name(request.getProjectType()).build()));
 
         District district = districtRepository.findById(request.getDistrictId())
                 .orElseThrow(() -> new CustomException(ErrorsApp.DISTRICT_NOT_FOUND));
@@ -177,8 +174,8 @@ public class ProjectService implements IProjectService {
         }
 
         // set projectType
-        ProjectType projectType = projectTypeRepository.findById(request.getProjectTypeId())
-                .orElseThrow(() -> new CustomException(ErrorsApp.PROJECT_TYPE_NOT_FOUND));
+        ProjectType projectType = projectTypeRepository.findByName(request.getProjectType())
+                .orElseGet(() -> projectTypeRepository.save(ProjectType.builder().name(request.getProjectType()).build()));
         project.setProjectType(projectType);
 
         // set District

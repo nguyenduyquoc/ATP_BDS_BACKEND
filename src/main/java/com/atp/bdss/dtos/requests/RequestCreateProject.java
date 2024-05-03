@@ -52,8 +52,8 @@ public class RequestCreateProject {
     @Size(min = 10, max = 10, message = "Investor phone must have exactly 10 digits")
     String investorPhone;
 
-    @NotNull(message = "Project type ID must not be null")
-    Short projectTypeId;
+    @NotNull(message = "Project type must not be null")
+    String projectType;
 
     @NotNull(message = "District ID must not be null")
     int districtId;
