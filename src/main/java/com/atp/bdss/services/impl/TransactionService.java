@@ -135,12 +135,7 @@ public class TransactionService implements ITransactionService {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorsApp.TRANSACTION_NOT_FOUND));
         Land land = landRepository.findById(transaction.getLandId()).orElseThrow(
-                () -> new CustomException(ErrorsApp.LAND_NOT_FOUND)
-        );
-
-        // kiem tra trang thai cua giao dich, chi cho cap nhat neu status cua transaction là wait_for_confirmation
-        if(transaction.getStatus() != Constants.STATUS_TRANSACTION.WAIT_FOR_CONFIRMATION)
-            throw new CustomException(ErrorsApp.CANNOT_UPDATE_ANYMORE);
+                () -> new CustomException(ErrorsApp.LAND_NOT_FOUND));
 
         // Kiểm tra trạng thái từ request có tồn tại không
         if (!findStatusTransaction(status))
@@ -154,7 +149,8 @@ public class TransactionService implements ITransactionService {
             land.setStatus(Constants.STATUS_lAND.IN_PROGRESS);
             transaction.setStatus(Constants.STATUS_TRANSACTION.PAYMENT_FAILED);
         } else {
-            throw new CustomException(ErrorsApp.STATUS_INCORRECT);
+            land.setStatus(Constants.STATUS_lAND.LOCKING);
+            transaction.setStatus(Constants.STATUS_TRANSACTION.WAIT_FOR_CONFIRMATION);
         }
 
         landRepository.save(land);
