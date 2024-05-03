@@ -80,7 +80,7 @@ public class TransactionControllerAPI {
         return transactionService.findTransactionByUserId(id, status);
     }
 
-    @PostMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData deleteTransactionById(@PathVariable String id){
 
         return transactionService.deleteTransaction(id);
