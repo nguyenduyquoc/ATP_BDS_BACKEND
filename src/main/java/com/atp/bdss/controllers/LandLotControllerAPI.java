@@ -6,14 +6,17 @@ import com.atp.bdss.dtos.requests.pagination.RequestPaginationLandByAreaId;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.services.ILandService;
+import com.atp.bdss.services.customService.ExcelService;
 import com.atp.bdss.utils.Constants;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -24,7 +27,7 @@ import java.io.IOException;
 public class LandLotControllerAPI {
 
     final ILandService landService;
-
+    final ExcelService excelService;
 
     // lay danh sach cac lo dat co phan trang
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -113,6 +116,11 @@ public class LandLotControllerAPI {
         return landService.filterAllLandsByAreaId(request);
     }
 
+    @PostMapping(value = "/create_multi_lands_from_excel_file",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData createMultiLandsFromExcelFile(@RequestParam("file") MultipartFile file) {
+
+        return excelService.importExcelFile(file);
+    }
 
 
 }
