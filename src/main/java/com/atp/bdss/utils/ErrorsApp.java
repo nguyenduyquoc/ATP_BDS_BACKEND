@@ -21,6 +21,7 @@ public enum ErrorsApp {
     CREATE_TOKEN_FAIL(1006, "token.generate-token-fail", HttpStatus.BAD_REQUEST),
     PROJECT_TYPE_NOT_FOUND(2000, "project-type.project-type-not-found", HttpStatus.BAD_REQUEST),
     PROJECT_TYPE_EXISTED(2001, "project-type.project-type-existed", HttpStatus.BAD_REQUEST),
+    CAN_NOT_DELETE_PROJECT_TYPE(2002, "project-type.project-type-existed", HttpStatus.BAD_REQUEST),
     PROJECT_NOT_FOUND(3000, "project.project-not-found", HttpStatus.BAD_REQUEST),
     PROJECT_EXISTED(3001, "project.project-existed", HttpStatus.BAD_REQUEST),
     DUPLICATE_PROJECT_NAME(3002, "project.project-name-duplicate", HttpStatus.BAD_REQUEST),

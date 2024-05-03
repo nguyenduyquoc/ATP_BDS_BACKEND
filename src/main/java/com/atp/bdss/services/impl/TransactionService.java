@@ -1,8 +1,8 @@
 package com.atp.bdss.services.impl;
 
 import com.atp.bdss.dtos.*;
-import com.atp.bdss.dtos.requests.RequestCreateTransaction;
-import com.atp.bdss.dtos.requests.RequestPaginationTransaction;
+import com.atp.bdss.dtos.requests.create.RequestCreateTransaction;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationTransaction;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.*;
@@ -28,7 +28,6 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static com.atp.bdss.utils.CheckerStatus.findStatusTransaction;
 

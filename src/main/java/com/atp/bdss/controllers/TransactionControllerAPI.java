@@ -1,7 +1,7 @@
 package com.atp.bdss.controllers;
 
-import com.atp.bdss.dtos.requests.RequestCreateTransaction;
-import com.atp.bdss.dtos.requests.RequestPaginationTransaction;
+import com.atp.bdss.dtos.requests.create.RequestCreateTransaction;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationTransaction;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.services.ITransactionService;

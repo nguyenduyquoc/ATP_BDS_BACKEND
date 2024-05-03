@@ -1,4 +1,4 @@
-package com.atp.bdss.dtos.requests;
+package com.atp.bdss.dtos.requests.create;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;

@@ -1,6 +1,6 @@
 package com.atp.bdss.services;
 
-import com.atp.bdss.dtos.requests.RequestCreateImage;
+import com.atp.bdss.dtos.requests.create.RequestCreateImage;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.entities.Image;
 import org.springframework.stereotype.Service;

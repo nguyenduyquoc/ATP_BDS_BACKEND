@@ -1,6 +1,7 @@
 package com.atp.bdss.controllers;
 
-import com.atp.bdss.dtos.requests.*;
+import com.atp.bdss.dtos.requests.create.RequestCreateProject;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationProject;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.services.IProjectService;

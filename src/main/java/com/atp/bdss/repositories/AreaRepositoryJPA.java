@@ -1,7 +1,7 @@
 package com.atp.bdss.repositories;
 
 import com.atp.bdss.dtos.AreaDTO;
-import com.atp.bdss.dtos.requests.RequestPaginationArea;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationArea;
 import com.atp.bdss.entities.Area;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -2,7 +2,7 @@ package com.atp.bdss.services.impl;
 
 import com.atp.bdss.dtos.*;
 import com.atp.bdss.dtos.requests.RegisterRequest;
-import com.atp.bdss.dtos.requests.RequestPaginationUser;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationUser;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.Account;
@@ -27,8 +27,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Component

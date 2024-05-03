@@ -1,11 +1,11 @@
 package com.atp.bdss.services.impl;
 
 
-import com.atp.bdss.dtos.requests.RequestCreateArea;
+import com.atp.bdss.dtos.requests.create.RequestCreateArea;
 import com.atp.bdss.dtos.AreaDTO;
 import com.atp.bdss.dtos.LandDTO;
-import com.atp.bdss.dtos.requests.RequestCreateMultiObject;
-import com.atp.bdss.dtos.requests.RequestPaginationArea;
+import com.atp.bdss.dtos.requests.create.RequestCreateMultiObject;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationArea;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.Area;

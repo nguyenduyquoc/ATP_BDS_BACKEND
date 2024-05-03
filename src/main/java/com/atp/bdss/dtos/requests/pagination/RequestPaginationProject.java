@@ -1,4 +1,4 @@
-package com.atp.bdss.dtos.requests;
+package com.atp.bdss.dtos.requests.pagination;
 
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -1,10 +1,8 @@
 package com.atp.bdss.controllers;
 
-import com.atp.bdss.dtos.requests.RequestCreateImage;
-import com.atp.bdss.dtos.requests.RequestCreateLand;
+import com.atp.bdss.dtos.requests.create.RequestCreateImage;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.services.IImageService;
-import com.atp.bdss.services.IProjectService;
 import com.atp.bdss.utils.Constants;
 import jakarta.validation.Valid;
 import lombok.AccessLevel;

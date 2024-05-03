@@ -1,8 +1,8 @@
 package com.atp.bdss.controllers;
 
-import com.atp.bdss.dtos.requests.RequestCreateLand;
-import com.atp.bdss.dtos.requests.RequestPaginationLand;
-import com.atp.bdss.dtos.requests.RequestPaginationLandByAreaId;
+import com.atp.bdss.dtos.requests.create.RequestCreateLand;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationLand;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationLandByAreaId;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.services.ILandService;

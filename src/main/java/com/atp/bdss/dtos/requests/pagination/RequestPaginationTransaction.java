@@ -1,19 +1,22 @@
-package com.atp.bdss.dtos.requests;
+package com.atp.bdss.dtos.requests.pagination;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RequestPaginationUser {
+public class RequestPaginationTransaction {
 
     Short pageIndex;
 
     Short pageSize;
 
-    String search;
+    String searchByLandName;
+
+    Short status;
 
 }

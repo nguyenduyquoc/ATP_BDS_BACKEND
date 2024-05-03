@@ -1,16 +1,19 @@
-package com.atp.bdss.dtos.requests;
+package com.atp.bdss.dtos.requests.pagination;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
-import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RequestCreateImage {
+public class RequestPaginationUser {
 
-    MultipartFile url;
-    String landId;
+    Short pageIndex;
+
+    Short pageSize;
+
+    String search;
+
 }

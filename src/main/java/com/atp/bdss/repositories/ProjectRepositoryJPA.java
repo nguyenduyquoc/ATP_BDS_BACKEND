@@ -1,6 +1,6 @@
 package com.atp.bdss.repositories;
 
-import com.atp.bdss.dtos.requests.RequestPaginationProject;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationProject;
 import com.atp.bdss.entities.Project;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

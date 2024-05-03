@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface ProjectTypeRepositoryJPA extends JpaRepository<ProjectType, Short> {
 
     Optional<ProjectType> findByName(String name);
+    boolean existsByNameIgnoreCase (String name);
 }
