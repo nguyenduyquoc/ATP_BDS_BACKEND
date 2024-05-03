@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -37,6 +39,8 @@ public class LandDTO {
     String direction;
 
     AreaDTO areaDTO;
+
+    List<ImageDTO> images;
 
 
 }

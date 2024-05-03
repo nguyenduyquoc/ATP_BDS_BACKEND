@@ -1,6 +1,7 @@
 package com.atp.bdss.controllers;
 
 import com.atp.bdss.dtos.requests.create.RequestCreateImage;
+import com.atp.bdss.dtos.requests.create.RequestCreateMultiImageForALand;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.services.IImageService;
 import com.atp.bdss.utils.Constants;
@@ -28,5 +29,12 @@ public class ImageControllerAPI {
     public ResponseData createImage(@ModelAttribute @Valid RequestCreateImage request) throws IOException {
 
         return imageService.save(request);
+    }
+
+
+    @PostMapping(value = "/import_multi_image_for_land",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData importMultiImageForALand(@ModelAttribute @Valid RequestCreateMultiImageForALand request) throws IOException {
+
+        return imageService.importMultiImageForALand(request);
     }
 }

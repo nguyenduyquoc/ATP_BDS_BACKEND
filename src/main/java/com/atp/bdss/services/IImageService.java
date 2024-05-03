@@ -1,6 +1,7 @@
 package com.atp.bdss.services;
 
 import com.atp.bdss.dtos.requests.create.RequestCreateImage;
+import com.atp.bdss.dtos.requests.create.RequestCreateMultiImageForALand;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.entities.Image;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,7 @@ public interface IImageService {
     void delete(int id);
 
     boolean exist(int id);
+
+    ResponseData importMultiImageForALand(RequestCreateMultiImageForALand request) throws IOException;
 }
 
