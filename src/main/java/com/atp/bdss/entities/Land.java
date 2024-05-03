@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -38,19 +37,19 @@ public class Land {
     short status;
 
     @Column(name = "price")
-    BigDecimal price;
+    String price;
 
     @Column(name = "deposit")
-    BigDecimal deposit;
+    String deposit;
 
     @Column(name = "acreage")
     long acreage;
 
     @Column(name = "type_of_apartment")
-    Short typeOfApartment;
+    String typeOfApartment;
 
     @Column(name = "direction")
-    Short direction;
+    String direction;
 
     @ManyToOne
     @JoinColumn(name = "area_id")
@@ -59,7 +58,7 @@ public class Land {
     @OneToMany(mappedBy = "land" , fetch = FetchType.LAZY)
     List<Image> images;
 
-    public Land(String id, String name, String description, String thumbnail, String address, short status, BigDecimal price, BigDecimal deposit, long acreage, short typeOfApartment, short direction) {
+    public Land(String id, String name, String description, String thumbnail, String address, short status, String price, String deposit, long acreage, String typeOfApartment, String direction, Area area) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -71,5 +70,6 @@ public class Land {
         this.acreage = acreage;
         this.typeOfApartment = typeOfApartment;
         this.direction = direction;
+        this.area = area;
     }
 }

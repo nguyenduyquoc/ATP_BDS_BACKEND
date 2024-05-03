@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -27,15 +26,15 @@ public class LandDTO {
 
     String address;
 
-    BigDecimal price;
+    String price;
 
-    BigDecimal deposit;
+    String deposit;
 
     Long acreage;
 
-    Short typeOfApartment;
+    String typeOfApartment;
 
-    Short direction;
+    String direction;
 
     AreaDTO areaDTO;
 

@@ -42,6 +42,9 @@ public class TransactionService implements ITransactionService {
     final LandRepositoryJPA landRepository;
     final ModelMapper modelMapper;
 
+    private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static SecureRandom random = new SecureRandom();
+
     @Override
     public ResponseData findTransactionById(String id) {
         Transaction transaction = transactionRepository.findById(id)
@@ -243,7 +246,6 @@ public class TransactionService implements ITransactionService {
             areaDTO = AreaDTO.builder()
                     .id(area.getId())
                     .name(area.getName())
-                    .expiryDate(area.getExpiryDate())
                     .projectId(area.getProject().getId())
                     .projectName(area.getProject().getName())
                     .build();
@@ -252,26 +254,6 @@ public class TransactionService implements ITransactionService {
         return landDTO;
     }
 
-    /*public static String generateUniqueRandomString(TransactionRepositoryJPA transactionRepository) {
-
-        String randomString = null;
-        boolean isUnique = false;
-
-        while (!isUnique) {
-
-            randomString = UUID.randomUUID().toString().replaceAll("[^A-Z0-9]", "").substring(0, 12);
-
-
-            if (!transactionRepository.existsByCode(randomString)) {
-                isUnique = true;
-            }
-        }
-
-        return randomString;
-    }*/
-
-    private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private static SecureRandom random = new SecureRandom();
 
     public static String generateUniqueRandomString(TransactionRepositoryJPA transactionRepository, int length) {
         StringBuilder sb = new StringBuilder(length);

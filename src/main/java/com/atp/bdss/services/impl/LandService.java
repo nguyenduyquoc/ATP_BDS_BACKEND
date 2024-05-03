@@ -65,7 +65,6 @@ public class LandService implements ILandService {
                 AreaDTO areaDTO = AreaDTO.builder()
                         .id(land.getArea().getId())
                         .name(land.getArea().getName())
-                        .expiryDate(land.getArea().getExpiryDate())
                         .projectId(land.getArea().getProject().getId())
                         .projectName(land.getArea().getProject().getName())
                         .build();
@@ -97,16 +96,13 @@ public class LandService implements ILandService {
         if (!findStatusLand(request.getStatus()))
             throw new CustomException(ErrorsApp.STATUS_LAND_NOT_FOUND);
 
-        if (!findDirection(request.getDirection()))
-            throw new CustomException(ErrorsApp.DIRECTION_NOT_FOUND);
-
-        if (!findTypeOfApartment(request.getTypeOfApartment()))
-            throw new CustomException(ErrorsApp.TYPE_OF_APARTMENT_NOT_FOUND);
-
         String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
         Land land = modelMapper.map(request, Land.class);
         land.setThumbnail(thumbnail);
         land.setArea(area);
+        if (request.getDeposit() == null) {
+            land.setDeposit(land.getArea().getProject().getDefaultDeposit());
+        }
         landRepository.save(land);
 
         return ResponseData
@@ -144,12 +140,6 @@ public class LandService implements ILandService {
         if (!findStatusLand(request.getStatus()))
             throw new CustomException(ErrorsApp.STATUS_LAND_NOT_FOUND);
 
-        if (!findDirection(request.getDirection()))
-            throw new CustomException(ErrorsApp.DIRECTION_NOT_FOUND);
-
-        if (!findTypeOfApartment(request.getTypeOfApartment()))
-            throw new CustomException(ErrorsApp.TYPE_OF_APARTMENT_NOT_FOUND);
-
         optionalLand.setDescription(request.getDescription());
         optionalLand.setAddress(request.getAddress());
         optionalLand.setStatus(request.getStatus());
@@ -178,7 +168,6 @@ public class LandService implements ILandService {
             AreaDTO areaDTO = AreaDTO.builder()
                     .id(area.getId())
                     .name(area.getName())
-                    .expiryDate(area.getExpiryDate())
                     .projectId(area.getProject().getId())
                     .projectName(area.getProject().getName())
                     .build();
@@ -216,7 +205,6 @@ public class LandService implements ILandService {
         );
 
         // kiem tra lo dat ay da ban hoac dang khoa hay k
-
         if (land.getStatus() == Constants.STATUS_lAND.LOCKING || land.getStatus() == Constants.STATUS_lAND.LOCKED) {
             throw new CustomException(ErrorsApp.CAN_NOT_DELETE_PROJECT);
         }
@@ -237,7 +225,6 @@ public class LandService implements ILandService {
                         AreaDTO areaDTO = AreaDTO.builder()
                                 .id(land.getArea().getId())
                                 .name(land.getArea().getName())
-                                .expiryDate(land.getArea().getExpiryDate())
                                 .projectId(land.getArea().getProject().getId())
                                 .projectName(land.getArea().getProject().getName())
                                 .build();

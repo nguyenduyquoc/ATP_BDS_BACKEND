@@ -25,6 +25,8 @@ public interface ProjectRepositoryJPA extends JpaRepository<Project, String> {
             "   p.hostBank," +
             "   p.investor," +
             "   p.investorPhone," +
+            "   p.expiryDate," +
+            "   p.defaultDeposit," +
             "   p.projectType," +
             "   p.district" +
             ")" +

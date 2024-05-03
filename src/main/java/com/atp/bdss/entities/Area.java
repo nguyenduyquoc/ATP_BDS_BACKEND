@@ -25,9 +25,6 @@ public class Area {
     @Column(name = "name")
     String name;
 
-    @Column(name = "expiry_date")
-    int expiryDate;
-
     @OneToMany(mappedBy = "area" , fetch = FetchType.LAZY)
     List<Land> lands;
 
@@ -36,23 +33,20 @@ public class Area {
     Project project;
 
 
-    public Area(String id, String name,int expiryDate, List<Land> lands) {
+    public Area(String id, String name, List<Land> lands) {
         this.id = id;
         this.name = name;
-        this.expiryDate = expiryDate;
         this.lands = lands;
     }
 
-    public Area(String id, String name, int expiryDate) {
+    public Area(String id, String name) {
         this.id = id;
         this.name = name;
-        this.expiryDate = expiryDate;
     }
 
-    public Area(String id, String name,int expiryDate, Project project) {
+    public Area(String id, String name, Project project) {
         this.id = id;
         this.name = name;
-        this.expiryDate = expiryDate;
         this.project = project;
     }
 

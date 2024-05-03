@@ -1,8 +1,6 @@
 package com.atp.bdss.dtos.requests.create;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +19,4 @@ public class RequestCreateArea {
     @NotBlank(message = "Are name must not be blank")
     String name;
 
-    @NotNull(message = "Expiry date must not be null")
-    @Positive(message = "Expiry date must be a positive integer")
-    Integer expiryDate;
 }

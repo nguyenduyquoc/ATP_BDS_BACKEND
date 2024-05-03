@@ -76,7 +76,6 @@ public class AreaService implements IAreaService {
 
         Area area = Area.builder()
                 .name(request.getName())
-                .expiryDate(request.getExpiryDate())
                 .project(project)
                 .build();
         areaRepository.save(area);
@@ -116,7 +115,6 @@ public class AreaService implements IAreaService {
         for(RequestCreateArea areaCreate : request.getMultiObject()) {
             Area area = Area.builder()
                     .name(areaCreate.getName())
-                    .expiryDate(areaCreate.getExpiryDate())
                     .project(project)
                     .build();
 
@@ -149,9 +147,6 @@ public class AreaService implements IAreaService {
                 throw new CustomException(ErrorsApp.DUPLICATE_PROJECT_NAME);
             }
         }
-
-        // Cập nhật expiryDate
-        area.setExpiryDate(request.getExpiryDate());
 
         areaRepository.save(area);
 
@@ -191,7 +186,6 @@ public class AreaService implements IAreaService {
         );
 
         // kiem tra da co lo dat nao ton tai hay chua, neu chua co thi co the xoa
-
         if (!area.getLands().isEmpty()) {
             throw new CustomException(ErrorsApp.CAN_NOT_DELETE_PROJECT);
         }
@@ -206,15 +200,12 @@ public class AreaService implements IAreaService {
     @Override
     public ResponseData allAreasNoPagination() {
         List<AreaDTO> areas =  areaRepository.findAll().stream().map(
-                area -> {
-                    return AreaDTO.builder()
-                            .id(area.getId())
-                            .name(area.getName())
-                            .expiryDate(area.getExpiryDate())
-                            .projectId(area.getProject().getId())
-                            .projectName(area.getProject().getName())
-                            .build();
-                }
+                area -> AreaDTO.builder()
+                        .id(area.getId())
+                        .name(area.getName())
+                        .projectId(area.getProject().getId())
+                        .projectName(area.getProject().getName())
+                        .build()
         ).toList();
 
         return ResponseData.builder()

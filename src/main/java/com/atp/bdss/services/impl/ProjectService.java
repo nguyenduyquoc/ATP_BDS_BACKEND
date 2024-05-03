@@ -208,6 +208,8 @@ public class ProjectService implements IProjectService {
         project.setBankName(request.getBankName());
         project.setHostBank(request.getHostBank());
         project.setInvestor(request.getInvestor());
+        project.setExpiryDate(request.getExpiryDate());
+        project.setDefaultDeposit(request.getDefaultDeposit());
         project.setInvestorPhone(request.getInvestorPhone());
         project.setUpdatedAt(LocalDateTime.now());
 

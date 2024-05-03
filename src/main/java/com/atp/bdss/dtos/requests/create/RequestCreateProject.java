@@ -1,9 +1,6 @@
 package com.atp.bdss.dtos.requests.create;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,6 +43,14 @@ public class RequestCreateProject {
     String hostBank;
 
     String investor;
+
+    @NotNull(message = "Expiry date must not be null")
+    @Positive(message = "Expiry date must be a positive integer")
+    Integer expiryDate;
+
+    @NotNull(message = "Deposit must not be null")
+    @Pattern(regexp = "\\d+", message = "Deposit must be a valid number")
+    String defaultDeposit;
 
     @NotNull(message = "Investor phone must not be null")
     @Pattern(regexp = "^[0-9]*$", message = "Investor phone must contain only digits")

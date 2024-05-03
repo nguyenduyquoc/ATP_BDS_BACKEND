@@ -63,6 +63,12 @@ public class Project {
     @Column(name = "investor_phone")
     String investorPhone;
 
+    @Column(name = "expiry_date")
+    int expiryDate;
+
+    @Column(name = "default_deposit")
+    String defaultDeposit;
+
     @Column(name = "created_at")
     LocalDateTime createdAt;
 
@@ -85,7 +91,7 @@ public class Project {
 
     public Project(String id, String name, String description, String thumbnail, String address, Short status,
                    LocalDate startDate, LocalDate endDate, String qrImg, String bankNumber, String bankName,
-                   String hostBank, String investor, String investorPhone, ProjectType projectType, District district) {
+                   String hostBank, String investor, String investorPhone,int expiryDate, String defaultDeposit, ProjectType projectType, District district) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -100,6 +106,8 @@ public class Project {
         this.hostBank = hostBank;
         this.investor = investor;
         this.investorPhone = investorPhone;
+        this.expiryDate = expiryDate;
+        this.defaultDeposit = defaultDeposit;
         this.projectType = projectType;
         this.district = district;
     }

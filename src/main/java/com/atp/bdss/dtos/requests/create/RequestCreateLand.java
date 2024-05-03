@@ -1,9 +1,6 @@
 package com.atp.bdss.dtos.requests.create;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,22 +28,21 @@ public class RequestCreateLand {
     @NotNull(message = "Status must not be null")
     short status;
 
-    @NotNull(message = "Price must not be null")
-    @DecimalMin(value = "0.0", message = "Price must be greater than or equal to 0")
-    BigDecimal price;
 
-    @NotNull(message = "Deposit must not be null")
-    @DecimalMin(value = "0.0", message = "Deposit must be greater than or equal to 0")
-    BigDecimal deposit;
+    @Pattern(regexp = "\\d+", message = "Price must be a valid number")
+    String price;
+
+    @Pattern(regexp = "\\d+", message = "Deposit must be a valid number")
+    String deposit;
 
 
     @NotNull(message = "Acreage must not be null")
     @Positive(message = "Acreage must be a positive number")
     long acreage;
 
-    short typeOfApartment;
+    String typeOfApartment;
 
-    short direction;
+    String direction;
 
     @NotBlank(message = "Area Id must not be blank")
     String areaId;

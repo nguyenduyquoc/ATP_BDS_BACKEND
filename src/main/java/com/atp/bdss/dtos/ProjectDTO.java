@@ -1,6 +1,5 @@
 package com.atp.bdss.dtos;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -42,6 +41,10 @@ public class ProjectDTO {
 
     String investor;
 
+    Integer expiryDate;
+
+    String defaultDeposit;
+
     String investorPhone;
 
     ProjectTypeDTO projectType;
@@ -51,7 +54,8 @@ public class ProjectDTO {
     DistrictDTO district;
 
     public ProjectDTO(String id, String name, String description, String thumbnail, String address, short status, String qrImg,
-                      String bankNumber, String bankName, String hostBank, String investor, String investorPhone, LocalDate startDate,
+                      String bankNumber, String bankName, String hostBank, String investor, int expiryDate, String defaultDeposit,
+                              String investorPhone, LocalDate startDate,
                       LocalDate endDate, ProjectTypeDTO projectType, DistrictDTO district) {
         this.id = id;
         this.name = name;
@@ -64,6 +68,8 @@ public class ProjectDTO {
         this.bankName = bankName;
         this.hostBank = hostBank;
         this.investor = investor;
+        this.expiryDate = expiryDate;
+        this.defaultDeposit = defaultDeposit;
         this.investorPhone = investorPhone;
         this.startDate = startDate;
         this.endDate = endDate;

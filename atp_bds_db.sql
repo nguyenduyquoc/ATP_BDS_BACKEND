@@ -55,6 +55,8 @@ CREATE TABLE project (
                          status TINYINT DEFAULT 0,
                          start_date DATE,
                          end_date DATE,
+                         default_deposit VARCHAR(20) NOT NULL,
+                         expiry_date INT,
                          qr_img VARCHAR(255) NOT NULL,
                          bank_number VARCHAR(100) NOT NULL,
                          bank_name VARCHAR(100) NOT NULL,
@@ -73,7 +75,6 @@ CREATE TABLE project (
 CREATE TABLE area (
                       id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
                       name VARCHAR(100) NOT NULL,
-                      expiry_date INT,
                       project_id VARCHAR(36),
                       FOREIGN KEY (project_id) REFERENCES project(id)
 );
@@ -85,11 +86,11 @@ CREATE TABLE land (
                       thumbnail VARCHAR(255),
                       address VARCHAR(255),
                       status TINYINT DEFAULT 0,
-                      price DECIMAL(18,2),
-                      deposit DECIMAL(16,2),
+                      price VARCHAR(20),
+                      deposit VARCHAR(20),
                       acreage INT NOT NULL,
-                      typeOfApartment TINYINT,
-                      direction TINYINT,
+                      typeOfApartment VARCHAR(100),
+                      direction VARCHAR(100),
                       area_id VARCHAR(36),
                       FOREIGN KEY (area_id) REFERENCES area(id)
 );

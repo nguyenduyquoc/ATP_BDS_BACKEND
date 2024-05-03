@@ -32,21 +32,4 @@ public class CheckerStatus {
         );
         return validTransactions.contains(status);
     }
-
-    public static boolean findTypeOfApartment (Short status) {
-        List<Short> validDirection = Arrays.asList(
-                Constants.TYPEOFAPARTMENT.TWO_ROOM_PLUS_ONE,
-                Constants.TYPEOFAPARTMENT.THREE_ROOM
-        );
-        return validDirection.contains(status);
-    }
-
-    public static boolean findDirection (Short status) {
-        List<Short> validTypeOfApartment = Arrays.asList(
-                Constants.DIRECTION.TB,
-                Constants.DIRECTION.TN_TB,
-                Constants.DIRECTION.DN_TB
-        );
-        return validTypeOfApartment.contains(status);
-    }
 }
