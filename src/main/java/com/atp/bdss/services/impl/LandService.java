@@ -8,9 +8,11 @@ import com.atp.bdss.dtos.requests.pagination.RequestPaginationLandByProjectId;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.Area;
+import com.atp.bdss.entities.Image;
 import com.atp.bdss.entities.Land;
 import com.atp.bdss.exceptions.CustomException;
 import com.atp.bdss.repositories.AreaRepositoryJPA;
+import com.atp.bdss.repositories.ImageRepositoryJPA;
 import com.atp.bdss.repositories.LandRepositoryJPA;
 import com.atp.bdss.services.ILandService;
 import com.atp.bdss.services.customService.CloudinaryService;
@@ -44,6 +46,7 @@ public class LandService implements ILandService {
     final AreaRepositoryJPA areaRepository;
     final ModelMapper modelMapper;
     final CloudinaryService cloudinary;
+    final ImageRepositoryJPA imageRepository;
 
     @Override
     public ResponseDataWithPagination allLands(RequestPaginationLand request) {
@@ -247,12 +250,13 @@ public class LandService implements ILandService {
         List<LandDTO> landList = landRepository.getLandPaginationByProjectId(request)
                 .stream().map(land -> {
                     LandDTO landDTO = convertLandToLandDTO(land, modelMapper);
-                    if (land.getImages() != null) {
-                        List<ImageDTO> imageList = land.getImages().stream().map(
-                                image -> modelMapper.map(image, ImageDTO.class)
 
+                    List<Image> imageList = imageRepository.getImagesByLandId(land.getId());
+                    if (!imageList.isEmpty()) {
+                        List<ImageDTO> imageDTOList = imageList.stream().map(
+                                image -> modelMapper.map(image, ImageDTO.class)
                         ).toList();
-                        landDTO.setImages(imageList);
+                        landDTO.setImages(imageDTOList);
                     }
                     return landDTO;
                 }).toList();
