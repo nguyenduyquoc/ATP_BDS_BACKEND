@@ -39,9 +39,12 @@ public class LandLotControllerAPI {
         RequestPaginationLand request = new RequestPaginationLand();
         request.setPageIndex(pageIndex);
         request.setPageSize(pageSize);
-        request.setSearchName(searchName);
-        request.setProjectId(projectId);
-        request.setAreaId(areaId);
+        if (searchName != null)
+            request.setSearchName(searchName);
+        if (projectId != null)
+            request.setProjectId(projectId);
+        if (areaId != null)
+            request.setAreaId(areaId);
         return landService.allLands(request);
     }
 

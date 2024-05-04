@@ -48,7 +48,7 @@ public class LandService implements ILandService {
     @Override
     public ResponseDataWithPagination allLands(RequestPaginationLand request) {
         Pageable pageable = PageRequest.of(request.getPageIndex() != null ? request.getPageIndex() : 0,
-                Math.max(request.getPageSize() != null ? request.getPageSize().intValue() : 8, 1));
+                Math.max(request.getPageSize() != null ? request.getPageSize().intValue() : 10, 1));
 
         if (request.getSearchName() != null)
             request.setSearchName(request.getSearchName().replace("%", "\\%").replace("_", "\\_").trim());
