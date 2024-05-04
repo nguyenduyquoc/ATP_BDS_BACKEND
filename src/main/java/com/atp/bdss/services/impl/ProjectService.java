@@ -170,8 +170,18 @@ public class ProjectService implements IProjectService {
             if (projectRepository.existsByNameIgnoreCase(request.getName())) {
                 throw new CustomException(ErrorsApp.DUPLICATE_PROJECT_NAME);
             }
-            project.setName(request.getName());
         }
+
+        if (!findStatusProject(request.getStatus()))
+            throw new CustomException(ErrorsApp.STATUS_NOT_FOUND);
+
+        District district = districtRepository.findById(request.getDistrictId())
+                .orElseThrow(() -> new CustomException(ErrorsApp.DISTRICT_NOT_FOUND));
+
+        String thumbnailOld = project.getThumbnail();
+        String qrOld = project.getQrImg();
+
+        modelMapper.map(request, project);
 
         // set projectType
         ProjectType projectType = projectTypeRepository.findByName(request.getProjectType())
@@ -179,38 +189,25 @@ public class ProjectService implements IProjectService {
         project.setProjectType(projectType);
 
         // set District
-        District district = districtRepository.findById(request.getDistrictId())
-                .orElseThrow(() -> new CustomException(ErrorsApp.DISTRICT_NOT_FOUND));
         project.setDistrict(district);
 
-
-
-        // setStatus
-        if (!findStatusProject(request.getStatus()))
-            throw new CustomException(ErrorsApp.STATUS_NOT_FOUND);
-        project.setStatus(request.getStatus());
 
         // setThumbnail
         if(request.getThumbnail() != null && !request.getThumbnail().isEmpty()){
             String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
             project.setThumbnail(thumbnail);
+        } else {
+            project.setThumbnail(thumbnailOld);
         }
 
         // set Qr image
         if(request.getQrImg() != null && !request.getQrImg().isEmpty()){
             String qrImage = uploadImage(request.getQrImg(), cloudinary);
             project.setQrImg(qrImage);
+        }  else {
+            project.setQrImg(qrOld);
         }
-        project.setDescription(request.getDescription());
-        project.setAddress(request.getAddress());
-        project.setStartDate(request.getStartDate());
-        project.setEndDate(request.getEndDate());
-        project.setBankName(request.getBankName());
-        project.setHostBank(request.getHostBank());
-        project.setInvestor(request.getInvestor());
-        project.setExpiryDate(request.getExpiryDate());
-        project.setDefaultDeposit(request.getDefaultDeposit());
-        project.setInvestorPhone(request.getInvestorPhone());
+
         project.setUpdatedAt(LocalDateTime.now());
 
         projectRepository.save(project);

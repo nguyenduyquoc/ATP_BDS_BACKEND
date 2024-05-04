@@ -117,31 +117,25 @@ public class LandService implements ILandService {
             if (landRepository.existsByNameIgnoreCaseAndAreaId(request.getName(), area.getId())) {
                 throw new CustomException(ErrorsApp.DUPLICATE_LAND_NAME);
             }
-            optionalLand.setName(request.getName());
-        }
-
-
-        // setThumbnail
-        if(request.getThumbnail() != null && !request.getThumbnail().isEmpty()){
-            String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
-            optionalLand.setThumbnail(thumbnail);
         }
 
         if (!findStatusLand(request.getStatus()))
             throw new CustomException(ErrorsApp.STATUS_LAND_NOT_FOUND);
 
-        optionalLand.setDescription(request.getDescription());
-        optionalLand.setAddress(request.getAddress());
-        optionalLand.setStatus(request.getStatus());
-        optionalLand.setPrice(request.getPrice());
-        optionalLand.setDeposit(request.getDeposit());
-        optionalLand.setAcreage(request.getAcreage());
-        optionalLand.setTypeOfApartment(request.getTypeOfApartment());
-        optionalLand.setDirection(request.getDirection());
+        String thumbnailOld = optionalLand.getThumbnail();
+        modelMapper.map(request, optionalLand);
+
+        // setThumbnail
+        if(request.getThumbnail() != null && !request.getThumbnail().isEmpty()){
+            String thumbnailNew = uploadImage(request.getThumbnail(), cloudinary);
+            optionalLand.setThumbnail(thumbnailNew);
+        } else {
+            optionalLand.setThumbnail(thumbnailOld);
+        }
+
         landRepository.save(optionalLand);
 
-        return ResponseData
-                .builder()
+        return ResponseData.builder()
                 .code(HttpStatus.OK.value())
                 .message("Query successfully")
                 .build();
