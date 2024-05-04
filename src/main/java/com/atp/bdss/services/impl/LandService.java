@@ -251,12 +251,14 @@ public class LandService implements ILandService {
         // duyet tat ca cac land cua du an
         List<AreaDTO> areaDTOS = projectDTO.getAreas().stream().map(area -> {
             AreaDTO areaDTO = modelMapper.map(area, AreaDTO.class);
+
+            // filter cac lands trong tung area
             RequestPaginationLandByAreaId requestPaginationLandByAreaId = RequestPaginationLandByAreaId.builder()
                     .areaId(area.getId())
                     .price(request.getPrice())
                     .status(request.getStatus())
                     .typeOfApartment(request.getTypeOfApartment())
-                    .typeOfApartment(request.getDirection())
+                    .direction(request.getDirection())
                     .build();
             List<LandDTO> landList = landRepository.getLandPaginationByAreaID(requestPaginationLandByAreaId)
                     .stream().map(land -> {
@@ -271,8 +273,10 @@ public class LandService implements ILandService {
                         }
                         return landDTO;
                     }).toList();
+
             areaDTO.setLands(landList);
             return areaDTO;
+
         }).toList();
 
         projectDTO.setAreas(areaDTOS);
