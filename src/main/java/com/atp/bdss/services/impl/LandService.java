@@ -109,6 +109,7 @@ public class LandService implements ILandService {
                 .builder()
                 .code(HttpStatus.OK.value())
                 .message("Query successfully")
+                .data(land.getId())
                 .build();
     }
 

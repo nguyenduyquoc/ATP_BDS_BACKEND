@@ -76,10 +76,9 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
             "   AND (:#{#request.typeOfApartment} IS NULL OR l.typeOfApartment LIKE %:#{#request.typeOfApartment}%) " +
             "   AND (:#{#request.direction} IS NULL OR l.direction LIKE %:#{#request.direction}%) " +
             "ORDER BY " +
-            "   CASE WHEN :#{#request.price} = 1 THEN l.price END DESC, " +
-            "   CASE WHEN :#{#request.price} = 0 THEN l.price END ASC")
+            "   CASE WHEN :#{#request.price} = 1 THEN cast(l.price AS java.math.BigDecimal) END DESC, " +
+            "   CASE WHEN :#{#request.price} = 0 THEN cast(l.price AS java.math.BigDecimal) END ASC")
 
     List<Land> getLandPaginationByAreaID(@Param("request") RequestPaginationLandByAreaId request);
     // filter land thuoc areaId cho can ho, dat nen
-
 }
