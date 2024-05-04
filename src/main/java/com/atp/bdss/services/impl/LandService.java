@@ -258,7 +258,8 @@ public class LandService implements ILandService {
     @Override
     public ResponseData getAllDirection() {
         List<LandDTO> landList = landRepository.getAllDirection().stream().map(
-                land -> LandDTO.builder().direction(land.getDirection()).build()
+                land -> LandDTO.builder()
+                        .direction(land.getDirection()).build()
         ).toList();
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())

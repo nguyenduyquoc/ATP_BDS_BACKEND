@@ -90,11 +90,12 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
           )
     List<Land> getAllTypeOfApartment();
 
-    @Query(value = "select distinct new com.atp.bdss.entities.Land( " +
+    @Query(value = "select new com.atp.bdss.entities.Land( " +
             "   l.id," +
             "   l.direction" +
             ")" +
-            "FROM Land l "
+            "FROM Land l " +
+            "GROUP BY l.direction"
     )
     List<Land> getAllDirection();
 }
