@@ -8,6 +8,7 @@ import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.*;
 import com.atp.bdss.exceptions.CustomException;
 import com.atp.bdss.repositories.AccountRepositoryJPA;
+import com.atp.bdss.repositories.ImageRepositoryJPA;
 import com.atp.bdss.repositories.LandRepositoryJPA;
 import com.atp.bdss.repositories.TransactionRepositoryJPA;
 import com.atp.bdss.services.ITransactionService;
@@ -41,6 +42,7 @@ public class TransactionService implements ITransactionService {
     final TransactionRepositoryJPA transactionRepository;
     final LandRepositoryJPA landRepository;
     final ModelMapper modelMapper;
+    final ImageRepositoryJPA imageRepository;
 
     private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static SecureRandom random = new SecureRandom();
@@ -233,6 +235,14 @@ public class TransactionService implements ITransactionService {
                 transaction -> {
                     TransactionDTO transactionDTO = modelMapper.map(transaction, TransactionDTO.class);
                     LandDTO landDTO = returnLandDTO(landRepository, transaction.getLandId());
+                    // get images of land
+                    List<Image> images = imageRepository.getImagesByLandId(transaction.getLandId());
+                    if (!images.isEmpty()) {
+                        List<ImageDTO> imageDTOs = images.stream().map(
+                           image -> modelMapper.map(image, ImageDTO.class)
+                        ).toList();
+                        landDTO.setImages(imageDTOs);
+                    }
                     transactionDTO.setLand(landDTO);
                     return transactionDTO;
                 }
