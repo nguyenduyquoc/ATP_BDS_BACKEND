@@ -10,10 +10,12 @@ import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.Area;
 import com.atp.bdss.entities.Image;
 import com.atp.bdss.entities.Land;
+import com.atp.bdss.entities.Project;
 import com.atp.bdss.exceptions.CustomException;
 import com.atp.bdss.repositories.AreaRepositoryJPA;
 import com.atp.bdss.repositories.ImageRepositoryJPA;
 import com.atp.bdss.repositories.LandRepositoryJPA;
+import com.atp.bdss.repositories.ProjectRepositoryJPA;
 import com.atp.bdss.services.ILandService;
 import com.atp.bdss.services.customService.CloudinaryService;
 import com.atp.bdss.utils.Constants;
@@ -47,6 +49,7 @@ public class LandService implements ILandService {
     final ModelMapper modelMapper;
     final CloudinaryService cloudinary;
     final ImageRepositoryJPA imageRepository;
+    final ProjectRepositoryJPA projectRepository;
 
     @Override
     public ResponseDataWithPagination allLands(RequestPaginationLand request) {
@@ -239,24 +242,46 @@ public class LandService implements ILandService {
 
     @Override
     public ResponseData filterAllLandsByProjectId(RequestPaginationLandByProjectId request) {
-        List<LandDTO> landList = landRepository.getLandPaginationByProjectId(request)
-                .stream().map(land -> {
-                    LandDTO landDTO = convertLandToLandDTO(land, modelMapper);
+        Project project = projectRepository.findById(request.getProjectId()).orElseThrow(
+                () -> new CustomException(ErrorsApp.PROJECT_NOT_FOUND)
+        );
 
-                    List<Image> imageList = imageRepository.getImagesByLandId(land.getId());
-                    if (!imageList.isEmpty()) {
-                        List<ImageDTO> imageDTOList = imageList.stream().map(
-                                image -> modelMapper.map(image, ImageDTO.class)
-                        ).toList();
-                        landDTO.setImages(imageDTOList);
-                    }
-                    return landDTO;
-                }).toList();
+        ProjectDTO projectDTO = modelMapper.map(project, ProjectDTO.class);
+
+        // duyet tat ca cac land cua du an
+        List<AreaDTO> areaDTOS = projectDTO.getAreas().stream().map(area -> {
+            AreaDTO areaDTO = modelMapper.map(area, AreaDTO.class);
+            RequestPaginationLandByAreaId requestPaginationLandByAreaId = RequestPaginationLandByAreaId.builder()
+                    .areaId(area.getId())
+                    .price(request.getPrice())
+                    .status(request.getStatus())
+                    .typeOfApartment(request.getTypeOfApartment())
+                    .typeOfApartment(request.getDirection())
+                    .build();
+            List<LandDTO> landList = landRepository.getLandPaginationByAreaID(requestPaginationLandByAreaId)
+                    .stream().map(land -> {
+                        LandDTO landDTO = convertLandToLandDTO(land, modelMapper);
+
+                        List<Image> imageList = imageRepository.getImagesByLandId(land.getId());
+                        if (!imageList.isEmpty()) {
+                            List<ImageDTO> imageDTOList = imageList.stream().map(
+                                    image -> modelMapper.map(image, ImageDTO.class)
+                            ).toList();
+                            landDTO.setImages(imageDTOList);
+                        }
+                        return landDTO;
+                    }).toList();
+            areaDTO.setLands(landList);
+            return areaDTO;
+        }).toList();
+
+        projectDTO.setAreas(areaDTOS);
+
 
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
                 .message("Query successfully")
-                .data(landList)
+                .data(projectDTO)
                 .build();
     }
 

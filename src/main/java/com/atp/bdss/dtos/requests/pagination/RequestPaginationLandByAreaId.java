@@ -1,12 +1,14 @@
 package com.atp.bdss.dtos.requests.pagination;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.checkerframework.checker.units.qual.A;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RequestPaginationLandByAreaId {
 
