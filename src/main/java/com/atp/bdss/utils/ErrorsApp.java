@@ -44,7 +44,8 @@ public enum ErrorsApp {
     TRANSACTION_NOT_FOUND(10000, "transaction.transaction-not-found", HttpStatus.BAD_REQUEST),
     CANNOT_UPDATE_ANYMORE(10001, "transaction.transaction-cannot-update-anymore", HttpStatus.BAD_REQUEST),
     OTP_INCORRECT(10002, "otp.otp-incorrect", HttpStatus.BAD_REQUEST),
-    STATUS_NOT_FOUND(10003, "status.status-not-found", HttpStatus.BAD_REQUEST);
+    STATUS_NOT_FOUND(10003, "status.status-not-found", HttpStatus.BAD_REQUEST),
+    UNCATEGORIZED_EXCEPTION(10004, "Uncategorized error", HttpStatus.INTERNAL_SERVER_ERROR),;
 
 
     private final int code;

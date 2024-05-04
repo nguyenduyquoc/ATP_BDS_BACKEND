@@ -2,7 +2,6 @@ package com.atp.bdss.services.impl;
 
 import com.atp.bdss.dtos.*;
 import com.atp.bdss.dtos.requests.create.RequestCreateLand;
-import com.atp.bdss.dtos.requests.create.RequestCreateMultiObject;
 import com.atp.bdss.dtos.requests.pagination.RequestPaginationLand;
 import com.atp.bdss.dtos.requests.pagination.RequestPaginationLandByAreaId;
 import com.atp.bdss.dtos.responses.ResponseData;
@@ -54,24 +53,10 @@ public class LandService implements ILandService {
             request.setSearchName(request.getSearchName().replace("%", "\\%").replace("_", "\\_").trim());
 
         Page<Land> data = landRepository.getLandPagination(request, pageable);
-
         if(data.isEmpty()){
             return (ResponseDataWithPagination) Page.empty();
         }
-
-        Page<LandDTO> landDTOS = data.map(land -> {
-            LandDTO landDTO = modelMapper.map(land, LandDTO.class);
-            if(land.getArea() != null) {
-                AreaDTO areaDTO = AreaDTO.builder()
-                        .id(land.getArea().getId())
-                        .name(land.getArea().getName())
-                        .projectId(land.getArea().getProject().getId())
-                        .projectName(land.getArea().getProject().getName())
-                        .build();
-                landDTO.setAreaDTO(areaDTO);
-            }
-            return landDTO;
-        });
+        Page<LandDTO> landDTOS = data.map(land -> convertLandToLandDTO(land, modelMapper));
 
         return ResponseDataWithPagination.builder()
                 .currentPage(data.getNumber())
@@ -222,19 +207,7 @@ public class LandService implements ILandService {
     @Override
     public ResponseData filterAllLandsByAreaId(RequestPaginationLandByAreaId request) {
         List<LandDTO> landList = landRepository.getLandPaginationByAreaID(request)
-                .stream().map(land -> {
-                    LandDTO landDTO = modelMapper.map(land, LandDTO.class);
-                    if(land.getArea() != null) {
-                        AreaDTO areaDTO = AreaDTO.builder()
-                                .id(land.getArea().getId())
-                                .name(land.getArea().getName())
-                                .projectId(land.getArea().getProject().getId())
-                                .projectName(land.getArea().getProject().getName())
-                                .build();
-                        landDTO.setAreaDTO(areaDTO);
-                    }
-                    return landDTO;
-                }).toList();
+                .stream().map(land -> convertLandToLandDTO(land, modelMapper)).toList();
 
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
@@ -268,12 +241,19 @@ public class LandService implements ILandService {
                 .build();
     }
 
+    private static LandDTO convertLandToLandDTO(Land land, ModelMapper modelMapper){
 
-    @Override
-    public ResponseData createMultiLand(RequestCreateMultiObject<RequestCreateLand> request) {
-        return null;
+        LandDTO landDTO = modelMapper.map(land, LandDTO.class);
+        if(land.getArea() != null) {
+            AreaDTO areaDTO = AreaDTO.builder()
+                    .id(land.getArea().getId())
+                    .name(land.getArea().getName())
+                    .projectId(land.getArea().getProject().getId())
+                    .projectName(land.getArea().getProject().getName())
+                    .build();
+                landDTO.setAreaDTO(areaDTO);
+            }
+            return landDTO;
     }
-
-
 
 }

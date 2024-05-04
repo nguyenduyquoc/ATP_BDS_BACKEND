@@ -2,6 +2,7 @@ package com.atp.bdss.exceptions;
 
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.utils.ErrorsApp;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -15,19 +16,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = RuntimeException.class)
-    public ResponseEntity<ResponseData> handleRuntimeException(RuntimeException exception){
-
+    @ExceptionHandler(value = Exception.class)
+    ResponseEntity<ResponseData> handlingRuntimeException(RuntimeException exception) {
+        log.error("Exception: ", exception);
         ResponseData responseData = new ResponseData();
-        responseData.setCode(HttpStatus.BAD_REQUEST.value());
-        responseData.setMessage("Internal Server Error");
-        responseData.setData(exception.getMessage());
 
-        return ResponseEntity.status(
-                        HttpStatus.BAD_REQUEST)
-                .body(responseData);
+        responseData.setCode(ErrorsApp.UNCATEGORIZED_EXCEPTION.getCode());
+        responseData.setMessage(ErrorsApp.UNCATEGORIZED_EXCEPTION.getDescription());
+        return ResponseEntity.badRequest().body(responseData);
     }
 
 
