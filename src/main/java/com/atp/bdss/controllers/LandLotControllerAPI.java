@@ -3,6 +3,7 @@ package com.atp.bdss.controllers;
 import com.atp.bdss.dtos.requests.create.RequestCreateLand;
 import com.atp.bdss.dtos.requests.pagination.RequestPaginationLand;
 import com.atp.bdss.dtos.requests.pagination.RequestPaginationLandByAreaId;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationLandByProjectId;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.services.ILandService;
@@ -132,6 +133,32 @@ public class LandLotControllerAPI {
     @GetMapping(value = "/all-direction", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData getAllDirection () {
         return landService.getAllDirection();
+    }
+
+    // filter cac lo dat thuoc 1 phan khu
+    @GetMapping(value = "/all-lands-by-project-id", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData allLandLotsByProjectId(
+            @RequestParam(name = "projectId") String projectId,
+            @RequestParam(name = "price", required = false) Short price,
+            @RequestParam(name = "status", required = false) Short status,
+            @RequestParam(name = "typeOfApartment", required = false) String typeOfApartment,
+            @RequestParam(name = "direction", required = false) String direction
+    ){
+
+        RequestPaginationLandByProjectId request = new RequestPaginationLandByProjectId();
+
+        if (price != null)
+            request.setPrice(price);
+        if (status != null)
+            request.setStatus(status);
+        if (typeOfApartment != null)
+            request.setTypeOfApartment(typeOfApartment);
+        if (direction != null)
+            request.setDirection(direction);
+        if (projectId != null)
+            request.setProjectId(projectId);
+
+        return landService.filterAllLandsByProjectId(request);
     }
 
 

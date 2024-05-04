@@ -3,6 +3,7 @@ package com.atp.bdss.repositories;
 
 import com.atp.bdss.dtos.requests.pagination.RequestPaginationLand;
 import com.atp.bdss.dtos.requests.pagination.RequestPaginationLandByAreaId;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationLandByProjectId;
 import com.atp.bdss.entities.Land;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -98,4 +99,34 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
             "GROUP BY l.direction"
     )
     List<Land> getAllDirection();
+
+
+
+    @Query(value = "select distinct new com.atp.bdss.entities.Land( " +
+            "   l.id, " +
+            "   l.name, " +
+            "   l.description, " +
+            "   l.thumbnail, " +
+            "   l.address, " +
+            "   l.status, " +
+            "   l.price, " +
+            "   l.deposit, " +
+            "   l.acreage," +
+            "   l.typeOfApartment," +
+            "   l.direction," +
+            "   l.area" +
+            ")" +
+            "FROM Land l " +
+            "LEFT JOIN l.area a " +
+            "LEFT JOIN a.project p " +
+            "WHERE (:#{#request.projectId} IS NULL OR p.id = :#{#request.projectId}) " +
+            "   AND (:#{#request.status} IS NULL OR l.status = :#{#request.status}) " +
+            "   AND (:#{#request.typeOfApartment} IS NULL OR l.typeOfApartment LIKE %:#{#request.typeOfApartment}%) " +
+            "   AND (:#{#request.direction} IS NULL OR l.direction LIKE %:#{#request.direction}%) " +
+            "ORDER BY " +
+            "   CASE WHEN :#{#request.price} = 1 THEN cast(l.price AS java.math.BigDecimal) END DESC, " +
+            "   CASE WHEN :#{#request.price} = 0 THEN cast(l.price AS java.math.BigDecimal) END ASC")
+
+    List<Land> getLandPaginationByProjectId(@Param("request") RequestPaginationLandByProjectId request);
+    // filter land thuoc projectId cho can ho, dat nen
 }

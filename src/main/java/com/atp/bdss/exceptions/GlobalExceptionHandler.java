@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -86,6 +87,21 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(
                         HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(responseData);
+    }
+
+    @ExceptionHandler(value = AuthenticationServiceException.class)
+    public ResponseEntity<ResponseData> handleAuthenticationServiceException(AuthenticationServiceException exception){
+
+        ErrorsApp errorsApp = ErrorsApp.UNAUTHENTICATED;
+
+        ResponseData responseData = new ResponseData();
+        responseData.setCode(errorsApp.getCode());
+        responseData.setMessage(errorsApp.getDescription());
+        responseData.setData(exception.getMessage());
+
+        return ResponseEntity
+                .status(errorsApp.getStatusCode())
                 .body(responseData);
     }
 }

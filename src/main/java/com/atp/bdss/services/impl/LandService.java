@@ -4,6 +4,7 @@ import com.atp.bdss.dtos.*;
 import com.atp.bdss.dtos.requests.create.RequestCreateLand;
 import com.atp.bdss.dtos.requests.pagination.RequestPaginationLand;
 import com.atp.bdss.dtos.requests.pagination.RequestPaginationLandByAreaId;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationLandByProjectId;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import com.atp.bdss.entities.Area;
@@ -234,6 +235,28 @@ public class LandService implements ILandService {
                 land -> LandDTO.builder()
                         .direction(land.getDirection()).build()
         ).toList();
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .data(landList)
+                .build();
+    }
+
+    @Override
+    public ResponseData filterAllLandsByProjectId(RequestPaginationLandByProjectId request) {
+        List<LandDTO> landList = landRepository.getLandPaginationByProjectId(request)
+                .stream().map(land -> {
+                    LandDTO landDTO = convertLandToLandDTO(land, modelMapper);
+                    if (land.getImages() != null) {
+                        List<ImageDTO> imageList = land.getImages().stream().map(
+                                image -> modelMapper.map(image, ImageDTO.class)
+
+                        ).toList();
+                        landDTO.setImages(imageList);
+                    }
+                    return landDTO;
+                }).toList();
+
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
                 .message("Query successfully")

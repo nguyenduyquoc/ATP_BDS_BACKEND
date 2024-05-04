@@ -3,6 +3,7 @@ package com.atp.bdss.services;
 import com.atp.bdss.dtos.requests.create.RequestCreateLand;
 import com.atp.bdss.dtos.requests.pagination.RequestPaginationLand;
 import com.atp.bdss.dtos.requests.pagination.RequestPaginationLandByAreaId;
+import com.atp.bdss.dtos.requests.pagination.RequestPaginationLandByProjectId;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.dtos.responses.ResponseDataWithPagination;
 import org.springframework.stereotype.Service;
@@ -31,4 +32,6 @@ public interface ILandService {
     ResponseData getAllTypeOfApartment();
 
     ResponseData getAllDirection();
+
+    ResponseData filterAllLandsByProjectId(RequestPaginationLandByProjectId request);
 }
