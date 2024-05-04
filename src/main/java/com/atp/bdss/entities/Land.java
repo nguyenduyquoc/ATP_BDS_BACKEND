@@ -72,4 +72,13 @@ public class Land {
         this.direction = direction;
         this.area = area;
     }
+
+    public Land(String typeOfApartment) {
+        this.typeOfApartment = typeOfApartment;
+    }
+
+    public Land(String id, String direction) {
+        this.id = id;
+        this.direction = direction;
+    }
 }

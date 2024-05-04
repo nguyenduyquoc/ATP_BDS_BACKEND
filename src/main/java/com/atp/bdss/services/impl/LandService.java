@@ -95,13 +95,15 @@ public class LandService implements ILandService {
 
         if (!findStatusLand(request.getStatus()))
             throw new CustomException(ErrorsApp.STATUS_LAND_NOT_FOUND);
-
         String thumbnail = uploadImage(request.getThumbnail(), cloudinary);
         Land land = modelMapper.map(request, Land.class);
         land.setThumbnail(thumbnail);
         land.setArea(area);
         if (request.getDeposit() == null) {
             land.setDeposit(land.getArea().getProject().getDefaultDeposit());
+        }
+        if (!request.getDirection().isEmpty()) {
+            land.setDirection(request.getDirection().replaceAll("[^a-zA-Z0-9+]", ""));
         }
         landRepository.save(land);
 
@@ -234,6 +236,30 @@ public class LandService implements ILandService {
                     return landDTO;
                 }).toList();
 
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .data(landList)
+                .build();
+    }
+
+    @Override
+    public ResponseData getAllTypeOfApartment() {
+        List<LandDTO> landList = landRepository.getAllTypeOfApartment().stream().map(
+                land -> LandDTO.builder().typeOfApartment(land.getTypeOfApartment()).build()
+        ).toList();
+        return ResponseData.builder()
+                .code(HttpStatus.OK.value())
+                .message("Query successfully")
+                .data(landList)
+                .build();
+    }
+
+    @Override
+    public ResponseData getAllDirection() {
+        List<LandDTO> landList = landRepository.getAllDirection().stream().map(
+                land -> LandDTO.builder().direction(land.getDirection()).build()
+        ).toList();
         return ResponseData.builder()
                 .code(HttpStatus.OK.value())
                 .message("Query successfully")

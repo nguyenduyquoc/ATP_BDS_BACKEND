@@ -30,4 +30,8 @@ public interface ILandService {
     ResponseData delete(String id);
 
     ResponseData filterAllLandsByAreaId(RequestPaginationLandByAreaId request);
+
+    ResponseData getAllTypeOfApartment();
+
+    ResponseData getAllDirection();
 }

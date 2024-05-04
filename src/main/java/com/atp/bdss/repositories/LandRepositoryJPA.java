@@ -81,4 +81,20 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
 
     List<Land> getLandPaginationByAreaID(@Param("request") RequestPaginationLandByAreaId request);
     // filter land thuoc areaId cho can ho, dat nen
+
+
+    @Query(value = "select distinct new com.atp.bdss.entities.Land( " +
+            "   l.typeOfApartment" +
+            ")" +
+            "FROM Land l "
+          )
+    List<Land> getAllTypeOfApartment();
+
+    @Query(value = "select distinct new com.atp.bdss.entities.Land( " +
+            "   l.id," +
+            "   l.direction" +
+            ")" +
+            "FROM Land l "
+    )
+    List<Land> getAllDirection();
 }

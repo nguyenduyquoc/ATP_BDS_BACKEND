@@ -124,5 +124,15 @@ public class LandLotControllerAPI {
         return excelService.importExcelFile(file);
     }
 
+    @GetMapping(value = "/all-type-of-apartment", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData getAllTypeOfApartment () {
+        return landService.getAllTypeOfApartment();
+    }
+
+    @GetMapping(value = "/all-direction", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseData getAllDirection () {
+        return landService.getAllDirection();
+    }
+
 
 }

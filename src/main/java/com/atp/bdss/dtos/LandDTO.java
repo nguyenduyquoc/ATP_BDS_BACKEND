@@ -42,5 +42,4 @@ public class LandDTO {
 
     List<ImageDTO> images;
 
-
 }
