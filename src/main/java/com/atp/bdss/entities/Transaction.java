@@ -53,4 +53,14 @@ public class Transaction {
         this.createdAt = createdAt;
         this.updateAt = updateAt;
     }
+
+    public Transaction(String id, String userId, String landId, short status, String code, LocalDateTime createdAt, LocalDateTime updateAt) {
+        this.id = id;
+        this.userId = userId;
+        this.landId = landId;
+        this.status = status;
+        this.code = code;
+        this.createdAt = createdAt;
+        this.updateAt = updateAt;
+    }
 }

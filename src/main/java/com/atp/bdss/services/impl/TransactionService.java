@@ -45,7 +45,7 @@ public class TransactionService implements ITransactionService {
     final ImageRepositoryJPA imageRepository;
 
     private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private static SecureRandom random = new SecureRandom();
+    private static final SecureRandom random = new SecureRandom();
 
     @Override
     public ResponseData findTransactionById(String id) {
@@ -198,8 +198,8 @@ public class TransactionService implements ITransactionService {
         Pageable pageable = PageRequest.of(request.getPageIndex() != null ? request.getPageIndex() : 0,
                 Math.max(request.getPageSize() != null ? request.getPageSize().intValue() : 10, 1));
 
-        if (request.getSearchByLandName() != null)
-            request.setSearchByLandName(request.getSearchByLandName().replace("%", "\\%").replace("_", "\\_").trim());
+        if (request.getSearch() != null)
+            request.setSearch(request.getSearch().replace("%", "\\%").replace("_", "\\_").trim());
 
         Page<Transaction> data = transactionRepository.transactionPagination(request, pageable);
 

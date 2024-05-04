@@ -15,8 +15,10 @@ public class RequestPaginationTransaction {
 
     Short pageSize;
 
-    String searchByLandName;
+    String search;
 
     Short status;
+
+    String searchCode;
 
 }

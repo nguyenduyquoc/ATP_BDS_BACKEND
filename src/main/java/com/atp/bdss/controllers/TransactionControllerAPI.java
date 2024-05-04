@@ -29,17 +29,21 @@ public class TransactionControllerAPI {
     public ResponseDataWithPagination allTransaction(
             @RequestParam(name = "pageIndex", defaultValue = "0") Short pageIndex,
             @RequestParam(name = "pageSize", defaultValue = "10") Short pageSize,
-            @RequestParam(name = "searchByLandName", required = false) String searchByLandName,
+            @RequestParam(name = "search", required = false) String search,
+            @RequestParam(name = "searchCode", required = false) String searchCode,
             @RequestParam(name = "status", required = false) Short status
     ) {
         RequestPaginationTransaction requestParam = new RequestPaginationTransaction();
         requestParam.setPageIndex(pageIndex);
         requestParam.setPageSize(pageSize);
 
-        if (searchByLandName != null)
-            requestParam.setSearchByLandName(searchByLandName);
+        if (search != null)
+            requestParam.setSearch(search);
         if (status != null)
             requestParam.setStatus(status);
+        if (searchCode != null) {
+            requestParam.setSearchCode(searchCode);
+        }
 
         return transactionService.allTransactionWithPagination(requestParam);
     }

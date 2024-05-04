@@ -20,6 +20,7 @@ public interface TransactionRepositoryJPA extends JpaRepository<Transaction, Str
             "   t.userId, " +
             "   t.landId," +
             "   t.status," +
+            "   t.code," +
             "   t.createdAt," +
             "   t.updateAt" +
             ")" +
@@ -28,10 +29,11 @@ public interface TransactionRepositoryJPA extends JpaRepository<Transaction, Str
             "left join Account a on l.id = t.userId " +
             "WHERE " +
             "(:#{#request.status} IS NULL OR t.status = :#{#request.status}) " +
-            "   AND ((:#{#request.searchByLandName} IS NULL OR :#{#request.searchByLandName} = '') " +
-            "       OR (l.name LIKE %:#{#request.searchByLandName}% " +
-            "       OR l.area.name LIKE %:#{#request.searchByLandName}% " +
-            "       OR l.area.project.name LIKE %:#{#request.searchByLandName}%)) " +
+            "   AND ((:#{#request.search} IS NULL OR :#{#request.search} = '') " +
+            "       OR (l.name LIKE %:#{#request.search}% " +
+            "       OR l.area.name LIKE %:#{#request.search}% " +
+            "       OR l.area.project.name LIKE %:#{#request.search}%)) " +
+            "   AND (:#{#request.searchCode} IS NULL OR :#{#request.searchCode} = '' OR t.code LIKE %:#{#request.searchCode}%) " +
             " ORDER BY CASE " +
             "            WHEN t.status = 0 THEN 0 " + // Ưu tiên các giao dịch chờ được xử lí
             "            WHEN t.status = 1 THEN 1 " + // Sau đó đến các giao dịch đã được xử lí
