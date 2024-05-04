@@ -57,9 +57,7 @@ public class LandService implements ILandService {
             request.setSearchName(request.getSearchName().replace("%", "\\%").replace("_", "\\_").trim());
 
         Page<Land> data = landRepository.getLandPagination(request, pageable);
-        if(data.isEmpty()){
-            return (ResponseDataWithPagination) Page.empty();
-        }
+
         Page<LandDTO> landDTOS = data.map(land -> convertLandToLandDTO(land, modelMapper));
 
         return ResponseDataWithPagination.builder()
