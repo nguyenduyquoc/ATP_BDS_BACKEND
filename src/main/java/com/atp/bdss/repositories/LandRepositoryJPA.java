@@ -73,8 +73,8 @@ public interface LandRepositoryJPA extends JpaRepository<Land, String> {
             "LEFT JOIN a.project p " +
             "WHERE (:#{#request.areaId} IS NULL OR a.id = :#{#request.areaId}) " +
             "   AND (:#{#request.status} IS NULL OR l.status = :#{#request.status}) " +
-            "   AND (:#{#request.typeOfApartment} IS NULL OR l.typeOfApartment = :#{#request.typeOfApartment}) " +
-            "   AND (:#{#request.direction} IS NULL OR l.direction = :#{#request.direction}) " +
+            "   AND (:#{#request.typeOfApartment} IS NULL OR l.typeOfApartment LIKE %:#{#request.typeOfApartment}%) " +
+            "   AND (:#{#request.direction} IS NULL OR l.direction LIKE %:#{#request.direction}%) " +
             "ORDER BY " +
             "   CASE WHEN :#{#request.price} = 1 THEN l.price END DESC, " +
             "   CASE WHEN :#{#request.price} = 0 THEN l.price END ASC")

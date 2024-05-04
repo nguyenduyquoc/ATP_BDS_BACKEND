@@ -17,7 +17,7 @@ public class RequestPaginationLandByAreaId {
 
     Short status;
 
-    Short typeOfApartment;
+    String typeOfApartment;
 
-    Short direction;
+    String direction;
 }

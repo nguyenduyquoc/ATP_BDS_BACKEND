@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 
 @Service
@@ -76,7 +77,8 @@ public class ExcelService {
             return cell.getStringCellValue();
         } else if (cell.getCellType() == CellType.NUMERIC) {
             // Format giá trị số thành chuỗi
-            return String.valueOf(cell.getNumericCellValue());
+            DecimalFormat decimalFormat = new DecimalFormat("#");
+            return decimalFormat.format(cell.getNumericCellValue());
         } else {
             // Xử lý các kiểu dữ liệu khác nếu cần
             return null;

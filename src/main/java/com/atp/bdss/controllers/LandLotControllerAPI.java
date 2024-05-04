@@ -12,7 +12,6 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -96,8 +95,8 @@ public class LandLotControllerAPI {
             @RequestParam(name = "areaId", required = false) String areaId,
             @RequestParam(name = "price", required = false) Short price,
             @RequestParam(name = "status", required = false) Short status,
-            @RequestParam(name = "typeOfApartment", required = false) Short typeOfApartment,
-            @RequestParam(name = "direction", required = false) Short direction
+            @RequestParam(name = "typeOfApartment", required = false) String typeOfApartment,
+            @RequestParam(name = "direction", required = false) String direction
     ){
 
         RequestPaginationLandByAreaId request = new RequestPaginationLandByAreaId();

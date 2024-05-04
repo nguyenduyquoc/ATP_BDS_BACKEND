@@ -37,15 +37,14 @@ public interface ProjectRepositoryJPA extends JpaRepository<Project, String> {
             "   AND (:#{#request.investor} IS NULL OR :#{#request.investor} = '' OR p.investor LIKE %:#{#request.investor}%) " +
             "   AND (:#{#request.provinceId} IS NULL OR p.district.province.id = :#{#request.provinceId}) " +
             "   AND (:#{#request.districtId} IS NULL OR p.district.id = :#{#request.districtId}) " +
-
             "   AND (:#{#request.projectTypeId} IS NULL OR p.projectType.id = :#{#request.projectTypeId}) " +
-
-            "   AND (:#{#request.priceFrom} IS NULL OR :#{#request.priceTo} IS NULL OR EXISTS (SELECT 1 FROM Area a JOIN a.lands l WHERE a.project.id = p.id AND l.price BETWEEN :#{#request.priceFrom} AND :#{#request.priceTo})) " +
+            "   AND (:#{#request.priceFrom} IS NULL OR :#{#request.priceTo} IS NULL OR EXISTS " +
+            "       (SELECT 1 FROM Area a JOIN a.lands l WHERE a.project.id = p.id " +
+            "       AND CAST(l.price AS java.math.BigDecimal) BETWEEN :#{#request.priceFrom} AND :#{#request.priceTo})) " +
             " ORDER BY CASE " +
             "            WHEN p.status = 1 THEN 0 " + // Ưu tiên các dự án có status là 1 lên trên cùng
-            "            WHEN p.status = 0 THEN 1 " + // Sau đó đến các dự án sắp diên ra (status = 0)
+            "            WHEN p.status = 0 THEN 1 " + // Sau đó đến các dự án sắp diễn ra (status = 0)
             "            ELSE 2 " + // Cuối cùng là các dự án đã kết thúc (các giá trị status khác)
-            "          " +
             "          END, " +
             "  p.id DESC")
     Page<Project> getProjectPagination(@Param("request") RequestPaginationProject request, Pageable pageable);

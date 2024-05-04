@@ -146,6 +146,7 @@ public class AreaService implements IAreaService {
             if (areaRepository.existsByNameIgnoreCaseAndProjectId(request.getName(), request.getProjectId())) {
                 throw new CustomException(ErrorsApp.DUPLICATE_PROJECT_NAME);
             }
+            area.setName(request.getName());
         }
 
         areaRepository.save(area);
