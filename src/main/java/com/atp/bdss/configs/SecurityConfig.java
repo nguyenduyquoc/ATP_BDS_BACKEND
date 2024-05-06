@@ -59,7 +59,7 @@ public class SecurityConfig{
             "/auth/check-token",
             "/auth/sign-up-admin",
             "/auth/logout-admin",
-            "/auth//refresh_token",
+            "/auth/refresh-token",
 
             "/api/v1/transactions",
 
