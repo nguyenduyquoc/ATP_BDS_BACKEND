@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,7 +22,7 @@ public class UserControllerAPI {
     final IAccountService accountService;
 
     // check user info
-    @PostMapping("/login_user")
+    @PostMapping("/login-user")
     public ResponseData login(@RequestBody UserInfoFromGoogle userInfo){
 
         return accountService.checkUserInformation(userInfo);
@@ -29,8 +30,9 @@ public class UserControllerAPI {
 
 
     // list user by pagination for admin
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseDataWithPagination allProjects(
+    public ResponseDataWithPagination allUser(
             @RequestParam(name = "pageIndex", defaultValue = "0") Short pageIndex,
             @RequestParam(name = "pageSize", defaultValue = "10") Short pageSize,
             @RequestParam(name = "search", required = false) String search

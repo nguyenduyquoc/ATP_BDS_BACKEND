@@ -43,7 +43,7 @@ public class AreaControllerAPI {
 
 
     // lay tat ca area khong phan trang
-    @GetMapping(value = "/noPagination", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/no-pagination", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData allAreasNoPagination(){
 
 
@@ -69,7 +69,8 @@ public class AreaControllerAPI {
 
 
     // Tao nhieu phan khu trong mot lan tao
-    @PostMapping(value = "/{id}/addMultiArea", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(value = "/{id}/add-multi-areas", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData createMultiArea(@PathVariable String id, @Valid @RequestBody RequestCreateMultiObject<RequestCreateArea> request) {
         request.setId(id);
         return areaService.createAreaMultiProject(request);
@@ -84,6 +85,7 @@ public class AreaControllerAPI {
     }
 
     // xoa phan khu
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData deleteArea(@PathVariable String id)
     {

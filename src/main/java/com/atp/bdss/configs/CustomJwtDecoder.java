@@ -22,11 +22,11 @@ import com.nimbusds.jose.JOSEException;
 @Component
 public class CustomJwtDecoder implements JwtDecoder {
 
-    @Autowired
-    private AuthenticationService authenticationService;
-
     @Value("${jwt.signerKey}")
     private String SIGNER_KEY;
+
+    @Autowired
+    private AuthenticationService authenticationService;
 
     private NimbusJwtDecoder nimbusJwtDecoder = null;
 
@@ -37,14 +37,16 @@ public class CustomJwtDecoder implements JwtDecoder {
             var response = authenticationService.introspect(
                     IntrospectRequest.builder().token(token).build());
 
-            if (!response.isValid()) throw new JwtException("Token invalid");
+            if (!response.isValid())
+                throw new JwtException("Token invalid");
         } catch (JOSEException | ParseException e) {
             throw new JwtException(e.getMessage());
         }
 
         if (Objects.isNull(nimbusJwtDecoder)) {
             SecretKeySpec secretKeySpec = new SecretKeySpec(SIGNER_KEY.getBytes(), "HS512");
-            nimbusJwtDecoder = NimbusJwtDecoder.withSecretKey(secretKeySpec)
+            nimbusJwtDecoder = NimbusJwtDecoder
+                    .withSecretKey(secretKeySpec)
                     .macAlgorithm(MacAlgorithm.HS512)
                     .build();
         }

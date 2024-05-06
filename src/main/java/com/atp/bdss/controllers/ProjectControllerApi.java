@@ -59,8 +59,9 @@ public class ProjectControllerApi {
     }
 
     // lay tat ca du an khong phan trang
-    @GetMapping(value = "/allProjects", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/all-projects", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData allProjectsNoPagination() {
+
         return projectService.allProjectsNoPagination();
     }
 

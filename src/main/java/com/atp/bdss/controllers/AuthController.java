@@ -25,25 +25,25 @@ public class AuthController {
     final AuthenticationService authenticationService;
     final IAccountService accountService;
 
-    @PostMapping("/sign_in_admin")
+    @PostMapping("/sign-in-admin")
     public ResponseData login(@RequestBody RequestLogin userLogin){
 
         return authenticationService.authentication(userLogin);
     }
 
-    @PostMapping("/check_token")
+    @PostMapping("/check-token")
     public IntrospectResponse checkToken(@RequestBody IntrospectRequest token) throws ParseException, JOSEException {
 
         return authenticationService.introspect(token);
     }
 
-    @PostMapping(value = "/sign_up_admin", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/sign-up-admin", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData create(@RequestBody @Valid RegisterRequest request){
 
         return accountService.createAdmin(request);
     }
 
-    @PostMapping(value = "/logout_admin", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/logout-admin", produces = MediaType.APPLICATION_JSON_VALUE)
     public void logOut(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
 
         authenticationService.logout(request);

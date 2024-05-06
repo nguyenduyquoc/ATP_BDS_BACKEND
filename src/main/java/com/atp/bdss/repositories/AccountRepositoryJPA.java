@@ -27,7 +27,7 @@ public interface AccountRepositoryJPA extends JpaRepository<Account, String> {
             "OR (a.name LIKE %:#{#request.search}% " +
             "OR a.email LIKE %:#{#request.search}% " +
             "OR a.phone LIKE %:#{#request.search}%)) " +
-            "AND a.role.id = 2 " +
+            "AND a.role.name = 'USER' " +
             " ORDER BY CASE " +
             "            WHEN a.isDeleted = 1 THEN 0 " + // Cac user co status la 1 se duoc hien thi truoc
             "            WHEN a.isDeleted = 2 THEN 1 " + // Tiep theo la cac user co status la 2, tuc la chua xac thuc

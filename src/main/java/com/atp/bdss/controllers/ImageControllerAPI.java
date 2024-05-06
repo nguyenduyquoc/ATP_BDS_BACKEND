@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ public class ImageControllerAPI {
 
     final IImageService imageService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData createImage(@ModelAttribute @Valid RequestCreateImage request) throws IOException {
 
@@ -32,7 +34,8 @@ public class ImageControllerAPI {
     }
 
 
-    @PostMapping(value = "/import_multi_image_for_land",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(value = "/import-multi-image-for-land",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData importMultiImageForALand(@ModelAttribute @Valid RequestCreateMultiImageForALand request) throws IOException {
 
         return imageService.importMultiImageForALand(request);

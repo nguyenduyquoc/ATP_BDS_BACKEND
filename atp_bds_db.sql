@@ -33,12 +33,9 @@ CREATE TABLE account (
                          FOREIGN KEY (role_id) REFERENCES role(id)
 );
 
-
 CREATE TABLE token (
-                       id VARCHAR(36) PRIMARY KEY DEFAULT (UUID()),
-                       expiry_date DATE NOT NULL,
-                       account_id VARCHAR(36),
-                       FOREIGN KEY (account_id) REFERENCES account(id)
+                       id VARCHAR(100) PRIMARY KEY,
+                       expiry_date DATE
 );
 
 CREATE TABLE type (

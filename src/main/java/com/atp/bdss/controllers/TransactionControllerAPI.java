@@ -57,7 +57,7 @@ public class TransactionControllerAPI {
 
     // update transaction status
     @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping(value = "/confirmTransactionSuccessOrFail", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/confirm-transaction-success-or-fail", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData confirmTransactionSuccess(
             @RequestParam("id") String id,
             @RequestParam("status") Short status)
@@ -69,14 +69,14 @@ public class TransactionControllerAPI {
 
     // find transaction by id
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData getProjectById(@PathVariable String id){
+    public ResponseData getTransactionById(@PathVariable String id){
 
         return transactionService.findTransactionById(id);
     }
 
 
     //list transaction with user id
-    @GetMapping(value = "/withUser", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/with-user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData getTransactionByUserId(@RequestParam("id") String id,
                                                @RequestParam(name = "status", required = false) Short status
     ) {

@@ -32,7 +32,7 @@ public class ProvinceControllerAPI {
 
 
     //  GET ALL PROVINCES WITH PROJECTS
-    @GetMapping(value = "/withProject", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/with-project", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData getAllProvincesWithProjects(){
 
         return provinceDistrictService.getAllProvincesWithProjects();
@@ -40,7 +40,7 @@ public class ProvinceControllerAPI {
 
 
     //  GET ALL DISTRICTS WITH PROJECTS BELONGING TO A PROVINCE.
-    @GetMapping(value = "/{provinceId}/allDistrictWithProject", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{provinceId}/all-district-with-project", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData getAllDistrictWithProjectByProvinceId(@PathVariable int provinceId){
 
         return provinceDistrictService.getAllDistrictWithProjectByProvinceId(provinceId);

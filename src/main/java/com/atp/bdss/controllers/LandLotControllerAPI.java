@@ -75,7 +75,7 @@ public class LandLotControllerAPI {
     }
 
     // khoa hoac mo khoa lo dat
-    @PutMapping(value = "/temporarilyLockOrUnLock", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/temporarily-lock-or-unlock", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData temporarilyLockOrUnLock(
             @RequestParam("id") String id,
             @RequestParam("status") short status)
@@ -94,7 +94,7 @@ public class LandLotControllerAPI {
 
 
     // filter cac lo dat thuoc 1 phan khu
-    @GetMapping(value = "/allLandByAreaId", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/all-land-by-area-id", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData allLandLotsByAreaId(
             @RequestParam(name = "areaId", required = false) String areaId,
             @RequestParam(name = "price", required = false) Short price,
@@ -119,7 +119,8 @@ public class LandLotControllerAPI {
         return landService.filterAllLandsByAreaId(request);
     }
 
-    @PostMapping(value = "/create_multi_lands_from_excel_file",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(value = "/create-multi-lands-from-excel-file",consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData createMultiLandsFromExcelFile(@RequestParam("file") MultipartFile file) {
 
         return excelService.importExcelFile(file);

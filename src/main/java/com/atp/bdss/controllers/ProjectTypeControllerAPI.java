@@ -30,7 +30,7 @@ public class ProjectTypeControllerAPI {
 
 
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseData getProjectById(@PathVariable Short id){
+    public ResponseData getProjectTypeById(@PathVariable Short id){
 
         return projectTypeService.findProjectTypeById(id);
     }

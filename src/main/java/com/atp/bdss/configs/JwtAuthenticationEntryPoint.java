@@ -1,6 +1,6 @@
 package com.atp.bdss.configs;
-import java.io.IOException;
 
+import java.io.IOException;
 import com.atp.bdss.dtos.responses.ResponseData;
 import com.atp.bdss.utils.ErrorsApp;
 import jakarta.servlet.ServletException;
@@ -17,8 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Slf4j
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
-    public void commence(
-            HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException, ServletException {
         ErrorsApp errorsApp = ErrorsApp.UNAUTHENTICATED;
 
