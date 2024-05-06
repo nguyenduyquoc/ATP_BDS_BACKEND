@@ -50,14 +50,14 @@ public class AuthController {
 
     }
 
-    @PostMapping(value = "/refresh_token", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/refresh-token", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseData refreshToken(@RequestBody RefreshTokenRequest request) throws ParseException, JOSEException {
 
         return authenticationService.refreshToken(request);
 
     }
 
-    @GetMapping(value = "/my_information", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/my-information", produces = MediaType.APPLICATION_JSON_VALUE)
     @PostAuthorize("returnObject.data.phone == authentication.name")
     public ResponseData getMyInformation() {
         return accountService.getMyInformation();
