@@ -89,6 +89,9 @@ public class SecurityConfig{
                 .requestMatchers(HttpMethod.POST, POST_PUBLIC_ENDPOINTS).permitAll()
                 .requestMatchers(HttpMethod.PUT, PUT_PUBLIC_ENDPOINTS).permitAll()
                 .requestMatchers(HttpMethod.DELETE, DELETE_PUBLIC_ENDPOINTS).permitAll()
+                .requestMatchers("/ws/**").permitAll() // Bỏ qua xác thực cho WebSocket
+                /*.requestMatchers(HttpMethod.POST, "/lands_unlock").permitAll() // Các endpoint HTTP vẫn có thể được cấu hình bình thường
+                .requestMatchers(HttpMethod.POST, "/lands_lock").permitAll()*/
                 .anyRequest().authenticated());
 
         http.oauth2ResourceServer(oauth2 ->
